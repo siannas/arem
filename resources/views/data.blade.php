@@ -2,10 +2,10 @@
 @extends('layouts.sidebar')
 
 @section('title')
-Validasi Data
+Data Siswa
 @endsection
 
-@section('validasiStatus')
+@section('dataStatus')
 active
 @endsection
 
@@ -17,12 +17,12 @@ Validasi
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Validasi Data</h1>
+    <h1 class="h3 mb-2 text-gray-800">Data Siswa</h1>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Skrining Siswa</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Data Siswa</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -54,7 +54,7 @@ Validasi
                             <td>Edinburgh</td>
                             <td>61</td>
                             <td>2011/04/25</td>
-                            <td>$320,800</td>
+                            <td><div class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</div></td>
                         </tr>
                         <tr>
                             <td>Garrett Winters</td>
