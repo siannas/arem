@@ -17,5 +17,6 @@ class Formulir extends Model
         'json',
         'status',
         'kelas',
+        'tahun_ajaran',
     ];
 }
