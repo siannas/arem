@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('email');
-            $table->integer('telp')->unsigned();
+            $table->string('telp');
             $table->rememberToken();
             $table->timestamps();
             $table->smallInteger('kelas')->nullable();

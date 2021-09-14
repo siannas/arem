@@ -17,7 +17,8 @@ class CreateFormulirTable extends Migration
             $table->increments('id');
             $table->json('json');
             $table->tinyInteger('status')->default(0);
-            $table->smallInteger('kelas');
+            $table->string('kelas', 30);
+            $table->string('tahun_ajaran');
             $table->timestamps();
         });
     }
