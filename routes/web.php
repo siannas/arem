@@ -31,3 +31,11 @@ Route::get('/jenis-form', function () {
 Route::get('/form', function () {
     return view('form');
 });
+
+Route::get('/index', function () {
+    return view('index');
+});
+
+Route::get('/tambah-form', function () {
+    return view('crudForm');
+});
