@@ -1,5 +1,5 @@
 @php
-$role=2
+$role=3
 @endphp
 
 @if($role===1)
@@ -159,6 +159,13 @@ $role=2
         <a class="nav-link" href="/validasi">
             <i class="fas fa-fw fa-table"></i>
             <span>Validasi</span></a>
+    </li>
+
+    <!-- Nav Item - Tables -->
+    <li class="nav-item @yield('dataStatus')">
+        <a class="nav-link" href="/data-siswa">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Data Siswa</span></a>
     </li>
 
     <!-- Divider -->

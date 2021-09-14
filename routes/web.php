@@ -15,6 +15,19 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
+
+Route::get('/data-siswa', function () {
+    return view('data');
+});
+
 Route::get('/validasi', function () {
     return view('validasi');
+});
+
+Route::get('/jenis-form', function () {
+    return view('jenisForm');
+});
+
+Route::get('/form', function () {
+    return view('form');
 });
