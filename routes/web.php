@@ -11,46 +11,37 @@
 |
 */
 
-Route::get('/login', function(){
-    return view('login');
-});
-
-Route::get('/', function () {
-    return view('dashboard');
-});
-
-Route::get('/data-siswa', 'DataController@dataSiswa');
-Route::get('/data-sekolah', 'DataController@dataSekolah');
-Route::get('/data-kelurahan', 'DataController@dataKelurahan');
-Route::get('/data-puskesmas', 'DataController@dataPuskesmas');
-Route::get('/data-kecamatan', 'DataController@dataKecamatan');
-
-Route::get('/validasi', function () {
-    return view('validasi');
-});
-
-Route::get('/jenis-form', function () {
-    return view('jenisForm');
-});
-
-Route::get('/form', function () {
-    return view('form');
-});
-
-Route::get('/index', function () {
-    return view('index');
-});
-
-Route::get('/tambah-form', function () {
-    return view('crudForm');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('dashboard');
+    });
+    
+    Route::get('/data-siswa', 'DataController@dataSiswa');
+    Route::get('/data-sekolah', 'DataController@dataSekolah');
+    Route::get('/data-kelurahan', 'DataController@dataKelurahan');
+    Route::get('/data-puskesmas', 'DataController@dataPuskesmas');
+    Route::get('/data-kecamatan', 'DataController@dataKecamatan');
+    
+    Route::get('/validasi', function () {
+        return view('validasi');
+    });
+    
+    Route::get('/jenis-form', function () {
+        return view('jenisForm');
+    });
+    
+    Route::get('/form', function () {
+        return view('form');
+    });
+    
+    Route::get('/index', function () {
+        return view('index');
+    });
+    
+    Route::get('/tambah-form', function () {
+        return view('crudForm');
+    });
 });
 
 // Authentication Routes...
-// Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
-// Route::post('/login', 'Auth\LoginController@login')->name('');
-// Route::post('/logout','Auth\LoginController@logout')->name('logout');
 Auth::routes(['register' => false]);
-
-Route::get('/tes', function () {
-    return 'Halaman Tes';
-})->middleware('auth');

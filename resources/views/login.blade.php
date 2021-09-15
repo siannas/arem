@@ -41,20 +41,33 @@
                                 </div>
                                 <h1 class="h4 text-gray-900 mb-4">Aplikasi Remaja</h1>
                             </div>
-                            <form class="user">
+                            <form class="user" method="POST" action="{{ route('login') }}">
+                                @csrf
+
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user"
+                                    <input type="text" class="form-control form-control-user {{ $errors->has('username') ? ' is-invalid' : '' }}"
                                         id="exampleInputEmail" aria-describedby="emailHelp"
-                                        placeholder="Username">
+                                        placeholder="Username" name="username" value="{{ old('username') }}" required>
+                                    @if ($errors->has('username'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('username') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" class="form-control form-control-user"
-                                        id="exampleInputPassword" placeholder="Password">
+                                    <input type="password" class="form-control form-control-user {{ $errors->has('password') ? ' is-invalid' : '' }}"
+                                        id="exampleInputPassword" placeholder="Password"
+                                        name="password" required>
+                                    @if ($errors->has('password'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('password') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                                 <br>
-                                <a href="/" class="btn btn-primary btn-user btn-block">
+                                <button type="submit" class="btn btn-primary btn-user btn-block">
                                     Login
-                                </a>
+                                </button>
                             </form>
                         </div>
                     </div>
