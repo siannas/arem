@@ -15,9 +15,8 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
-
 Route::get('/data-siswa', function () {
-    return view('data');
+    return view('dataSiswa');
 });
 
 Route::get('/validasi', function () {

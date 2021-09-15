@@ -5,7 +5,7 @@
 Data Siswa
 @endsection
 
-@section('dataStatus')
+@section('siswaStatus')
 active
 @endsection
 

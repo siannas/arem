@@ -27,15 +27,8 @@ Validasi
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="font-weight-bold text-primary text-uppercase mb-1">1. Riwayat Kesehatan</div>
-                            <a href="/form" class="btn btn-primary btn-icon-split btn-md">
-                                <span class="icon text-white-50">
-                                    <i class="fas fa-flag"></i>
-                                </span>
-                                <span class="text">Isi Form</span>
-                            </a>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                            <a href="/form" class="btn btn-primary"><i class="fas fa-pen"></i> Edit</a>
+                            <a href="/form" class="btn btn-danger"><i class="fas fa-trash"></i> Hapus</a>
                         </div>
                     </div>
                 </div>
@@ -114,16 +107,12 @@ Validasi
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="font-weight-bold text-primary text-uppercase mb-1">1. Riwayat Kesehatan</div>
-                            <a href="/form" class="btn btn-primary btn-icon-split btn-md">
+                            <a href="/tambah-form" class="btn btn-primary btn-icon-split btn-md">
                                 <span class="icon text-white-50">
-                                    <i class="fas fa-flag"></i>
+                                    <i class="fas fa-plus"></i>
                                 </span>
-                                <span class="text">Isi Form</span>
+                                <span class="text">Tambah</span>
                             </a>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>

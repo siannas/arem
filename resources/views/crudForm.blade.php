@@ -4,9 +4,11 @@
 Dashboard
 @endsection
 
+@section('tambahStatus')
+active
+@endsection
+
 @section('content')
-
-
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -32,6 +34,7 @@ Dashboard
                         <label><b>Tipe Pertanyaan</b></label>
                         <div class="input-group">
                             <select id="terserah" class="form-control">
+                                <option selected>Pilih Tipe</option>
                                 <option value="1">Pilihan 2</option>
                                 <option value="2">Pilihan 3</option>
                                 <option value="3">Isian</option>
