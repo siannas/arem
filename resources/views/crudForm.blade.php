@@ -39,6 +39,7 @@ active
                                 <option value="2">Pilihan 3</option>
                                 <option value="3">Isian</option>
                                 <option value="4">Gabungan</option>
+                                <option value="5">Isian Dengan Foto</option>
                             </select>
                         
                             <a class="btn btn-success" onclick="nameFunction()"><i class="fas fa-plus"></i> Tambah</a>
