@@ -19,5 +19,7 @@ class Jawaban extends Model
         'id_user',
         'id_formulir',
         'json',
+        'validasi',
     ];
+
 }

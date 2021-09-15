@@ -97,6 +97,16 @@ class PertanyaanTableSeeder extends Seeder
      */
     public function run()
     {
+        $formulir = App\Formulir::create([
+            'status' => 0,
+            'kelas' => '1,2,3,4,5,6',
+            'tahun_ajaran' => '2021-2022',
+        ]);
+
+        $formulir->save();
+
+        $formulir = App\Formulir::find(1);
+
         $pertanyaan1 = App\Pertanyaan::create([
             'json' => json_encode(
                 [
@@ -116,20 +126,17 @@ class PertanyaanTableSeeder extends Seeder
                 ]
             )
         ]);
-        
-        $pertanyaan1->save();
-        $pertanyaan2->save();
 
-        $formulir = App\Formulir::create([
-            'json' => json_encode( [
-                json_decode($pertanyaan1->toArray()['json']),
-                json_decode($pertanyaan2->toArray()['json']),
-            ]),
-            'status' => 0,
-            'kelas' => '1,2,3,4,5,6',
-            'tahun_ajaran' => '2021-2022',
+        $pertanyaan_tes = new App\Pertanyaan([
+            'json' => json_encode(
+                [
+                    "judul"=> "A. Riwayat Kesehatan Anak",
+                    "gambar-petunjuk" => null,
+                    "pertanyaan" => $this->sub_pertanyaan_1
+                ]
+            )
         ]);
-
-        $formulir->save();
+        
+        $formulir->pertanyaan()->saveMany([$pertanyaan1, $pertanyaan2]);
     }
 }

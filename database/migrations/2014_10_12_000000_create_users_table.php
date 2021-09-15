@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->smallInteger('kelas')->nullable();
             $table->string('tahun_ajaran')->nullable();
             $table->foreign('id_role')->references('id')->on('roles');
-            $table->foreign('parent')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('parent')->references('id')->on('users');
         });
     }
 

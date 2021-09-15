@@ -16,7 +16,9 @@ class CreatePertanyaanTable extends Migration
         Schema::create('pertanyaan', function (Blueprint $table) {
             $table->increments('id');
             $table->json('json');
+            $table->integer('id_formulir')->unsigned()->nullable();
             $table->timestamps();
+            $table->foreign('id_formulir')->references('id')->on('formulir')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

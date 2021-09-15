@@ -15,5 +15,16 @@ class Pertanyaan extends Model
 
     protected $fillable = [
         'json',
+        'id_formulir',
     ];
+
+    /**
+     * Get the formulir that owns the Jawaban
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function formulir()
+    {
+        return $this->belongsTo(Formulir::class, 'id_formulir'); 
+    }
 }

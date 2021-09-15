@@ -15,7 +15,6 @@ class CreateFormulirTable extends Migration
     {
         Schema::create('formulir', function (Blueprint $table) {
             $table->increments('id');
-            $table->json('json');
             $table->tinyInteger('status')->default(0);
             $table->string('kelas', 30);
             $table->string('tahun_ajaran');
