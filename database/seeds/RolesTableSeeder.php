@@ -16,7 +16,7 @@ class RolesTableSeeder extends Seeder
             ['id' => 1, 'role' => 'Siswa'],
             ['id' => 2, 'role' => 'Sekolah'],
             ['id' => 3, 'role' => 'Kelurahan'],
-            ['id' => 4, 'role' => 'Puskemas'],
+            ['id' => 4, 'role' => 'Puskesmas'],
             ['id' => 5, 'role' => 'Kecamatan'],
             ['id' => 6, 'role' => 'Kota']
         ]);

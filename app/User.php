@@ -33,4 +33,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function getRole(){
+        return $this->belongsTo(Role::class, 'id_role');
+    }
 }

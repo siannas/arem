@@ -1,8 +1,8 @@
 @php
-$role=6
+$role= Auth::user()->getRole->role;
 @endphp
 
-@if($role===1)
+@if($role==='Siswa')
 <!-- SISWA -->
 @section('sidebar')
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -123,7 +123,7 @@ $role=6
         
 @endsection
 
-@elseif($role===2)
+@elseif($role==='Sekolah')
 <!-- SEKOLAH -->
 @section('sidebar')
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -178,7 +178,7 @@ $role=6
 </ul>
 @endsection
 
-@elseif($role===3)
+@elseif($role==='Kelurahan')
 <!-- KELURAHAN -->
 @section('sidebar')
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -238,7 +238,7 @@ $role=6
 </ul>
 @endsection
 
-@elseif($role===4)
+@elseif($role==='Puskesmas')
 <!-- PUSKESMAS -->
 @section('sidebar')
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -305,7 +305,7 @@ $role=6
 </ul>
 @endsection
 
-@elseif($role===5)
+@elseif($role==='Kecamatan')
 <!-- KECAMATAN -->
 @section('sidebar')
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -378,7 +378,7 @@ $role=6
 </ul>
 @endsection
 
-@elseif($role===6)
+@elseif($role==='Kota')
 <!-- KOTA/DINAS -->
 @section('sidebar')
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
