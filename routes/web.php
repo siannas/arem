@@ -11,13 +11,19 @@
 |
 */
 
+Route::get('/login', function(){
+    return view('login');
+});
+
 Route::get('/', function () {
     return view('dashboard');
 });
 
-Route::get('/data-siswa', function () {
-    return view('dataSiswa');
-});
+Route::get('/data-siswa', 'DataController@dataSiswa');
+Route::get('/data-sekolah', 'DataController@dataSekolah');
+Route::get('/data-kelurahan', 'DataController@dataKelurahan');
+Route::get('/data-puskesmas', 'DataController@dataPuskesmas');
+Route::get('/data-kecamatan', 'DataController@dataKecamatan');
 
 Route::get('/validasi', function () {
     return view('validasi');
