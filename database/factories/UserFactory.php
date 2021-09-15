@@ -19,7 +19,7 @@ $factory->define(App\User::class, function (Faker $faker) {
         'parent' => null,
         'id_role' => 1,
         'username' => $faker->numerify('################'),
-        'password' => 'password', // secret
+        'password' => '$2y$10$D5ykTMSjN89Zqom/9csATuYYRbEDfXEePmQYg3UNUH/bRwrT2Lx0S', // passwordnya: password
         'email' => $faker->unique()->safeEmail,
         'telp' => $faker->numerify('###########'),
         'kelas' => $faker->numberBetween(1,12),

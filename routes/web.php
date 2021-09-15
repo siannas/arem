@@ -38,3 +38,13 @@ Route::get('/index', function () {
 Route::get('/tambah-form', function () {
     return view('crudForm');
 });
+
+// Authentication Routes...
+// Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
+// Route::post('/login', 'Auth\LoginController@login')->name('');
+// Route::post('/logout','Auth\LoginController@logout')->name('logout');
+Auth::routes(['register' => false]);
+
+Route::get('/tes', function () {
+    return 'Halaman Tes';
+})->middleware('auth');
