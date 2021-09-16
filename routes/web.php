@@ -62,3 +62,9 @@ Route::middleware(['auth'])->group(function () {
 
 // Authentication Routes...
 Auth::routes(['register' => false]);
+
+// Route::post('formulir/store', 'FormulirController@store');
+Route::resource('formulir', FormulirController::class)->except([
+    'create', 'edit', 
+]);
+Route::post('formulir/duplicate/{id}', 'FormulirController@duplicate');

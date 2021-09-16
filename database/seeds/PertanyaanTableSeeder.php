@@ -126,16 +126,6 @@ class PertanyaanTableSeeder extends Seeder
                 ]
             )
         ]);
-
-        $pertanyaan_tes = new App\Pertanyaan([
-            'json' => json_encode(
-                [
-                    "judul"=> "A. Riwayat Kesehatan Anak",
-                    "gambar-petunjuk" => null,
-                    "pertanyaan" => $this->sub_pertanyaan_1
-                ]
-            )
-        ]);
         
         $formulir->pertanyaan()->saveMany([$pertanyaan1, $pertanyaan2]);
     }

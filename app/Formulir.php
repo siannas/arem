@@ -14,7 +14,6 @@ class Formulir extends Model
     protected $table = 'formulir';
 
     protected $fillable = [
-        'json',
         'status',
         'kelas',
         'tahun_ajaran',
