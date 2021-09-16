@@ -294,6 +294,14 @@ $role= Auth::user()->getRole->role;
             </div>
         </div>
     </div>
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loading" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="loadingTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="justify-content: center;">
+            <div class="spinner-border text-primary" role="status" style="font-size: 45px;width: 3rem;height: 3rem;">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="/plugins/jquery/jquery.min.js"></script>
