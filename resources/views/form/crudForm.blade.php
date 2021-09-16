@@ -1,10 +1,10 @@
 @extends('layouts.layout')
 
 @section('title')
-Dashboard
+Tambah Form Skrining
 @endsection
 
-@section('tambahStatus')
+@section('formStatus')
 active
 @endsection
 

@@ -5,7 +5,7 @@
 Daftar Form Skrining
 @endsection
 
-@section('skriningStatus')
+@section('formStatus')
 active
 @endsection
 
@@ -47,11 +47,36 @@ Validasi
                         @foreach($formulir as $unit)
                         <tr>
                             <td>{{ $unit->tahun_ajaran }}</td>
-                            <td>{{ $unit->kelas }}</td>
-                            <td>{{ $unit->status }}</td>
+                            @if($unit->kelas==='1,2,3,4,5,6')
+                            <td>SD</td>
+                            @elseif($unit->kelas==='7,8,9')
+                            <td>SMP</td>
+                            @elseif($unit->kelas==='10,11,12')
+                            <td>SMA</td>
+                            @endif
+
+                            @if($unit->status===1)
+                            <td><div class="badge bg-success text-white rounded-pill">Aktif</div></td>
+                            @else
+                            <td><div class="badge bg-warning text-white rounded-pill">Non Aktif</div></td>
+                            @endif
                             <td>
-                                <div class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</div>
-                                <div class="btn btn-sm btn-primary"><i class="fas fa-fw fa-copy"></i> Duplikat</div>
+                                <div class="row m-1">
+                                    <form action="{{route('formulir.show', [$unit->id])}}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i></button></form>
+                                    <form action="{{route('formulir.update', [$unit->id])}}" method="POST" class="mr-1">
+                                    @csrf
+                                        <button class="btn btn-sm btn-warning"><i class="fas fa-fw fa-edit"></i></button>
+                                    </form>
+                                    <form action="/formulir/duplicate/{{ $unit->id }}" method="POST" class="mr-1">
+                                    @csrf
+                                        <button class="btn btn-sm btn-secondary"><i class="fas fa-fw fa-copy"></i></button>
+                                    </form>
+                                    <form action="{{route('formulir.destroy', [$unit->id])}}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                        <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-trash-alt"></i></button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @endforeach

@@ -54,8 +54,8 @@ class FormulirController extends Controller
     public function show($id)
     {
         $formulir = Formulir::findOrFail($id);
-        $formulir['pertanyaan'] = $formulir->pertanyaan;
-        return $formulir;
+        $pertanyaan = $formulir->pertanyaan;
+        return view('form.jenisForm', ['formulir' => $formulir, 'pertanyaan' => $pertanyaan]);
     }
 
     /**
@@ -96,7 +96,7 @@ class FormulirController extends Controller
     {
         $formulir = Formulir::findOrFail($id);
         $formulir->delete();
-        return $formulir;
+        return redirect()->action('FormulirController@index')->with('success', 'Data Berhasil Dihapus');;
     }
 
     /**
@@ -120,7 +120,8 @@ class FormulirController extends Controller
         ]);
 
         $formulir_baru->save();
-        return $formulir_baru->pertanyaan()->saveMany($pertanyaan_baru);
+        $formulir_baru->pertanyaan()->saveMany($pertanyaan_baru);
+        return redirect()->action('FormulirController@index')->with('success', 'Data Berhasil Diduplikat');;
     }
 
 }

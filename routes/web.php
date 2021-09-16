@@ -71,9 +71,9 @@ Auth::routes(['register' => false]);
 Route::resource('/formulir', FormulirController::class)->except([
     'create', 'edit', 
 ]);
-Route::post('_/formulir/duplicate/{id}', 'FormulirController@duplicate');
+Route::post('/formulir/duplicate/{id}', 'FormulirController@duplicate');
 
-Route::resource('_/pertanyaan', PertanyaanController::class)->except([
+Route::resource('/pertanyaan', PertanyaanController::class)->except([
     'index', 'create', 'edit', 'store'
 ]);
-Route::post('_/pertanyaan/{formulir}', 'PertanyaanController@store')->name('pertanyaan.store');
+Route::post('/pertanyaan/{formulir}', 'PertanyaanController@store')->name('pertanyaan.store');
