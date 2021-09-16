@@ -16,7 +16,8 @@ class FormulirController extends Controller
      */
     public function index()
     {
-        return Formulir::all();
+        $formulir = Formulir::all();
+        return view('form.listTahunAjaran', ['formulir' => $formulir]);
     }
 
     /**

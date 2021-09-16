@@ -52,7 +52,7 @@ Validasi
                             <td>{{ $unit->nama }}</td>
                             <td></td>
                             <td>{{ $unit->created_at }}</td>
-                            <td><div class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</div></td>
+                            <td><form action="/data-sekolah/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form></td>
                         </tr>
                         @endforeach
                     </tbody>

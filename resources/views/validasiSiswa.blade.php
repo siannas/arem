@@ -5,7 +5,7 @@
 Detail Siswa
 @endsection
 
-@section('siswaStatus')
+@section('validasiStatus')
 active
 @endsection
 
@@ -17,7 +17,7 @@ Validasi
 <div class="container-fluid">
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Detail Data Siswa</h1>
-    <div class="card">
+    <div class="card shadow">
         <div class="card-header bg-primary mb-3">
             <div class="row p-4 justify-content-between align-items-center">
                 <div class="col-12 col-lg-auto mb-5 mb-lg-0 text-center text-lg-left">
@@ -167,7 +167,7 @@ Validasi
         </div>
         <div class="card-footer text-right">
             <button class="btn btn-warning"><i class="fas fa-fw fa-check"></i> Validasi</button>
-            <a href="/data-siswa" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
+            <a href="/validasi" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
         </div>
     </div>
 </div>

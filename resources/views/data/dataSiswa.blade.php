@@ -2,10 +2,10 @@
 @extends('layouts.sidebar')
 
 @section('title')
-Validasi Data
+Data Siswa
 @endsection
 
-@section('validasiStatus')
+@section('siswaStatus')
 active
 @endsection
 
@@ -17,12 +17,12 @@ Validasi
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Validasi Data</h1>
+    <h1 class="h3 mb-2 text-gray-800">Data Siswa</h1>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Skrining Siswa</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Data Siswa</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -32,6 +32,7 @@ Validasi
                             <th>NIK</th>
                             <th>Nama</th>
                             <th>Kelas</th>
+                            <th>Status</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
@@ -41,18 +42,20 @@ Validasi
                             <th>NIK</th>
                             <th>Nama</th>
                             <th>Kelas</th>
+                            <th>Status</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach($siswa as $unit)
+                        @foreach($dataSiswa as $unit)
                         <tr>
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
-                            <td></td>
-                            <td></td>
-                            <td><form action="/validasi/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></td></form>
+                            <td>{{ $unit->kelas }}</td>
+                            <td><div class="badge bg-success text-white rounded-pill">Tervalidasi</div><div class="badge bg-danger text-white rounded-pill">Belum Tervalidasi</div></td>
+                            <td>{{ $unit->created_at }}</td>
+                            <td><form action="/data-siswa/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></td></form>
                         </tr>
                         @endforeach
                     </tbody>

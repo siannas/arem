@@ -18,21 +18,20 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['role:Siswa,Kota'])->group(function () {
         Route::get('/form', function () {
-            return view('form');
+            return view('form.form');
         });
     });
 
     Route::middleware(['role:Siswa,Kota'])->group(function () {
         Route::get('/jenis-form', function () {
-            return view('jenisForm');
+            return view('form.jenisForm');
         });
     });
     
     Route::middleware(['role:Sekolah,Kelurahan,Puskesmas,Kecamatan,Kota'])->group(function () {
         Route::get('/data-siswa', 'DataController@dataSiswa');
-        Route::get('/validasi', function () {
-            return view('validasi');
-        });
+        Route::get('/validasi', 'ValidasiController@validasi');
+        Route::get('/validasi/{id}', 'ValidasiController@validasiSiswa');
     });
 
     Route::middleware(['role:Kelurahan,Puskesmas,Kecamatan,Kota'])->group(function () {
@@ -49,8 +48,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['role:Kota'])->group(function () {
         Route::get('/data-kecamatan', 'DataController@dataKecamatan');
-        Route::get('/tambah-form', function () {
-            return view('crudForm');
+        Route::get('/list-form', function () {
+            return view('form.listTahunAjaran');
         });
     });
     
@@ -59,16 +58,17 @@ Route::middleware(['auth'])->group(function () {
     });
     
     Route::get('/tambah-form', function () {
-        return view('crudForm');
+        return view('form.crudForm');
     });
 
     Route::get('/data-siswa/{id}', 'DataController@detailSiswa');
+    Route::get('/data-sekolah/{id}', 'DataController@detailSekolah');
 });
 
 // Authentication Routes...
 Auth::routes(['register' => false]);
 
-Route::resource('_/formulir', FormulirController::class)->except([
+Route::resource('/formulir', FormulirController::class)->except([
     'create', 'edit', 
 ]);
 Route::post('_/formulir/duplicate/{id}', 'FormulirController@duplicate');
