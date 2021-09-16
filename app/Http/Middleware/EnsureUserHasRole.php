@@ -22,6 +22,6 @@ class EnsureUserHasRole
             }
         }
 
-        return redirect(route('home'))->with('msg', 'Anda tidak berhak mengakses halaman tersebut!');
+        return redirect('/')->with('msg', 'Anda tidak berhak mengakses halaman tersebut!');
     }
 }

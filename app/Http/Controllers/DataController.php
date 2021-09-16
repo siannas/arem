@@ -12,6 +12,12 @@ class DataController extends Controller
 
         return view('dataSiswa', ['dataSiswa' => $dataSiswa]);
     }
+    public function detailSiswa($id){
+        $detailSiswa = User::findOrFail($id);
+
+        return view('detailSiswa', ['siswa' => $detailSiswa]);
+    }
+
     public function dataSekolah(){
         $dataSekolah = User::where('id_role', 2)->get();
 

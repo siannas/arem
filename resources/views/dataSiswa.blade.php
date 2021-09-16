@@ -55,7 +55,7 @@ Validasi
                             <td>{{ $unit->kelas }}</td>
                             <td></td>
                             <td>{{ $unit->created_at }}</td>
-                            <td><div class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</div></td>
+                            <td><form action="/data-siswa/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></td></form>
                         </tr>
                         @endforeach
                     </tbody>
