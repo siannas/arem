@@ -16,7 +16,7 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     });
 
-    Route::middleware(['role:Siswa'])->group(function () {
+    Route::middleware(['role:Siswa,Kota'])->group(function () {
         Route::get('/form', function () {
             return view('form');
         });
@@ -58,6 +58,11 @@ Route::middleware(['auth'])->group(function () {
         return view('index');
     });
     
+    Route::get('/tambah-form', function () {
+        return view('crudForm');
+    });
+
+    Route::get('/data-siswa/{id}', 'DataController@detailSiswa');
 });
 
 // Authentication Routes...

@@ -1,5 +1,9 @@
 @include('layouts.sidebar')
 
+
+@php
+$role= Auth::user()->getRole->role;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,15 +18,15 @@
     <title>Aplikasi Remaja | @yield('title')</title>
 
     <!-- Custom fonts for this template-->
-    <link href="plugins/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/css/sb-admin-2.min.css?v=kjhkawhd" rel="stylesheet">
     <!-- Custom styles for validasi -->
-    <link href="plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 
 </head>
@@ -49,7 +53,7 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-
+                    @if($role==='Siswa')
                     <!-- Topbar Search -->
                     <div
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
@@ -57,7 +61,7 @@
                         <a href="/jenis-form" style="padding-left:20px">Form</a>
                         <a href="/form" style="padding-left:20px">KIE</a>
                     </div>
-
+                    @endif
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -292,28 +296,28 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="plugins/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/plugins/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
 
     <!-- Dashboard plugins -->
-    <script src="plugins/chart.js/Chart.min.js"></script>
+    <script src="/plugins/chart.js/Chart.min.js"></script>
 
     <!-- Dashboard custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    <script src="/js/demo/chart-area-demo.js"></script>
+    <script src="/js/demo/chart-pie-demo.js"></script>
 
     <!-- Tables plugins -->
-    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/plugins/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Tables custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
 
     @yield('script')
 </body>
