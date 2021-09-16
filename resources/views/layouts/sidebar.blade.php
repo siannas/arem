@@ -340,8 +340,8 @@ $role= Auth::user()->getRole->role;
     </div>
 
     <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('tambahStatus')">
-        <a class="nav-link" href="/tambah-form">
+    <li class="nav-item @yield('formStatus')">
+        <a class="nav-link" href="/formulir">
             <i class="fab fa-fw fa-wpforms"></i>
             <span>Form Skrining</span></a>
     </li>
