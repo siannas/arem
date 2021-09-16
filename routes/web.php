@@ -63,8 +63,12 @@ Route::middleware(['auth'])->group(function () {
 // Authentication Routes...
 Auth::routes(['register' => false]);
 
-// Route::post('formulir/store', 'FormulirController@store');
-Route::resource('formulir', FormulirController::class)->except([
+Route::resource('_/formulir', FormulirController::class)->except([
     'create', 'edit', 
 ]);
-Route::post('formulir/duplicate/{id}', 'FormulirController@duplicate');
+Route::post('_/formulir/duplicate/{id}', 'FormulirController@duplicate');
+
+Route::resource('_/pertanyaan', PertanyaanController::class)->except([
+    'index', 'create', 'edit', 'store'
+]);
+Route::post('_/pertanyaan/{formulir}', 'PertanyaanController@store')->name('pertanyaan.store');

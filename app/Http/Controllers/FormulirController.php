@@ -66,6 +66,8 @@ class FormulirController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $formulir = Formulir::findOrFail($id);
+
         $validator = Validator::make($request->all(), [
             'status' => 'required_without_all:kelas,tahun_ajaran',
             'kelas' => 'required_without_all:status,tahun_ajaran',
@@ -76,7 +78,11 @@ class FormulirController extends Controller
             throw new HttpResponseException(response()->json($validator->errors(), 422));
         }
 
-        return $request->all();
+        $formulir->fill($request->all());
+
+        $formulir->save();
+
+        return $formulir;
     }
 
     /**
