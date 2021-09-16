@@ -15,6 +15,7 @@ class CreatePertanyaanTable extends Migration
     {
         Schema::create('pertanyaan', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('judul');
             $table->json('json');
             $table->integer('id_formulir')->unsigned()->nullable();
             $table->timestamps();

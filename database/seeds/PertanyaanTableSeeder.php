@@ -108,6 +108,7 @@ class PertanyaanTableSeeder extends Seeder
         $formulir = App\Formulir::find(1);
 
         $pertanyaan1 = App\Pertanyaan::create([
+            "judul"=> "A. Riwayat Kesehatan Anak",
             'json' => json_encode(
                 [
                     "judul"=> "A. Riwayat Kesehatan Anak",
@@ -118,6 +119,7 @@ class PertanyaanTableSeeder extends Seeder
         ]);
 
         $pertanyaan2 = App\Pertanyaan::create([
+            "judul"=> "B. Kesehatan Intelegensia",
             'json' => json_encode(
                 [
                     "judul"=> "B. Kesehatan Intelegensia",

@@ -14,6 +14,7 @@ class Pertanyaan extends Model
     protected $table = 'pertanyaan';
 
     protected $fillable = [
+        'judul',
         'json',
         'id_formulir',
     ];

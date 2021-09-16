@@ -18,6 +18,7 @@ class PertanyaanController extends Controller
     public function store(Request $request, \App\Formulir $formulir)
     {
         $pertanyaan_baru = new Pertanyaan([
+            "judul"=> "Belum ada judul",
             'json' => json_encode(
                 [
                     "judul"=> "Belum ada judul",
@@ -58,7 +59,8 @@ class PertanyaanController extends Controller
         $pertanyaan = Pertanyaan::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'json' => 'required',
+            'judul' => 'required_without_all:json',
+            'json' => 'required_without_all:judul',
         ]);
         
         if ($validator->fails()) {
