@@ -320,6 +320,41 @@ $role= Auth::user()->getRole->role;
     <script src="/js/demo/datatables-demo.js"></script>
 
     @yield('script')
+
+    <script>
+        const myRequest = {
+            get: function(url){
+                return $.ajax({
+                    url: url,
+                    type: 'GET',
+                });
+            },
+            post: function(url, data){
+                data["_token"] = "{{ csrf_token() }}"
+                return $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: data,
+                });
+            },
+            delete: function(url){
+                const data = {"_token" : "{{ csrf_token() }}"}
+                return $.ajax({
+                    url: url,
+                    method: 'DELETE',
+                    data: data,
+                });
+            },
+            put: function(url, data){
+                data["_token"] = "{{ csrf_token() }}"
+                return $.ajax({
+                    url: url,
+                    method: 'PUT',
+                    data: data,
+                });
+            }
+        }
+    </script>
 </body>
 
 </html>
