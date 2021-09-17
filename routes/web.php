@@ -77,3 +77,11 @@ Route::resource('/pertanyaan', PertanyaanController::class)->except([
     'index', 'create', 'edit', 'store'
 ]);
 Route::post('/pertanyaan/{formulir}', 'PertanyaanController@store')->name('pertanyaan.store');
+
+Route::get('/tes/{id_puskesmas}', function(App\User $id_puskesmas){
+    $kelurahan = $id_puskesmas->users;
+    foreach ($kelurahan as $key => $k) {
+        $sekolah[] = $k->users;
+    }
+    dd($sekolah);
+});
