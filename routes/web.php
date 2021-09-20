@@ -93,3 +93,8 @@ Route::get('/tes/formulir/user/{pertanyaan}', function(App\Pertanyaan $pertanyaa
     $json = json_decode($pertanyaan->json);
     return view('form.formGenerated', ['json' => $json]);
 });
+
+Route::get('/coba/dong', function(){
+    $user = App\User::find(113);
+    dd($user->parents()->where('id_role',4)->get());
+});

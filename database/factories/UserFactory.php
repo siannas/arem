@@ -16,7 +16,6 @@ use Faker\Generator as Faker;
 $factory->define(App\User::class, function (Faker $faker) {
     return [
         'nama' => $faker->name,
-        'parent' => null,
         'id_role' => 1,
         'username' => $faker->numerify('################'),
         'password' => '$2y$10$D5ykTMSjN89Zqom/9csATuYYRbEDfXEePmQYg3UNUH/bRwrT2Lx0S', // passwordnya: password

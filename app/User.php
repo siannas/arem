@@ -17,7 +17,6 @@ class User extends Authenticatable
     protected $fillable = [
         'nama',
         'id_role',
-        'parent',
         'email',
         'telp',
         'kelas',
@@ -38,8 +37,21 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'id_role');
     }
 
+    // public function users()
+    // {
+    //     return $this->hasMany(User::class, 'parent'); 
+    // }
+
     public function users()
     {
-        return $this->hasMany(User::class, 'parent'); 
+        return $this->belongsToMany('App\User', 'user_pivot', 'id_user', 'id_child');
+            // ->withPivot('id_role');
     }
+
+    public function parents()
+    {
+        return $this->belongsToMany('App\User', 'user_pivot', 'id_child', 'id_user');
+            // ->withPivot('id_role');
+    }
+
 }

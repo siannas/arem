@@ -17,7 +17,6 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('nama');
             $table->integer('id_role');
-            $table->integer('parent')->unsigned()->nullable();
             $table->string('username')->unique();
             $table->string('password');
             $table->string('email');
@@ -27,7 +26,6 @@ class CreateUsersTable extends Migration
             $table->smallInteger('kelas')->nullable();
             $table->string('tahun_ajaran')->nullable();
             $table->foreign('id_role')->references('id')->on('roles');
-            $table->foreign('parent')->references('id')->on('users');
         });
     }
 

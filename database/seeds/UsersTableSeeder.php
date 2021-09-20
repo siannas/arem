@@ -132,35 +132,41 @@ class UsersTableSeeder extends Seeder
         ]);
         $count = 1;
 
+        $kecamatans_ = [];
         foreach ($this->kecamatan as $k => $val) {
             $s = factory(App\User::class)->create([
                 'nama' => $val[0],
                 'username' => $val[1],
-                'parent' => 1,
                 'kelas' => null,
                 'id_role' => 5,
             ]);
+            $s->parents()->attach($dinas);
+            $kecamatans_[] = $s;
         }
 
+        $puskesmass_ = [];
         foreach ($this->puskesmas as $k => $val) {
             $s = factory(App\User::class)->create([
                 'nama' => $val[0],
                 'username' => $val[1],
-                'parent' => $val[2] + $count,
                 'kelas' => null,
                 'id_role' => 4,
             ]);
+            $s->parents()->attach($val[2] + $count);
+            $puskesmass_[] = $s;
         }
         $count += count($this->kecamatan);
 
+        $kelurahans_ = [];
         foreach ($this->kelurahan as $k => $val) {
             $s = factory(App\User::class)->create([
                 'nama' => $val[0],
                 'username' => $val[1],
-                'parent' => $val[2] + $count,
                 'kelas' => null,
                 'id_role' => 3,
             ]);
+            $s->parents()->attach($val[2] + $count);
+            $kelurahans_[] = $s;
         }
         $count += count($this->puskesmas);
 
@@ -168,14 +174,24 @@ class UsersTableSeeder extends Seeder
             $s = factory(App\User::class)->create([
                 'nama' => $val[0],
                 'username' => $val[1],
-                'parent' => $val[2] + $count,
                 'kelas' => null,
                 'id_role' => 2,
             ]);
 
-            $users = factory(App\User::class, 10)->create([
-                'parent' => $s
-            ]);
+            $s->parents()->attach($val[2] + $count);
+            $users = factory(App\User::class, 10)->create();
+
+            $s->users()->attach($users);
+            $kelurahans_[$val[2]-1]->users()->attach($users);
+
+            $id_puskesmas = $this->kelurahan[$val[2]-1][2];
+            $puskesmass_[$id_puskesmas-1]->users()->attach($users);
+            $puskesmass_[$id_puskesmas-1]->users()->attach($s);
+
+            $id_kecamatan = $this->puskesmas[$id_puskesmas][2];
+            $kecamatans_[$id_kecamatan-1]->users()->attach($users);
+            $kecamatans_[$id_kecamatan-1]->users()->attach($s);
+            $kecamatans_[$id_kecamatan-1]->users()->attach($puskesmass_[$id_puskesmas-1]);
         }
     }
 }
