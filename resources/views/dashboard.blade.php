@@ -1,6 +1,10 @@
 @extends('layouts.layout')
 @extends('layouts.sidebar')
 
+@php
+$role= Auth::user()->getRole->role;
+@endphp
+
 @section('title')
 Dashboard
 @endsection
@@ -17,6 +21,8 @@ Dashboard
 Dashboard
 @endsection
 
+@if($role==='Siswa')
+@else
 @section('content')
 <div class="container-fluid">
 
@@ -348,3 +354,4 @@ Dashboard
 </div>
 
 @endsection
+@endif

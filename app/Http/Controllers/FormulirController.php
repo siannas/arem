@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Validator;
 use Illuminate\Http\Request;
 use App\Formulir;
+use App\Pertanyaan;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class FormulirController extends Controller
@@ -124,4 +125,9 @@ class FormulirController extends Controller
         return redirect()->action('FormulirController@index')->with('success', 'Data Berhasil Diduplikat');;
     }
 
+    public function generate($id){
+        $pertanyaan = Pertanyaan::findOrFail($id);
+        $json = json_decode($pertanyaan->json);
+        return view('form.formGenerated', ['json' => $json]);
+    }
 }
