@@ -84,9 +84,8 @@ Route::get('/tes/{id_puskesmas}', function(App\User $id_puskesmas){
     dd($sekolah);
 });
 
-Route::get('/tes/formulir/user/{pertanyaan}', function(App\Pertanyaan $pertanyaan){
-    $json = json_decode($pertanyaan->json);
-    return view('form.formGenerated', ['json' => $json]);
+Route::get('/tes/formulir/user/{formulir}', function(App\Formulir $formulir){
+    return view('form.formGenerated', [ 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan]);
 });
 
 Route::get('/coba/dong', function(){

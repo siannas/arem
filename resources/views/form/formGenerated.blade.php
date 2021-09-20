@@ -20,13 +20,16 @@ Validasi
     <h1 class="h3 mb-2 text-gray-800">Jenis Pemeriksaan</h1>
     
     <div class="row">
-
-        <div class="col-lg">
+        @foreach ($allPertanyaan as $key => $ap)
+        @php
+            $json = json_decode($ap->json);
+        @endphp
+        <div class="col-lg-12">
 
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">1. Riwayat Kesehatan</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">{{ $ap->judul }}</h6>
                 </div>
                 <div class="card-body">
                     @foreach ($json->pertanyaan as $p)
@@ -79,12 +82,34 @@ Validasi
                                                 </label>
                                             @endif
                                         @endforeach
-                                        <div class="col-12 collapse" style="flex:1" id="98s7dfy-isian-container">
-                                            <input type="text" class="form-control" name="98s7dfy_1" id="98s7dfy_1" placeholder="Sebutkan">
-                                        </div>
+                                        @foreach ($p->opsi as $index => $o)
+                                            @if (is_object($o) and $o->{'if-selected'}->tipe === 2 )
+                                                <div class="col-12 collapse" style="flex:1" id="{{ $o->{'if-selected'}->id }}-container">
+                                                    <input type="text" class="form-control" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id }}" placeholder="{{ $o->{'if-selected'}->pertanyaan }}">
+                                                </div>
+                                            @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
+                            @foreach ($p->opsi as $index => $o)
+                                @if (is_object($o) and $o->{'if-selected'}->tipe === 1 )
+                                    <div class="row collapse" style="padding-top:20px" id="{{ $o->{'if-selected'}->id }}-container">
+                                        <div class="col-12 col-md-5" style="margin-bottom:5px">
+                                            {{ $o->{'if-selected'}->pertanyaan }}
+                                        </div>
+                                        <div class="col-12 col-md-7" style="padding:0">
+                                            <div class="row" style="margin:0px">
+                                                @foreach ($o->{'if-selected'}->opsi as $index2 => $o2)
+                                                <label class="radio-inline col-6 col-md-4">
+                                                    <input type="radio" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id.'__'.$index2 }}" value="{{ $o2 }}"> {{ $o2 }}
+                                                </label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
                         @elseif ($p->tipe === 4)
                             <div class="row" style="padding-top:20px">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
@@ -99,18 +124,49 @@ Validasi
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
 </div>
 @endsection
 
 @section('script')
 <script>
-    $('input[name=98s7dfy]:radio').change(function(){
-        if (this.value == 'Ya') {
-            $('#98s7dfy-isian-container').collapse('show')
-        }else{
-            $('#98s7dfy-isian-container').collapse('hide')
+    var myData = {}
+    var myTempData = {}
+
+    var myPertanyaanOnChange = function(id, value){
+        myTempData['selected'+id] = value;
+        const keyAktif = 'additional'+id; //key pertanyaan tamabahan yg sedang aktif
+
+        //jika ada pertanyaan tambahan yang masih terbuka maka harus ditutup
+        if(myTempData[keyAktif]) { 
+            myTempData[keyAktif].collapse('hide');
+            myTempData[keyAktif] = null;
         }
-    });
+
+        //cek jika jawaban menimbulkan pertanyaan baru
+        const keyNew = (id+value);
+        if( keyNew in myData ) { 
+            const idPertanyaanBaru = myData[keyNew]['id'];
+            const idContainer = idPertanyaanBaru+"-container";
+            myTempData[keyAktif] = $('#'+idContainer );
+            myTempData[keyAktif].collapse('show');
+        }
+    }
+
+    @foreach ($json->pertanyaan as $p)
+        myData[@json($p->id)] = @json($p);
+        @if ($p->tipe === 3)
+            $('input[name={{ $p->id }}]:radio').change(function(){
+                myPertanyaanOnChange(@json($p->id), this.value);
+            });
+            @foreach ($p->opsi as $index => $o)
+            @if (is_object($o))
+                myData["{{ $p->id.$o->{'0'} }}"] = @json($o->{'if-selected'});
+            @endif
+            @endforeach
+        @endif
+    @endforeach
+
 </script>
 @endsection
