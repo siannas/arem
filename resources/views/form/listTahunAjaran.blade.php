@@ -14,6 +14,40 @@ Validasi
 @endsection
 
 @section('content')
+<!-- Modal -->
+<div class="modal fade" id="tambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Form Skrining</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <div class="form-group">
+                <label><b>Tahun Ajaran</b></label>
+                <input type="text" class="form-control" placeholder="Masukkan Judul Pertanyaan">
+            </div>
+            <div class="form-group">
+                <label><b>Jenjang</b></label>
+                <div class="input-group">
+                    <select id="jenjang" class="form-control">
+                        <option selected>Pilih Jenjang</option>
+                        <option value="1">SD</option>
+                        <option value="2">SMP</option>
+                        <option value="3">SMA</option>
+                    </select>
+                </div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+        <button type="button" class="btn btn-primary">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -22,7 +56,17 @@ Validasi
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Daftar Form Skrining</h6>
+            <div class="row">
+                <div class="col align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Daftar Form Skrining</h6>
+                </div>    
+                <div class="col text-right">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambah">
+                Tambah
+                </button>
+                </div>
+            </div>
+            
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -85,9 +129,9 @@ Validasi
             </div>
         </div>
     </div>
-
+       
 </div>
-                
+          
 @endsection
 
 @section('script')

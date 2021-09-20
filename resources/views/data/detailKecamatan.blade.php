@@ -2,10 +2,10 @@
 @extends('layouts.sidebar')
 
 @section('title')
-Data Puskesmas
+Detail Kecamatan
 @endsection
 
-@section('puskesmasStatus')
+@section('kecamatanStatus')
 active
 @endsection
 
@@ -15,22 +15,30 @@ Validasi
 
 @section('content')
 <div class="container-fluid">
-
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Data Puskesmas</h1>
-
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Puskesmas</h6>
+    <h1 class="h3 mb-2 text-gray-800">Detail Data Kecamatan</h1>
+    <div class="card">
+        <div class="card-header bg-primary mb-3">
+            <div class="row p-4 justify-content-between align-items-center">
+                <div class="col-12 col-lg-auto mb-5 mb-lg-0 text-center text-lg-left">
+                    <i class="fas fa-laugh-wink text-light mb-3" style="font-size:50px;"></i>
+                    <h5 class="text-light">Aplikasi Remaja</h5>
+                </div>
+                <div class="col-12 col-lg-auto text-center text-lg-right">
+                    <h5 class="card-title text-light mb-3"><b>{{ $kecamatan->nama }}</b></h5>
+                    <h6 class="card-subtitle text-gray-300 mb-2">Kode Wilayah {{ $kecamatan->username }}</h6>
+                </div>
+            </div>
         </div>
         <div class="card-body">
+            <h6 class="card-subtitle mb-3"><b>Puskesmas</b></h6>
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Kode Puskesmas</th>
-                            <th>Nama Puskesmas</th>
+                            <th>NIK</th>
+                            <th>Nama</th>
+                            <th>Kelas</th>
                             <th>Status</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
@@ -38,18 +46,20 @@ Validasi
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Kode Puskesmas</th>
-                            <th>Nama Puskesmas</th>
+                            <th>NIK</th>
+                            <th>Nama</th>
+                            <th>Kelas</th>
                             <th>Status</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach($dataPuskesmas as $unit)
+                        @foreach($puskesmas as $unit)
                         <tr>
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
+                            <td>{{ $unit->kelas }}</td>
                             <td></td>
                             <td>{{ $unit->created_at }}</td>
                             <td><form action="/data-puskesmas/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form></td>
@@ -58,13 +68,12 @@ Validasi
                     </tbody>
                 </table>
             </div>
+
+        </div>
+        <div class="card-footer text-right">
+            <a href="/data-kecamatan" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
         </div>
     </div>
-
 </div>
-                
-@endsection
-
-@section('script')
 
 @endsection

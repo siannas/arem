@@ -33,7 +33,7 @@ $role= Auth::user()->getRole->role;
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiStatus')">
         <a class="nav-link" href="/validasi">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>
 
@@ -88,7 +88,7 @@ $role= Auth::user()->getRole->role;
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiStatus')">
         <a class="nav-link" href="/validasi">
-            <i class="fas fa-fw fa-users"></i>
+            <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>
     <!-- Divider -->
@@ -129,7 +129,7 @@ $role= Auth::user()->getRole->role;
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -148,7 +148,7 @@ $role= Auth::user()->getRole->role;
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiStatus')">
         <a class="nav-link" href="/validasi">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>
 
@@ -175,7 +175,7 @@ $role= Auth::user()->getRole->role;
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('kelurahanStatus')">
         <a class="nav-link" href="/data-kelurahan">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-university"></i>
             <span>Data Kelurahan</span></a>
     </li>
 
@@ -196,7 +196,7 @@ $role= Auth::user()->getRole->role;
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -215,7 +215,7 @@ $role= Auth::user()->getRole->role;
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiStatus')">
         <a class="nav-link" href="/validasi">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>
 
@@ -242,13 +242,13 @@ $role= Auth::user()->getRole->role;
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('kelurahanStatus')">
         <a class="nav-link" href="/data-kelurahan">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-university"></i>
             <span>Data Kelurahan</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('puskesmasStatus')">
         <a class="nav-link" href="/data-puskesmas">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-hospital"></i>
             <span>Data Puskesmas</span></a>
     </li>
 
@@ -269,7 +269,7 @@ $role= Auth::user()->getRole->role;
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>

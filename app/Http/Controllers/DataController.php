@@ -35,14 +35,34 @@ class DataController extends Controller
 
         return view('data.dataKelurahan', ['dataKelurahan' => $dataKelurahan]);
     }
+    public function detailKelurahan($id){
+        $detailKelurahan = User::findOrFail($id);
+        $sekolah = User::where('parent', $id)->get();
+
+        return view('data.detailKelurahan', ['kelurahan' => $detailKelurahan, 'sekolah' => $sekolah]);
+    }
+
     public function dataPuskesmas(){
         $dataPuskesmas = User::where('id_role', 4)->get();
 
         return view('data.dataPuskesmas', ['dataPuskesmas' => $dataPuskesmas]);
     }
+    public function detailPuskesmas($id){
+        $detailPuskesmas = User::findOrFail($id);
+        $kelurahan = User::where('parent', $id)->get();
+
+        return view('data.detailPuskesmas', ['puskesmas' => $detailPuskesmas, 'kelurahan' => $kelurahan]);
+    }
+
     public function dataKecamatan(){
         $dataKecamatan = User::where('id_role', 5)->get();
 
         return view('data.dataKecamatan', ['dataKecamatan' => $dataKecamatan]);
+    }
+    public function detailKecamatan($id){
+        $detailKecamatan = User::findOrFail($id);
+        $puskesmas = User::where('parent', $id)->get();
+
+        return view('data.detailKecamatan', ['kecamatan' => $detailKecamatan, 'puskesmas' => $puskesmas]);
     }
 }
