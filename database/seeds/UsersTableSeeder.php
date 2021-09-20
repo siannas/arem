@@ -167,6 +167,8 @@ class UsersTableSeeder extends Seeder
             ]);
             $s->parents()->attach($val[2] + $count);
             $kelurahans_[] = $s;
+            $id_kecamatan = $this->puskesmas[$val[2]-1][2];
+            $kecamatans_[$id_kecamatan-1]->users()->attach($s);
         }
         $count += count($this->puskesmas);
 
@@ -191,7 +193,6 @@ class UsersTableSeeder extends Seeder
             $id_kecamatan = $this->puskesmas[$id_puskesmas][2];
             $kecamatans_[$id_kecamatan-1]->users()->attach($users);
             $kecamatans_[$id_kecamatan-1]->users()->attach($s);
-            $kecamatans_[$id_kecamatan-1]->users()->attach($puskesmass_[$id_puskesmas-1]);
         }
     }
 }

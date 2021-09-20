@@ -82,7 +82,7 @@ class PertanyaanTableSeeder extends Seeder
             "required" => true
         ],
         [
-            "id" => " vilkduc",
+            "id" => "vilkduc",
             "tipe" => 4,
             "pertanyaan" => "Foto Gigi Bagian Dalam",
             "gambar-petunjuk" => "URL",
