@@ -1,6 +1,10 @@
 @extends('layouts.layout')
 @extends('layouts.sidebar')
 
+@php
+$role= Auth::user()->getRole->role;
+@endphp
+
 @section('title')
 Daftar Form Skrining
 @endsection
@@ -27,7 +31,15 @@ Validasi
       <div class="modal-body">
             <div class="form-group">
                 <label><b>Tahun Ajaran</b></label>
-                <input type="text" class="form-control" placeholder="Masukkan Judul Pertanyaan">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" id="tahun1" class="form-control" placeholder="Tahun 1">
+                    </div>
+                    -
+                    <div class="col">
+                        <input type="text" id="tahun2" class="form-control" placeholder="Tahun 2" disabled>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label><b>Jenjang</b></label>
@@ -40,6 +52,10 @@ Validasi
                     </select>
                 </div>
             </div>
+            <div class="custom-control custom-switch mt-4">
+                <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                <label class="custom-control-label" for="customSwitch1">Aktifkan</label>
+            </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -48,6 +64,7 @@ Validasi
     </div>
   </div>
 </div>
+
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -59,12 +76,14 @@ Validasi
             <div class="row">
                 <div class="col align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Daftar Form Skrining</h6>
-                </div>    
+                </div>   
+                @if($role==='Kota')
                 <div class="col text-right">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambah">
                 Tambah
                 </button>
                 </div>
+                @endif
             </div>
             
         </div>
@@ -106,11 +125,9 @@ Validasi
                             @endif
                             <td>
                                 <div class="row m-1">
+                                    @if($role==='Kota')
                                     <form action="{{route('formulir.show', [$unit->id])}}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i></button></form>
-                                    <form action="{{route('formulir.update', [$unit->id])}}" method="POST" class="mr-1">
-                                    @csrf
-                                        <button class="btn btn-sm btn-warning"><i class="fas fa-fw fa-edit"></i></button>
-                                    </form>
+                                    <button type="button" class="btn btn-sm btn-warning mr-1" data-toggle="modal" data-target="#tambah"><i class="fas fa-fw fa-edit"></i></button>
                                     <form action="/formulir/duplicate/{{ $unit->id }}" method="POST" class="mr-1">
                                     @csrf
                                         <button class="btn btn-sm btn-secondary"><i class="fas fa-fw fa-copy"></i></button>
@@ -120,6 +137,9 @@ Validasi
                                     @method('DELETE')
                                         <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-trash-alt"></i></button>
                                     </form>
+                                    @elseif($role==='Siswa')
+                                    <form action="{{route('formulir.show', [$unit->id])}}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -135,5 +155,24 @@ Validasi
 @endsection
 
 @section('script')
+<script>
+$(document).ready(function(){
+    $('.tahun1').ready(function(){
+        $(this).keyup(function(){
+            calculateTahun2();
+        });
+    }); 
+});
 
+function calculateTahun2(){
+    var tahun = document.getElementById('tahun1');
+    var tot = 0;
+
+    if(parseInt(tahun.value))
+        tot = parseInt(tahun.value)+1;
+    
+    document.getElementById('tahun2').value = tot;
+}
+
+</script>
 @endsection

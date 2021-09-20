@@ -23,8 +23,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:Siswa,Kota'])->group(function () {
-        Route::get('/jenis-form', function () {
-            return view('form.jenisForm');
+        Route::get('/list-form', function () {
+            return view('form.listTahunAjaran');
         });
     });
     
@@ -48,19 +48,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['role:Kota'])->group(function () {
         Route::get('/data-kecamatan', 'DataController@dataKecamatan');
-        Route::get('/list-form', function () {
-            return view('form.listTahunAjaran');
+        Route::get('/tambah-form', function () {
+            return view('form.crudForm');
         });
     });
     
-    Route::get('/index', function () {
-        return view('index');
-    });
-    
-    Route::get('/tambah-form', function () {
-        return view('form.crudForm');
-    });
-
     Route::get('/data-siswa/{id}', 'DataController@detailSiswa');
     Route::get('/data-sekolah/{id}', 'DataController@detailSekolah');
     Route::get('/data-kelurahan/{id}', 'DataController@detailKelurahan');
@@ -80,6 +72,9 @@ Route::resource('/pertanyaan', PertanyaanController::class)->except([
     'index', 'create', 'edit', 'store'
 ]);
 Route::post('/pertanyaan/{formulir}', 'PertanyaanController@store')->name('pertanyaan.store');
+
+Route::get('/formulir/user/{pertanyaan}', 'FormulirController@generate');
+
 
 Route::get('/tes/{id_puskesmas}', function(App\User $id_puskesmas){
     $kelurahan = $id_puskesmas->users;

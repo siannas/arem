@@ -50,7 +50,7 @@ Validasi
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="font-weight-bold text-primary text-uppercase mb-1">{{ $unit->judul }}</div>
-                            <a href="/form" class="btn btn-primary btn-icon-split btn-md">
+                            <a href="/formulir/user/{{ $unit->id }}" class="btn btn-primary btn-icon-split btn-md">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-flag"></i>
                                 </span>

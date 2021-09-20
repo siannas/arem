@@ -58,8 +58,8 @@ $role= Auth::user()->getRole->role;
                     <div
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <a href="/">Home</a>
-                        <a href="/jenis-form" style="padding-left:20px">Form</a>
-                        <a href="/form" style="padding-left:20px">KIE</a>
+                        <a href="/formulir" style="padding-left:20px">Form</a>
+                        <a href="/kie" style="padding-left:20px">KIE</a>
                     </div>
                     @endif
                     <!-- Topbar Navbar -->
