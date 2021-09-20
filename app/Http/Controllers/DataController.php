@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Auth;
 
 class DataController extends Controller
 {
     public function dataSiswa(){
-        $dataSiswa = User::where('id_role', 1)->get();
-
+        $id_user= Auth::user();
+        if($id_user->id==1){
+            $dataSiswa = User::where('id_role',1)->get();
+        }
+        else{
+            $user = User::find($id_user->id);
+            $dataSiswa = $user->users()->where('id_role',1)->get();
+        }
+    
         return view('data.dataSiswa', ['dataSiswa' => $dataSiswa]);
     }
     public function detailSiswa($id){
@@ -19,37 +27,58 @@ class DataController extends Controller
     }
 
     public function dataSekolah(){
-        $dataSekolah = User::where('id_role', 2)->get();
-
+        $id_user= Auth::user();
+        if($id_user->id==1){
+            $dataSekolah = User::where('id_role',2)->get();        
+        }
+        else{
+            $user = User::find($id_user->id);
+            $dataSekolah = $user->users()->where('id_role',2)->get();        
+        }
+        
         return view('data.dataSekolah', ['dataSekolah' => $dataSekolah]);
     }
     public function detailSekolah($id){
         $detailSekolah = User::findOrFail($id);
-        $siswa = User::where('parent', $id)->get();
+        $siswa = $detailSekolah->users()->where('id_role', 1)->get();
 
         return view('data.detailSekolah', ['sekolah' => $detailSekolah, 'siswa' => $siswa]);
     }
 
     public function dataKelurahan(){
-        $dataKelurahan = User::where('id_role', 3)->get();
-
+        $id_user= Auth::user();
+        if($id_user->id==1){
+            $dataKelurahan = User::where('id_role',3)->get();    
+        }
+        else{
+            $user = User::find($id_user->id);
+            $dataKelurahan = $user->users()->where('id_role',3)->get();    
+        }
+        
         return view('data.dataKelurahan', ['dataKelurahan' => $dataKelurahan]);
     }
     public function detailKelurahan($id){
         $detailKelurahan = User::findOrFail($id);
-        $sekolah = User::where('parent', $id)->get();
+        $sekolah = $detailKelurahan->users()->where('id_role', 2)->get();
 
         return view('data.detailKelurahan', ['kelurahan' => $detailKelurahan, 'sekolah' => $sekolah]);
     }
 
     public function dataPuskesmas(){
-        $dataPuskesmas = User::where('id_role', 4)->get();
-
+        $id_user= Auth::user();
+        if($id_user->id==1){
+            $dataPuskesmas = User::where('id_role',4)->get();
+        }
+        else{
+            $user = User::find($id_user->id);
+            $dataPuskesmas = $user->users()->where('id_role',4)->get();    
+        }
+        
         return view('data.dataPuskesmas', ['dataPuskesmas' => $dataPuskesmas]);
     }
     public function detailPuskesmas($id){
         $detailPuskesmas = User::findOrFail($id);
-        $kelurahan = User::where('parent', $id)->get();
+        $kelurahan = $detailPuskesmas->users()->where('id_role', 3)->get();
 
         return view('data.detailPuskesmas', ['puskesmas' => $detailPuskesmas, 'kelurahan' => $kelurahan]);
     }
@@ -61,7 +90,7 @@ class DataController extends Controller
     }
     public function detailKecamatan($id){
         $detailKecamatan = User::findOrFail($id);
-        $puskesmas = User::where('parent', $id)->get();
+        $puskesmas = $detailKecamatan->users()->where('id_role', 4)->get();
 
         return view('data.detailKecamatan', ['kecamatan' => $detailKecamatan, 'puskesmas' => $puskesmas]);
     }

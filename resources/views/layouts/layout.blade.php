@@ -27,6 +27,19 @@ $role= Auth::user()->getRole->role;
     <link href="/css/sb-admin-2.min.css?v=kjhkawhd" rel="stylesheet">
     <!-- Custom styles for validasi -->
     <link href="/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+    .float{
+        z-index: 1049;
+        position:fixed;
+        width:100px;
+        height:40px;
+        bottom:20px;
+        right:65px;
+        border-radius:5px;
+        text-align:center;
+        box-shadow: 2px 5px 10px #999;
+    }
+    </style>
 
 
 </head>

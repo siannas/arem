@@ -66,9 +66,17 @@ Validasi
 </div>
 
 <div class="container-fluid">
-
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Daftar Form Skrining</h1>
+    
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -132,11 +140,31 @@ Validasi
                                     @csrf
                                         <button class="btn btn-sm btn-secondary"><i class="fas fa-fw fa-copy"></i></button>
                                     </form>
-                                    <form action="{{route('formulir.destroy', [$unit->id])}}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                        <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-trash-alt"></i></button>
-                                    </form>
+                                    <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-trash-alt" data-toggle="modal" data-target="#deleteModal"></i></button>
+                                    <div class="modal modal-danger fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Hapus</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                <form action="{{ route('formulir.destroy', [$unit->id]) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <h5 class="text-center">Yakin Ingin Hapus?</h5>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
+                                                    <button type="submit" class="btn btn-danger">Ya</button>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     @elseif($role==='Siswa')
                                     <form action="{{route('formulir.show', [$unit->id])}}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form>
                                     @endif
@@ -149,7 +177,7 @@ Validasi
             </div>
         </div>
     </div>
-       
+<button class="btn btn-primary float" style="font-size:15px"><i class="fas fa-fw fa-save"></i> Simpan</button>       
 </div>
           
 @endsection

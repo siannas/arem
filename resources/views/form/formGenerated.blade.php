@@ -116,7 +116,15 @@ Validasi
                                     {{ $p->pertanyaan }}
                                 </div>
                                 <div class="col-12 col-md-7">
-                                    <button type="button" class="btn btn-primary">Upload</button>
+                                    <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                                        <label class="custom-file-label" for="inputGroupFile04">Pilih file</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04">Upload</button>
+                                    </div>
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -168,5 +176,11 @@ Validasi
         @endif
     @endforeach
 
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+<script>
+$(document).ready(function () {
+    bsCustomFileInput.init()
+})
 </script>
 @endsection
