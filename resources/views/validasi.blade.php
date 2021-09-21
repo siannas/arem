@@ -50,8 +50,8 @@ Validasi
                         <tr>
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
-                            <td></td>
-                            <td></td>
+                            <td>{{ $unit->kelas }}</td>
+                            <td>{{ $unit->updated_at }}</td>
                             <td><form action="/validasi/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></td></form>
                         </tr>
                         @endforeach

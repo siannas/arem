@@ -73,7 +73,7 @@ Route::resource('/pertanyaan', PertanyaanController::class)->except([
 ]);
 Route::post('/pertanyaan/{formulir}', 'PertanyaanController@store')->name('pertanyaan.store');
 
-Route::get('/formulir/user/{pertanyaan}', 'FormulirController@generate');
+Route::get('/formulir/user/{formulir}', 'FormulirController@generate');
 
 
 Route::get('/tes/{id_puskesmas}', function(App\User $id_puskesmas){

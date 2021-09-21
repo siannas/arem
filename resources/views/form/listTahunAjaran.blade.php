@@ -72,7 +72,17 @@ Validasi
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
+    @elseif (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <p>Error</p>
+            <small>{{ session('error') }}</small>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     @endif
+    
+    <button class="btn btn-primary float">Simpan</button>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -162,7 +172,7 @@ Validasi
                                     </div>
                                     
                                     @elseif($role==='Siswa')
-                                    <form action="{{route('formulir.show', [$unit->id])}}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form>
+                                    <form action="/formulir/user/{{ $unit->id }}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form>
                                     @endif
                                 </div>
                             </td>
@@ -218,7 +228,6 @@ Validasi
             </div>
         </div>
     </div>
-<button class="btn btn-primary float" style="font-size:15px"><i class="fas fa-fw fa-save"></i> Simpan</button>       
 </div>
           
 @endsection
