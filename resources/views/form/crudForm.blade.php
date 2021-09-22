@@ -12,7 +12,6 @@ active
 <div class="container-fluid">
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Tambah Form Skrining</h1>
-    <form action="#" id="mainform" method="get" name="mainform">
     <div class="row">
         <div class="col-md">
             <!-- Basic Card Example -->
@@ -21,22 +20,23 @@ active
                     <h6 class="m-0 font-weight-bold text-primary">Detail</h6>
                 </div>
                 <div class="card-body">
+                    <form>
                     <div class="form-group">
                         <label><b>Judul</b></label>
-                        <input type="text" class="form-control" placeholder="Masukkan Judul Pertanyaan">
+                        <input type="text" class="form-control" placeholder="Masukkan Judul Pertanyaan" name="judul">
                     </div>
                     <div class="form-group">
                         <label><b>Deskripsi</b></label>
-                        <textarea class="form-control" rows="2" placeholder="Masukkan Deskripsi Pertanyaan"></textarea>
+                        <textarea class="form-control" rows="2" placeholder="Masukkan Deskripsi Pertanyaan" name="deskripsi"></textarea>
                     </div>
                     <div class="form-group">
                         <label><b>Tipe Pertanyaan</b></label>
                         <div class="input-group">
                             <select id="terserah" class="form-control">
                                 <option disabled selected>Pilih Tipe</option>
-                                <option value="1">Pilihan</option>
+                                <!-- <option value="1">Pilihan</option> -->
                                 <option value="2">Isian</option>
-                                <option value="3">Gabungan</option>
+                                <option value="3">Pilihan</option>
                                 <option value="4">Isian Dengan Foto</option>
                             </select>
                             <div class="input-group-append">
@@ -44,24 +44,25 @@ active
                             </div>
                         </div>
                     </div>
-                    
+                    </form>
                 </div>
                 <div class="card-footer">
-                    <input type="submit" value="Submit" class="btn btn-primary">
+                    <button  class="btn btn-primary" onclick="$('#mainform').trigger('submit')">Simpan</button>
                 </div>
             </div>
         </div>
 
         <div class="col-md">
-            <div class="accordion shadow" id="accordionPertanyaan">
-            </div>
+            <form action="" id="mainform" method="post">
+                <div class="accordion shadow" id="accordionPertanyaan"> 
+                </div>
+            </form>
         </div>
     </div>
-    </form>
     <template>
         <div class="card">
             <div class="d-flex">
-                <a class="card-header py-3 flex-grow-1 collapsed" href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
+                <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
                 </a>
                 <div class="input-group" style="width:unset!important;">
                     <div class="input-group-append">
@@ -73,7 +74,7 @@ active
                 <div class="card-body">
                     <div class="form-group">
                         <div class="mb-2" id="sub-pertanyaan">
-                            <input type="text" class="form-control mb-3" placeholder="Pertanyaan" >
+                            <input type="text" class="form-control mb-3" placeholder="Pertanyaan" id="pertanyaan" >
                         </div>  
                     </div>
                 </div>
@@ -97,13 +98,13 @@ active
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Pertanyaan</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" placeholder="Perintah Pertanyaan">
+                    <input type="text" class="form-control" placeholder="Perintah Pertanyaan" id="tambahan-pertanyaan">
                 </div>
             </div>
             <div class="form-group row collapse" id="suffixContainer">
                 <label class="col-sm-3 col-form-label">Suffix</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" placeholder="Suffix" disabled>
+                    <input type="text" class="form-control" placeholder="Suffix" id="tambahan-suffix" disabled>
                 </div>
             </div>
         </div>
@@ -113,6 +114,71 @@ active
 
 @section('script')
 <script>
+var myQuestionss = {};
+
+function getFormData($form){
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
+
+    $.map(unindexed_array, function(n, i){
+        var key =n['name'];
+        var is_arr=false;
+        if(/(\[\d+\])$/.test(key)){
+            key = key.replace( /(\[\d+\])$/, "");
+            is_arr=true;
+        }else if(/(\[\])$/.test(key)){
+            key = key.replace( /(\[\])$/, "");
+            is_arr=true;
+        }
+
+        if(is_arr && !(key in indexed_array)) indexed_array[key] = [];            
+        if(typeof n['value'] === 'string') n['value']=n['value'].trim()
+
+        if(is_arr){
+            indexed_array[key].push( n['value']);
+        }else{
+            indexed_array[key] = n['value'];
+        }
+        
+    });
+
+    return indexed_array;
+}
+
+$('#mainform').submit(function(e){
+    e.preventDefault();
+    var obj = $("form");
+    var all= {};
+    $.each(obj, function(i, val) {
+        Object.assign(all,getFormData($(val)));
+    });
+    console.log(all);
+    var json = []
+    for (var key in myQuestions) {
+        var counter = 0;
+        myQuestions[key]['pertanyaan'] = all[key+"_pertanyaan"];
+        if(myQuestions[key]['tipe'] === 3){
+            const types = all[key+"_opsi_tipe"]
+            for (var index in types) {
+                if(types[index] === 'none'){
+                    myQuestions[key]['opsi'][index] = all[key+"_opsi"][index]
+                }else if(types[index] === '2'){
+                    var childKey = all[key+"_child"][counter];
+                    myQuestions[key]['opsi'][index] = [
+                        all[key+"_opsi"][index],
+                        {
+                            "id": childKey,
+                            "tipe": 2,
+                            "pertanyaan": all[counter+"_pertanyaan"],
+                            "suffix": all[counter+"_suffix"],
+                            "required": true
+                        }
+                    ];
+                }
+            }
+        }
+    }
+})
 
 const myToggleInput = function(self, id_container){
     const elem = $('#'+id_container);
@@ -128,7 +194,6 @@ const myToggleInput = function(self, id_container){
 }
 
 const myPertanyaan = function(tipe, id){
-    console.log(tipe);
     if (tipe === '1') {
 
     }else if(tipe === '3'){
@@ -137,6 +202,11 @@ const myPertanyaan = function(tipe, id){
         const elem = $(clone);
         const container =  elem.children(":first-child");
         container.prop('id', id+'_pertanyaan');
+
+        var pertanyaan = elem.find('#pertanyaan');
+        pertanyaan.prop('id', id+'_pertanyaan');
+        pertanyaan.attr('name', id+'_pertanyaan');
+        pertanyaan.attr('onfocusout', 'updatePertanyaan(this.value,"'+id+'_judul" )');
 
         var toggle = elem.find('#collapse-toggle');
         toggle.prop('id', id+'_collapse-toggle');
@@ -152,13 +222,15 @@ const myPertanyaan = function(tipe, id){
         html = '';
         for (let i = 1; i < 3; i++) {
             var id_ = id+'_Pilihan'+i+'_container';
+            var idRandom = getRandomString(5);
             var html = html + `<div class="input-group mb-3" id="${id_}">
                 <div class="input-group-prepend align-items-center" style="padding: 0 12px;">
                     <input type="radio" aria-label="Radio button" style="width: 1em;height: 1em;" disabled>
                 </div>
-                <input type="text" class="form-control d-inline" placeholder="Pilihan ${i}">
+                <input type="text" name="${id+'_opsi[]'}" class="form-control d-inline" placeholder="Pilihan ${i}">
+                <input type="text" name="${id+'_child[]'}" value="${idRandom}" readonly hidden>
                 <div class="input-group-append">
-                    <select  class="custom-select" placeholder="" style="border-radius: 0 5.6px 5.6px 0;" onchange="myPertanyaanTambahan(this,'${id_}')">
+                    <select name="${id+'_opsi_tipe[]'}" class="custom-select" placeholder="" style="border-radius: 0 5.6px 5.6px 0;" onchange="myPertanyaanTambahan(this,'${id_}', '${idRandom}')">
                         <option disabled>Jika dipilih</option>
                         <option value="none" selected>None</option>
                         <option value="2">Isian</option>
@@ -176,7 +248,7 @@ const myPertanyaan = function(tipe, id){
     }
 }
 
-const myPertanyaanTambahan = function(self, id_neighbor){
+const myPertanyaanTambahan = function(self, id_neighbor, id_baru){
     const val = self.value;
     const curElem = $('#'+id_neighbor+'_tambahan');
     
@@ -198,8 +270,20 @@ const myPertanyaanTambahan = function(self, id_neighbor){
         var suffixContainer = elem.find('#suffixContainer');
         suffixContainer.prop('id', id_neighbor+'_suffixContainer');
 
+        var tambahanPertanyaan = elem.find('#tambahan-pertanyaan');
+        tambahanPertanyaan.removeProp('id');
+        tambahanPertanyaan.attr('name', id_baru+'_pertanyaan');
+
+        var tambahanSuffix = elem.find('#tambahan-suffix');
+        tambahanSuffix.removeProp('id');
+        tambahanSuffix.attr('name', id_baru+'_suffix');
+
         elem.insertAfter('#'+id_neighbor);
     }
+}
+
+const updatePertanyaan = function(val, id_judul){
+    $('#'+id_judul).text(val);
 }
 
 var i = 0; /* Set Global Variable i */
@@ -244,10 +328,15 @@ function addPertanyaan(){
         document.getElementById("myForm").appendChild(clon);
     }
     else if(value==='3'){
-        // var temp = document.getElementsByTagName("template")[2];
-        // var clon = temp.content.cloneNode(true);
-        // document.getElementById("myForm").appendChild(clon);
         var randomId = getRandomString(5);
+        var questionObj = {
+            "id": randomId,
+            "tipe": 3,
+            "pertanyaan": "",
+            "opsi": ["", ""],
+            "required": true
+        };
+        myQuestionss[randomId]=questionObj;
         myPertanyaan('3',randomId);
     }
     else{
