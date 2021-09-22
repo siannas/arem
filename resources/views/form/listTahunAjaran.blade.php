@@ -81,8 +81,6 @@ Validasi
             </button>
         </div>
     @endif
-    
-    <button class="btn btn-primary float">Simpan</button>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">

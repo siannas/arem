@@ -31,10 +31,10 @@ $role= Auth::user()->getRole->role;
     .float{
         z-index: 1049;
         position:fixed;
-        width:100px;
-        height:40px;
-        bottom:20px;
-        right:65px;
+        width:2.75rem;
+        height:2.75rem;
+        bottom:15px;
+        right:1rem;
         border-radius:5px;
         text-align:center;
         box-shadow: 2px 5px 10px #999;

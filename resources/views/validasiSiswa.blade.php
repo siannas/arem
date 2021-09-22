@@ -31,140 +31,121 @@ Validasi
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <h6 class="card-subtitle mb-3"><b>1. Riwayat Kesehatan</b></h6>
-            <div class="row">
-                <div class="col-4">Alergi</div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Tidak
-                    </label>
+        <div class="card-body row">
+        @foreach ($allPertanyaan as $key => $ap)
+        @php
+            $json = json_decode($ap->json);
+        @endphp
+        <div class="col-lg-12">
+
+            <!-- Basic Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ $ap->judul }}</h6>
                 </div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Ya
-                    </label>
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Sebutkan">
-                </div>
-            </div>
-            <div class="row" style="padding-top:10px">
-                <div class="col-4">Pernah mengalami cedera</div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions2" id="inlineRadio1" value="option1"> Tidak
-                    </label>
-                </div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions2" id="inlineRadio2" value="option2"> Ya
-                    </label>
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Sebutkan">
-                </div>
-            </div>
-            <div class="row" style="padding-top:10px">
-                <div class="col-4">Riwayat kejang berulang</div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions3" id="inlineRadio1" value="option1"> Tidak
-                    </label>
-                </div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions3" id="inlineRadio2" value="option2"> Ya
-                    </label>
-                </div>
-                <div class="col">
-                    
-                </div>
-            </div>
-            <div class="row" style="padding-top:10px">
-                <div class="col-4">Riwayat pingsan</div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions4" id="inlineRadio1" value="option1"> Tidak
-                    </label>
-                </div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions4" id="inlineRadio2" value="option2"> Ya
-                    </label>
-                </div>
-                <div class="col">
-                    
-                </div>
-            </div>
-            <div class="mb-5"><hr></div>
-            <h6 class="card-subtitle mb-3"><b>2. Riwayat Imunisasi</b></h6>
-            <div class="row">
-                <div class="col-4">Alergi</div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Tidak
-                    </label>
-                </div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Ya
-                    </label>
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Sebutkan">
-                </div>
-            </div>
-            <div class="row" style="padding-top:10px">
-                <div class="col-4">Pernah mengalami cedera</div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions2" id="inlineRadio1" value="option1"> Tidak
-                    </label>
-                </div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions2" id="inlineRadio2" value="option2"> Ya
-                    </label>
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Sebutkan">
-                </div>
-            </div>
-            <div class="row" style="padding-top:10px">
-                <div class="col-4">Riwayat kejang berulang</div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions3" id="inlineRadio1" value="option1"> Tidak
-                    </label>
-                </div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions3" id="inlineRadio2" value="option2"> Ya
-                    </label>
-                </div>
-                <div class="col">
-                    
+                <div class="card-body">
+                    @foreach ($json->pertanyaan as $p)
+                        @if ($p->tipe === 1)
+                            <div class="row" style="padding-top:20px">
+                                <div class="col-12 col-md-5" style="margin-bottom:5px">
+                                    {{ $p->pertanyaan }}
+                                </div>
+                                <div class="col-12 col-md-7" style="padding:0">
+                                    <div class="row" style="margin:0px">
+                                        @foreach ($p->opsi as $index => $o)
+                                        <label class="radio-inline col-6 col-md-4">
+                                            <input type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o }}"> {{ $o }}
+                                        </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @elseif ($p->tipe === 2)
+                            <div class="row" style="padding-top:20px">
+                                <div class="col-12 col-md-5" style="margin-bottom:5px">
+                                    {{ $p->pertanyaan }}
+                                </div>
+                                <div class="col-12 col-md-7">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="" name="{{ $p->id }}" >
+                                        @if (isset($p->suffix))
+                                            <div class="input-group-append">
+                                                <div class="input-group-text" >{{ $p->suffix }}</div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @elseif ($p->tipe === 3)
+                            <div class="row" style="padding-top:30px" id="98s7dfy-container">
+                                <div class="col-12 col-md-5" style="margin-bottom:5px">
+                                    {{ $p->pertanyaan }}
+                                </div>
+                                <div class="col-12 col-md-7" style="padding:0">
+                                    <div class="row" style="margin:0px">
+                                        @foreach ($p->opsi as $index => $o)
+                                            @if (is_object($o))
+                                                <label class="radio-inline col-6 col-md-4">
+                                                    <input type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o->{'0'} }}"> {{ $o->{'0'} }}
+                                                </label>
+                                            @else
+                                                <label class="radio-inline col-6 col-md-4">
+                                                    <input type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o }}"> {{ $o }}
+                                                </label>
+                                            @endif
+                                        @endforeach
+                                        @foreach ($p->opsi as $index => $o)
+                                            @if (is_object($o) and $o->{'if-selected'}->tipe === 2 )
+                                                <div class="col-12 collapse" style="flex:1" id="{{ $o->{'if-selected'}->id }}-container">
+                                                    <input type="text" class="form-control" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id }}" placeholder="{{ $o->{'if-selected'}->pertanyaan }}">
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            @foreach ($p->opsi as $index => $o)
+                                @if (is_object($o) and $o->{'if-selected'}->tipe === 1 )
+                                    <div class="row collapse" style="padding-top:20px" id="{{ $o->{'if-selected'}->id }}-container">
+                                        <div class="col-12 col-md-5" style="margin-bottom:5px">
+                                            {{ $o->{'if-selected'}->pertanyaan }}
+                                        </div>
+                                        <div class="col-12 col-md-7" style="padding:0">
+                                            <div class="row" style="margin:0px">
+                                                @foreach ($o->{'if-selected'}->opsi as $index2 => $o2)
+                                                <label class="radio-inline col-6 col-md-4">
+                                                    <input type="radio" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id.'__'.$index2 }}" value="{{ $o2 }}"> {{ $o2 }}
+                                                </label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        @elseif ($p->tipe === 4)
+                            <div class="row" style="padding-top:20px">
+                                <div class="col-12 col-md-5" style="margin-bottom:5px">
+                                    {{ $p->pertanyaan }}
+                                </div>
+                                <div class="col-12 col-md-7">
+                                    <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                                        <label class="custom-file-label" for="inputGroupFile04">Pilih file</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04">Upload</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
             </div>
-            <div class="row" style="padding-top:10px">
-                <div class="col-4">Riwayat pingsan</div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions4" id="inlineRadio1" value="option1"> Tidak
-                    </label>
-                </div>
-                <div class="col">
-                    <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions4" id="inlineRadio2" value="option2"> Ya
-                    </label>
-                </div>
-                <div class="col">
-                    
-                </div>
-            </div>
-            <div class="mb-5"><hr></div>
         </div>
+        @endforeach
+    </div>
         <div class="card-footer text-right">
             <button class="btn btn-warning"><i class="fas fa-fw fa-check"></i> Validasi</button>
             <a href="/validasi" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
