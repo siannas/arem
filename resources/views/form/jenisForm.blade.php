@@ -89,6 +89,14 @@ Validasi
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Jenis Pemeriksaan</h1>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
     <div class="row">
 
         @foreach($pertanyaan as $unit)
@@ -100,13 +108,38 @@ Validasi
                         <div class="col mr-2">
                             <div class="font-weight-bold text-primary text-uppercase mb-1">{{ $unit->judul }}</div>
                             <a href="/form" class="btn btn-primary"><i class="fas fa-pen"></i> Edit</a>
-                            <a href="/form" class="btn btn-danger"><i class="fas fa-trash"></i> Hapus</a>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hapus{{ $unit->id }}"><i class="fas fa-fw fa-trash-alt"></i> Hapus</button>
+                            <div class="modal modal-danger fade" id="hapus{{ $unit->id }}" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Hapus</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                        <form action="{{ route('pertanyaan.destroy', [$unit->id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <h5 class="text-center">Yakin Ingin Hapus?</h5>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
+                                            <button type="submit" class="btn btn-danger">Ya</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                                    
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         @endforeach
+
         <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">

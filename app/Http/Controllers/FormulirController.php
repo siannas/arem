@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Formulir;
 use App\Pertanyaan;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Database\QueryException;
 
 class FormulirController extends Controller
 {
@@ -95,8 +96,12 @@ class FormulirController extends Controller
      */
     public function destroy($id)
     {
-        $formulir = Formulir::findOrFail($id);
-        $formulir->delete();
+        try {
+            $formulir = Formulir::findOrFail($id);
+            $formulir->delete();
+        }catch (QueryException $exception) {
+            return back()->withError($exception->getMessage())->withInput();
+        }
         return redirect()->action('FormulirController@index')->with('success', 'Data Berhasil Dihapus');;
     }
 
@@ -126,8 +131,7 @@ class FormulirController extends Controller
     }
 
     public function generate($id){
-        $pertanyaan = Pertanyaan::findOrFail($id);
-        $json = json_decode($pertanyaan->json);
-        return view('form.formGenerated', ['json' => $json]);
+        $formulir = Formulir::findOrFail($id);
+        return view('form.formGenerated', [ 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan ]);
     }
 }

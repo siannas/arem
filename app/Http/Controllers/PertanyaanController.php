@@ -83,7 +83,8 @@ class PertanyaanController extends Controller
     public function destroy($id)
     {
         $pertanyaan = Pertanyaan::findOrFail($id);
+        $id_form = $pertanyaan->id_formulir;
         $pertanyaan->delete();
-        return $pertanyaan;
+        return redirect()->action('FormulirController@show', $id_form)->with('success', 'Data Berhasil Dihapus');;
     }
 }
