@@ -343,6 +343,15 @@ $role= Auth::user()->getRole->role;
     @yield('script')
 
     <script>
+        function getRandomString(length) {
+            var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var result = '';
+            for ( var i = 0; i < length; i++ ) {
+                result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+            }
+            return result;
+        }
+        
         const myRequest = {
             get: function(url){
                 return $.ajax({
