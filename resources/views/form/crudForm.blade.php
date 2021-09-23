@@ -23,7 +23,7 @@ active
                     <form>
                     <div class="form-group">
                         <label><b>Judul</b></label>
-                        <input type="text" class="form-control" placeholder="Masukkan Judul Pertanyaan" name="judul">
+                        <input type="text" class="form-control" placeholder="Masukkan Judul Pertanyaan" name="judul" value="{{ $judul }}">
                     </div>
                     <div class="form-group">
                         <label><b>Deskripsi</b></label>
@@ -37,7 +37,7 @@ active
                                 <!-- <option value="1">Pilihan</option> -->
                                 <option value="2">Isian</option>
                                 <option value="3">Pilihan</option>
-                                <option value="4">Isian Dengan Foto</option>
+                                <option value="4">Upload</option>
                             </select>
                             <div class="input-group-append">
                                 <button class="btn btn-success font-weight-bold" type="button" onclick="addPertanyaan()"><i class="fas fa-plus"></i>&nbsp Tambah</button>
@@ -55,6 +55,7 @@ active
         <div class="col-md">
             <form action="" id="mainform" method="post">
                 <div class="accordion shadow" id="accordionPertanyaan"> 
+                
                 </div>
             </form>
         </div>
@@ -62,15 +63,15 @@ active
     <template>
         <div class="card">
             <div class="d-flex">
-                <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
+                <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="true">
                 </a>
                 <div class="input-group" style="width:unset!important;">
                     <div class="input-group-append">
-                        <button class="btn btn-danger font-weight-bold" style="padding: 0 18px;border-radius:0;" type="button"><i class="fas fa-trash"></i></button>
+                        <button class="btn btn-danger font-weight-bold" style="padding: 0 18px;border-radius:0;" type="button" id="delete"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             </div>
-            <div id="collapse" class="collapse" data-parent="#accordionPertanyaan">
+            <div id="collapse" class="collapse show" data-parent="#accordionPertanyaan">
                 <div class="card-body">
                     <div class="form-group">
                         <div class="mb-2" id="sub-pertanyaan">
@@ -82,8 +83,57 @@ active
         </div>
     </template>
     <template>
+        <div class="card">
+            <div class="d-flex">
+                <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="true">
+                </a>
+                <div class="input-group" style="width:unset!important;">
+                    <div class="input-group-append">
+                        <button class="btn btn-danger font-weight-bold" style="padding: 0 18px;border-radius:0;" type="button" id="delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div id="collapse" class="collapse show" data-parent="#accordionPertanyaan">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div></div>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="TanpaSuffix" checked onclick="myToggleInput(this, '#suffix-container')">
+                            <label class="custom-control-label" for="TanpaSuffix" >Tanpa Suffix</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control mb-3" placeholder="Pertanyaan" id="pertanyaan" >  
+                    </div>
+                    <div class="form-group row collapse" id="suffixContainer">
+                        <label class="col-sm-3 col-form-label">Suffix</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Suffix" id="suffix" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </template>
     <template>
+        <div class="card">
+            <div class="d-flex">
+                <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
+                </a>
+                <div class="input-group" style="width:unset!important;">
+                    <div class="input-group-append">
+                        <button class="btn btn-danger font-weight-bold" style="padding: 0 18px;border-radius:0;" type="button" id="delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div id="collapse" class="collapse" data-parent="#accordionPertanyaan">
+                <div class="card-body">
+                    <div class="form-group">
+                        <input type="text" class="form-control mb-3" placeholder="Perintah" id="pertanyaan" >  
+                    </div>
+                </div>
+            </div>
+        </div>
     </template>
 
     <template>
@@ -114,7 +164,9 @@ active
 
 @section('script')
 <script>
-var myQuestionss = {};
+var myQuestions = {};
+var myUrutan = [];
+var jsonPertanyaan = @json($pertanyaan);
 
 function getFormData($form){
     var unindexed_array = $form.serializeArray();
@@ -154,30 +206,52 @@ $('#mainform').submit(function(e){
     });
     console.log(all);
     var json = []
-    for (var key in myQuestions) {
-        var counter = 0;
+    var deleted = []
+    for (var i in myUrutan) {
+        var key = myUrutan[i];
+        if(all[key+"_pertanyaan"] === undefined){
+            delete myQuestions[key]
+            deleted.push(i)
+            continue
+        }
         myQuestions[key]['pertanyaan'] = all[key+"_pertanyaan"];
-        if(myQuestions[key]['tipe'] === 3){
+
+        if (myQuestions[key]['tipe'] === 2) {
+            myQuestions[key]['suffix'] = all[key+"_suffix"] || null;
+        }
+        else if(myQuestions[key]['tipe'] === 3){
             const types = all[key+"_opsi_tipe"]
             for (var index in types) {
                 if(types[index] === 'none'){
                     myQuestions[key]['opsi'][index] = all[key+"_opsi"][index]
                 }else if(types[index] === '2'){
-                    var childKey = all[key+"_child"][counter];
-                    myQuestions[key]['opsi'][index] = [
-                        all[key+"_opsi"][index],
-                        {
+                    var childKey = all[key+"_child"][index];
+                    myQuestions[key]['opsi'][index] = {
+                        '0': all[key+"_opsi"][index],
+                        'if-selected': {
                             "id": childKey,
                             "tipe": 2,
-                            "pertanyaan": all[counter+"_pertanyaan"],
-                            "suffix": all[counter+"_suffix"],
+                            "pertanyaan": all[childKey+"_pertanyaan"],
+                            "suffix": all[childKey+"_suffix"] || null,
                             "required": true
                         }
-                    ];
+                    };
                 }
             }
         }
+        json.push(myQuestions[key]);
     }
+    //delete key yang gak dipakai karena sudah didelete
+    for (let i = deleted.length-1; i >= 0  ; i--) {
+        myUrutan.splice(i,1);
+    }
+    
+    jsonPertanyaan = {
+        "judul": all['judul'],
+        "gambar-petunjuk": null,
+        "pertanyaan": json
+    }
+    console.log(jsonPertanyaan);
 })
 
 const myToggleInput = function(self, id_container){
@@ -193,7 +267,7 @@ const myToggleInput = function(self, id_container){
     }
 }
 
-const myPertanyaan = function(tipe, id){
+const myPertanyaan = function(tipe, id, data={}){
     if (tipe === '1') {
 
     }else if(tipe === '3'){
@@ -207,10 +281,15 @@ const myPertanyaan = function(tipe, id){
         pertanyaan.prop('id', id+'_pertanyaan');
         pertanyaan.attr('name', id+'_pertanyaan');
         pertanyaan.attr('onfocusout', 'updatePertanyaan(this.value,"'+id+'_judul" )');
+        pertanyaan.val(data.pertanyaan || "");
+
+        var deleteButton = elem.find('#delete');
+        deleteButton.prop('id', id+'_delete');
+        deleteButton.attr('onclick', 'removeElement("'+id+'_pertanyaan")');
 
         var toggle = elem.find('#collapse-toggle');
         toggle.prop('id', id+'_collapse-toggle');
-        toggle.html('<h6 class="m-0 font-weight-bold text-primary" id="'+id+'_judul" >Pertanyaan</h6>')
+        toggle.html('<h6 class="m-0 font-weight-bold text-primary" id="'+id+'_judul" >'+(data.pertanyaan || "Pertanyaan")+'</h6>')
         toggle.attr('data-target', '#'+id+'_collapse');
         toggle.attr('aria-controls', id+'_collapse');
 
@@ -242,9 +321,77 @@ const myPertanyaan = function(tipe, id){
         subPertanyaan.append(html);
         $("#accordionPertanyaan").append(container);
     }else if(tipe === '2'){
+        var temp = document.getElementsByTagName("template")[1];
+        var clone = temp.content.cloneNode(true);
+        const elem = $(clone);
+        const container =  elem.children(":first-child");
+        container.prop('id', id+'_pertanyaan');
 
+        var pertanyaan = elem.find('#pertanyaan');
+        pertanyaan.prop('id', id+'_pertanyaan');
+        pertanyaan.attr('name', id+'_pertanyaan');
+        pertanyaan.attr('onfocusout', 'updatePertanyaan(this.value,"'+id+'_judul" )');
+        pertanyaan.val(data.pertanyaan || "");
+
+        var deleteButton = elem.find('#delete');
+        deleteButton.prop('id', id+'_delete');
+        deleteButton.attr('onclick', 'removeElement("'+id+'_pertanyaan")');
+
+        var toggle = elem.find('#collapse-toggle');
+        toggle.prop('id', id+'_collapse-toggle');
+        toggle.html('<h6 class="m-0 font-weight-bold text-primary" id="'+id+'_judul" >'+(data.pertanyaan || "Pertanyaan")+'</h6>')
+        toggle.attr('data-target', '#'+id+'_collapse');
+        toggle.attr('aria-controls', id+'_collapse');
+
+        var collapse = elem.find('#collapse');
+        collapse.prop('id', id+'_collapse');
+
+        var TanpaSuffix = elem.find('#TanpaSuffix');
+        TanpaSuffix.prop('id', id+'_TanpaSuffix');
+        TanpaSuffix.attr('onclick', "myToggleInput(this, '"+id+"_suffixContainer')");
+        TanpaSuffix.next().attr('for', id+'_TanpaSuffix');
+        
+        var suffixContainer = elem.find('#suffixContainer');
+        suffixContainer.prop('id', id+'_suffixContainer');
+
+        var tambahanSuffix = elem.find('#suffix');
+        tambahanSuffix.attr('name', id+'_suffix');
+        tambahanSuffix.val(data.suffix || "");
+
+        if(data.suffix){
+            TanpaSuffix.attr('checked', false );
+            suffixContainer.addClass('show');
+            tambahanSuffix.prop('disabled', false);
+        }
+
+        $("#accordionPertanyaan").append(container);
     }else if(tipe === '4'){
+        var temp = document.getElementsByTagName("template")[2];
+        var clone = temp.content.cloneNode(true);
+        const elem = $(clone);
+        const container =  elem.children(":first-child");
+        container.prop('id', id+'_pertanyaan');
 
+        var pertanyaan = elem.find('#pertanyaan');
+        pertanyaan.prop('id', id+'_pertanyaan');
+        pertanyaan.attr('name', id+'_pertanyaan');
+        pertanyaan.attr('onfocusout', 'updatePertanyaan(this.value,"'+id+'_judul" )');
+        pertanyaan.val(data.pertanyaan || "");
+
+        var deleteButton = elem.find('#delete');
+        deleteButton.prop('id', id+'_delete');
+        deleteButton.attr('onclick', 'removeElement("'+id+'_pertanyaan")');
+
+        var toggle = elem.find('#collapse-toggle');
+        toggle.prop('id', id+'_collapse-toggle');
+        toggle.html('<h6 class="m-0 font-weight-bold text-primary" id="'+id+'_judul" >'+(data.pertanyaan || "Pertanyaan")+'</h6>')
+        toggle.attr('data-target', '#'+id+'_collapse');
+        toggle.attr('aria-controls', id+'_collapse');
+
+        var collapse = elem.find('#collapse');
+        collapse.prop('id', id+'_collapse');
+
+        $("#accordionPertanyaan").append(container);
     }
 }
 
@@ -283,6 +430,7 @@ const myPertanyaanTambahan = function(self, id_neighbor, id_baru){
 }
 
 const updatePertanyaan = function(val, id_judul){
+    if (val === "") val = "Pertanyaan";
     $('#'+id_judul).text(val);
 }
 
@@ -295,19 +443,8 @@ function increment(){
 Function to Remove Form Elements Dynamically
 ---------------------------------------------
 */
-function removeElement(parentDiv, childDiv){
-    if (childDiv == parentDiv){
-        alert("The parent div cannot be removed.");
-    }
-    else if (document.getElementById(childDiv)){
-        var child = document.getElementById(childDiv);
-        var parent = document.getElementById(parentDiv);
-        parent.removeChild(child);
-    }
-    else{
-        alert("Child div has already been removed or does not exist.");
-    return false;
-    }
+function removeElement(id){
+    $('#'+id).remove();
 }
 /*
 ----------------------------------------------------------------------------
@@ -316,16 +453,18 @@ Functions that will be called upon, when user click on the Name text field.
 */
 function addPertanyaan(){
     var value = document.getElementById('terserah').value
-    console.log(value)
-    if(value==='1'){
-        var temp = document.getElementsByTagName("template")[0];
-        var clon = temp.content.cloneNode(true);
-        document.getElementById("myForm").appendChild(clon);
-    }
-    else if(value==='2'){
-        var temp = document.getElementsByTagName("template")[1];
-        var clon = temp.content.cloneNode(true);
-        document.getElementById("myForm").appendChild(clon);
+    if(value==='2'){
+        var randomId = getRandomString(5);
+        var questionObj = {
+            "id": randomId,
+            "tipe": 2,
+            "pertanyaan": "",
+            "suffix": "",
+            "required": true
+        };
+        myUrutan.push(randomId)
+        myQuestions[randomId]=questionObj;
+        myPertanyaan('2',randomId);
     }
     else if(value==='3'){
         var randomId = getRandomString(5);
@@ -336,35 +475,30 @@ function addPertanyaan(){
             "opsi": ["", ""],
             "required": true
         };
-        myQuestionss[randomId]=questionObj;
+        myUrutan.push(randomId)
+        myQuestions[randomId]=questionObj;
         myPertanyaan('3',randomId);
     }
-    else{
-        // var r = document.createElement('span');
-        // var y = document.createElement("INPUT");
-        // y.setAttribute("type", "text");
-        // y.setAttribute("class", "form-control");
-        // y.setAttribute("placeholder", "Name");
-        // var g = document.createElement("I");
-        // g.setAttribute("class", "fas fa-times-circle");
-        // increment();
-        // y.setAttribute("Name", "textelement_" + i);
-        // r.appendChild(y);
-        // g.setAttribute("onclick", "removeElement('myForm','id_" + i + "')");
-        // r.appendChild(g);
-        // r.setAttribute("id", "id_" + i);
-        // document.getElementById("myForm").appendChild(r);
+    else if(value==='4'){
+        var randomId = getRandomString(5);
+        var questionObj = {
+            "id": randomId,
+            "tipe": 4,
+            "pertanyaan": "",
+            "required": true
+        };
+        myUrutan.push(randomId)
+        myQuestions[randomId]=questionObj;
+        myPertanyaan('4',randomId);
     }
-    
-}
-/*
------------------------------------------------------------------------------
-Functions that will be called upon, when user click on the Reset Button.
-------------------------------------------------------------------------------
-*/
-function resetElements(){
-document.getElementById('myForm').innerHTML = '';
 }
 
+$( document ).ready(function() {
+@foreach ( $pertanyaan->pertanyaan as $key => $val )
+myUrutan.push(@json($val->id));
+myQuestions[@json($val->id)] = @json($val);
+myPertanyaan((@json($val->tipe)).toString(), @json($val->id), @json($val));
+@endforeach
+});
 </script>
 @endsection

@@ -51,6 +51,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/tambah-form', function () {
             return view('form.crudForm');
         });
+        Route::get('/form/{pertanyaan}', function (App\Pertanyaan $pertanyaan) {
+            $judul = $pertanyaan->judul;
+            $pertanyaan = json_decode($pertanyaan->json);
+            return view('form.crudForm', ['judul' => $judul , 'pertanyaan' => $pertanyaan]);
+        });
     });
     
     Route::get('/data-siswa/{id}', 'DataController@detailSiswa');
