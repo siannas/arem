@@ -13,14 +13,10 @@ class DataController extends Controller
 {
     public function dataSiswa(){
         $id_user= Auth::user();
+        $tahunAjar = Metadata::where('key', 'tahun-ajaran')->first();
+        $cekForm = Formulir::select('id')->where('tahun_ajaran', $tahunAjar->data)->get();
+
         if($id_user->id==1){
-            // $dataSiswa = User::where('id_role',1)->get();
-            $tahunAjar = Metadata::where('key', 'tahun-ajaran')->first();
-            $cekForm = Formulir::select('id')->where('tahun_ajaran', $tahunAjar->data)->get();
-            // foreach($cekForm as $unit){
-            //     $jawaban[] = Jawaban::select('id_user', 'validasi')->where('id_formulir', $unit->id)->get();
-            // }
-            
             $dataSiswa = User::leftJoin('jawaban', 'users.id', '=', 'jawaban.id_user')
             ->select('users.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.created_at')
             ->where('id_role', 1)->whereIn('jawaban.id_formulir', $cekForm)->get();
@@ -43,8 +39,28 @@ class DataController extends Controller
 
         }
         else{
-            $user = User::find($id_user->id);
-            $dataSiswa = $user->users()->where('id_role',1)->get();
+            // $user = User::find($id_user->id);
+            // $siswa = $user->users()->where('id_role',1)->get();
+
+            $dataSiswa = User::find($id_user->id)->users()->where('id_role', 1)
+            ->leftJoin('jawaban', 'users.id', '=', 'jawaban.id_user')
+            ->select('users.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.created_at')
+            ->whereIn('jawaban.id_formulir', $cekForm)->get();
+
+            if (count($dataSiswa)!=0){
+                foreach($dataSiswa as $unit){
+                    $idSiswa[] = $unit->id;
+                }
+                $dataSiswaB = User::find($id_user->id)->select('id', 'nama', 'username', 'kelas')->where('id_role',1)->whereNotIn('id', $idSiswa)->get();
+                $dataCampur = $dataSiswa->concat($dataSiswaB);
+
+                return view('data.dataSiswa', ['dataSiswa' => $dataCampur]);
+            }
+            else{
+                $dataSiswa = User::where('id_role',1)->get();
+
+                return view('data.dataSiswa', ['dataSiswa'=>$dataSiswa]);
+            }
         }
     
         return view('data.dataSiswa', ['dataSiswa' => $dataSiswa]);

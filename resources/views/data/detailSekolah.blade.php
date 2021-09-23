@@ -60,7 +60,15 @@ Validasi
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
                             <td>{{ $unit->kelas }}</td>
-                            <td></td>
+                            <td>
+                                @if($unit->validasi===1)
+                                <div class="badge bg-success text-white rounded-pill">Tervalidasi</div>
+                                @elseif($unit->validasi===0)
+                                <div class="badge bg-warning text-white rounded-pill">Belum Tervalidasi</div>
+                                @else
+                                <div class="badge bg-danger text-white rounded-pill">Belum Mengisi</div>
+                                @endif
+                            </td>
                             <td>{{ $unit->created_at }}</td>
                             <td><form action="/data-siswa/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form></td>
                         </tr>
