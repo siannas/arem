@@ -44,7 +44,9 @@ class PertanyaanController extends Controller
     public function show($id)
     {
         $pertanyaan = Pertanyaan::findOrFail($id);
-        return $pertanyaan;
+        $judul = $pertanyaan->judul;
+        $pertanyaan = json_decode($pertanyaan->json);
+        return view('form.crudForm', ['judul' => $judul , 'pertanyaan' => $pertanyaan]);
     }
 
     /**
