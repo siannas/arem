@@ -107,7 +107,7 @@ Validasi
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="font-weight-bold text-primary text-uppercase mb-1">{{ $unit->judul }}</div>
-                            <a href="/form" class="btn btn-primary"><i class="fas fa-pen"></i> Edit</a>
+                            <a href="/pertanyaan/{{ $unit->id }}" class="btn btn-primary"><i class="fas fa-pen"></i> Edit</a>
                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hapus{{ $unit->id }}"><i class="fas fa-fw fa-trash-alt"></i> Hapus</button>
                             <div class="modal modal-danger fade" id="hapus{{ $unit->id }}" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
                                 <div class="modal-dialog" role="document">

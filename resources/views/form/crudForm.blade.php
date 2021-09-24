@@ -63,7 +63,7 @@ active
     <template>
         <div class="card">
             <div class="d-flex">
-                <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="true">
+                <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
                 </a>
                 <div class="input-group" style="width:unset!important;">
                     <div class="input-group-append">
@@ -71,7 +71,7 @@ active
                     </div>
                 </div>
             </div>
-            <div id="collapse" class="collapse show" data-parent="#accordionPertanyaan">
+            <div id="collapse" class="collapse" data-parent="#accordionPertanyaan">
                 <div class="card-body">
                     <div class="form-group">
                         <div class="mb-2" id="sub-pertanyaan">
@@ -85,7 +85,7 @@ active
     <template>
         <div class="card">
             <div class="d-flex">
-                <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="true">
+                <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
                 </a>
                 <div class="input-group" style="width:unset!important;">
                     <div class="input-group-append">
@@ -93,7 +93,7 @@ active
                     </div>
                 </div>
             </div>
-            <div id="collapse" class="collapse show" data-parent="#accordionPertanyaan">
+            <div id="collapse" class="collapse" data-parent="#accordionPertanyaan">
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
                         <div></div>
@@ -251,7 +251,6 @@ $('#mainform').submit(function(e){
         "gambar-petunjuk": null,
         "pertanyaan": json
     }
-    console.log(jsonPertanyaan);
 })
 
 const myToggleInput = function(self, id_container){
@@ -265,6 +264,49 @@ const myToggleInput = function(self, id_container){
         elem.collapse('show');
         inputs.prop('disabled', false);
     }
+}
+
+const myToggleCard = function(self, id_card){
+    const elem = $('#'+id_card);
+    elem.collapse('toggle');
+    // console.log(elem.);
+}
+
+const myOptions = function(id, optionData=""){
+    var idRandom;
+    var ifSelectedOpsi;
+    var additionalHtml = '';
+    var id_;
+    var value;
+    
+    if(typeof optionData === 'string'){
+        value = optionData;
+        idRandom = getRandomString(5);
+        id_ = id+'_'+idRandom+'_container';
+        ifSelectedOpsi = '<option value="none" selected>None</option><option value="2">Isian</option>';
+    }else{
+        var data_ = optionData['if-selected'];
+        value = optionData['0'];
+        id_ = id+'_'+data_['id']+'_container';
+        ifSelectedOpsi = '<option value="none">None</option><option value="2" selected >Isian</option>';
+        additionalHtml = myPertanyaanTambahan({'value': (data_.tipe).toString()}, id_, data_['id'], data_)
+    }
+    
+    
+    var html = `<div class="input-group mb-3" id="${id_}">
+        <div class="input-group-prepend align-items-center" style="padding: 0 12px;">
+            <input type="radio" aria-label="Radio button" style="width: 1em;height: 1em;" disabled>
+        </div>
+        <input type="text" name="${id+'_opsi[]'}" class="form-control d-inline" placeholder="Pilihan" value="${ value }">
+        <input type="text" name="${id+'_child[]'}" value="${idRandom}" readonly hidden>
+        <div class="input-group-append">
+            <select name="${id+'_opsi_tipe[]'}" class="custom-select" placeholder="" style="border-radius: 0 5.6px 5.6px 0;" onchange="myPertanyaanTambahan(this,'${id_}', '${idRandom}')">
+                <option disabled>Jika dipilih</option>
+                ${ ifSelectedOpsi }
+            </select>
+        </div>
+    </div>`;
+    return html + additionalHtml;
 }
 
 const myPertanyaan = function(tipe, id, data={}){
@@ -289,9 +331,10 @@ const myPertanyaan = function(tipe, id, data={}){
 
         var toggle = elem.find('#collapse-toggle');
         toggle.prop('id', id+'_collapse-toggle');
-        toggle.html('<h6 class="m-0 font-weight-bold text-primary" id="'+id+'_judul" >'+(data.pertanyaan || "Pertanyaan")+'</h6>')
-        toggle.attr('data-target', '#'+id+'_collapse');
-        toggle.attr('aria-controls', id+'_collapse');
+        toggle.html('<h6 class="m-0 font-weight-bold text-primary" id="'+id+'_judul" >'+(data.pertanyaan || "Pertanyaan")+'</h6>');
+        toggle.attr('onclick', 'myToggleCard(this, "'+id+'_collapse")');
+        // toggle.attr('data-target', '#'+id+'_collapse');
+        // toggle.attr('aria-controls', id+'_collapse');
 
         var collapse = elem.find('#collapse');
         collapse.prop('id', id+'_collapse');
@@ -299,25 +342,16 @@ const myPertanyaan = function(tipe, id, data={}){
         var subPertanyaan = elem.find('#sub-pertanyaan');
 
         html = '';
-        for (let i = 1; i < 3; i++) {
-            var id_ = id+'_Pilihan'+i+'_container';
-            var idRandom = getRandomString(5);
-            var html = html + `<div class="input-group mb-3" id="${id_}">
-                <div class="input-group-prepend align-items-center" style="padding: 0 12px;">
-                    <input type="radio" aria-label="Radio button" style="width: 1em;height: 1em;" disabled>
-                </div>
-                <input type="text" name="${id+'_opsi[]'}" class="form-control d-inline" placeholder="Pilihan ${i}">
-                <input type="text" name="${id+'_child[]'}" value="${idRandom}" readonly hidden>
-                <div class="input-group-append">
-                    <select name="${id+'_opsi_tipe[]'}" class="custom-select" placeholder="" style="border-radius: 0 5.6px 5.6px 0;" onchange="myPertanyaanTambahan(this,'${id_}', '${idRandom}')">
-                        <option disabled>Jika dipilih</option>
-                        <option value="none" selected>None</option>
-                        <option value="2">Isian</option>
-                    </select>
-                </div>
-            </div>`;
+        if(data.opsi){
+            for (let opsi of data.opsi) {
+                html = html + myOptions(id, opsi);
+            }
+        }else{
+            for (let i = 1; i < 3; i++) {
+                html = html + myOptions(id);
+            }
         }
-        // console.log(html)
+        
         subPertanyaan.append(html);
         $("#accordionPertanyaan").append(container);
     }else if(tipe === '2'){
@@ -340,8 +374,9 @@ const myPertanyaan = function(tipe, id, data={}){
         var toggle = elem.find('#collapse-toggle');
         toggle.prop('id', id+'_collapse-toggle');
         toggle.html('<h6 class="m-0 font-weight-bold text-primary" id="'+id+'_judul" >'+(data.pertanyaan || "Pertanyaan")+'</h6>')
-        toggle.attr('data-target', '#'+id+'_collapse');
-        toggle.attr('aria-controls', id+'_collapse');
+        toggle.attr('onclick', 'myToggleCard(this, "'+id+'_collapse")');
+        // toggle.attr('data-target', '#'+id+'_collapse');
+        // toggle.attr('aria-controls', id+'_collapse');
 
         var collapse = elem.find('#collapse');
         collapse.prop('id', id+'_collapse');
@@ -385,8 +420,9 @@ const myPertanyaan = function(tipe, id, data={}){
         var toggle = elem.find('#collapse-toggle');
         toggle.prop('id', id+'_collapse-toggle');
         toggle.html('<h6 class="m-0 font-weight-bold text-primary" id="'+id+'_judul" >'+(data.pertanyaan || "Pertanyaan")+'</h6>')
-        toggle.attr('data-target', '#'+id+'_collapse');
-        toggle.attr('aria-controls', id+'_collapse');
+        toggle.attr('onclick', 'myToggleCard(this, "'+id+'_collapse")');
+        // toggle.attr('data-target', '#'+id+'_collapse');
+        // toggle.attr('aria-controls', id+'_collapse');
 
         var collapse = elem.find('#collapse');
         collapse.prop('id', id+'_collapse');
@@ -395,7 +431,7 @@ const myPertanyaan = function(tipe, id, data={}){
     }
 }
 
-const myPertanyaanTambahan = function(self, id_neighbor, id_baru){
+const myPertanyaanTambahan = function(self, id_neighbor, id_baru, dataTambahan={}){
     const val = self.value;
     const curElem = $('#'+id_neighbor+'_tambahan');
     
@@ -407,7 +443,8 @@ const myPertanyaanTambahan = function(self, id_neighbor, id_baru){
         var temp = document.getElementsByTagName("template")[3];
         var clone = temp.content.cloneNode(true);
         const elem = $(clone);
-        elem.children(":first-child").prop('id', id_neighbor+'_tambahan');
+        const elemChild = elem.children(":first-child")
+        elemChild.prop('id', id_neighbor+'_tambahan');
 
         var TanpaSuffix = elem.find('#TanpaSuffix');
         TanpaSuffix.prop('id', id_neighbor+'_TanpaSuffix');
@@ -418,15 +455,28 @@ const myPertanyaanTambahan = function(self, id_neighbor, id_baru){
         suffixContainer.prop('id', id_neighbor+'_suffixContainer');
 
         var tambahanPertanyaan = elem.find('#tambahan-pertanyaan');
-        tambahanPertanyaan.removeProp('id');
+        tambahanPertanyaan.removeAttr('id');
         tambahanPertanyaan.attr('name', id_baru+'_pertanyaan');
+        tambahanPertanyaan.attr('value', dataTambahan.pertanyaan || "");
 
         var tambahanSuffix = elem.find('#tambahan-suffix');
-        tambahanSuffix.removeProp('id');
+        tambahanSuffix.removeAttr('id');
         tambahanSuffix.attr('name', id_baru+'_suffix');
+        tambahanSuffix.val(dataTambahan.suffix || "");
 
-        elem.insertAfter('#'+id_neighbor);
+        if(dataTambahan.suffix){
+            TanpaSuffix.attr('checked', false );
+            suffixContainer.addClass('show');
+            tambahanSuffix.prop('disabled', false);
+        }
+
+        if(Object.keys(dataTambahan).length === 0){
+            elem.insertAfter('#'+id_neighbor);
+        }else{
+            return elemChild.prop('outerHTML');
+        }
     }
+    return '';
 }
 
 const updatePertanyaan = function(val, id_judul){
