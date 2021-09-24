@@ -131,7 +131,12 @@ class FormulirController extends Controller
     }
 
     public function generate($id){
-        $formulir = Formulir::findOrFail($id);
+        try{
+            $formulir = Formulir::findOrFail($id);
+        }catch(QueryException $exception){
+            return back()->withError($exception->getMessage())->withInput();
+        }
+        
         return view('form.formGenerated', [ 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan ]);
     }
 }

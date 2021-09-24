@@ -32,7 +32,6 @@ Validasi
                             <th>NPSN</th>
                             <th>Nama Sekolah</th>
                             <th>Status</th>
-                            <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -41,7 +40,6 @@ Validasi
                             <th>NPSN</th>
                             <th>Nama Sekolah</th>
                             <th>Status</th>
-                            <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
                     </tfoot>
@@ -51,7 +49,6 @@ Validasi
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
                             <td></td>
-                            <td>{{ $unit->created_at }}</td>
                             <td><form action="/data-sekolah/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form></td>
                         </tr>
                         @endforeach

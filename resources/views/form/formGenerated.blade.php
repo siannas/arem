@@ -134,6 +134,7 @@ Validasi
         </div>
         @endforeach
     </div>
+    <button class="btn btn-primary float"><i class="fas fa-fw fa-save"></i></button>
 </div>
 @endsection
 
