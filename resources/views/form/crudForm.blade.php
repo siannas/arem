@@ -197,8 +197,9 @@ function getFormData($form){
     return indexed_array;
 }
 
-$('#mainform').submit(function(e){
+$('#mainform').submit(async function(e){
     e.preventDefault();
+    $('#loading').modal('show');
     var obj = $("form");
     var all= {};
     $.each(obj, function(i, val) {
@@ -250,6 +251,19 @@ $('#mainform').submit(function(e){
         "judul": all['judul'],
         "gambar-petunjuk": null,
         "pertanyaan": json
+    }
+
+    try {
+        let data = {
+            'judul': all['judul'],
+            'json': JSON.stringify(jsonPertanyaan)
+        };
+        const res = await myRequest.put( '{{ route('pertanyaan.update', ['pertanyaan'=> $id_pertanyaan]) }}' , data)
+        console.log(res)
+        $('#loading').modal('hide');
+    } catch(err) {
+        console.log(err);
+        $('#loading').modal('hide');
     }
 })
 
