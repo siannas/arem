@@ -12,6 +12,7 @@ active
 <div class="container-fluid">
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Tambah Form Skrining</h1>
+    @include('form.alert')
     <div class="row">
         <div class="col-md">
             <!-- Basic Card Example -->
@@ -259,12 +260,15 @@ $('#mainform').submit(async function(e){
             'json': JSON.stringify(jsonPertanyaan)
         };
         const res = await myRequest.put( '{{ route('pertanyaan.update', ['pertanyaan'=> $id_pertanyaan]) }}' , data)
-        console.log(res)
-        $('#loading').modal('hide');
+        myAlert('Berhasil menyimpan');
     } catch(err) {
-        console.log(err);
-        $('#loading').modal('hide');
+        console.log(err)
+        myAlert('gagal, '+JSON.stringify(err['statusText']),'danger');
     }
+
+    setTimeout(() => {
+        $('#loading').modal('hide');
+    }, 1000);
 })
 
 const myToggleInput = function(self, id_container){

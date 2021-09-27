@@ -341,7 +341,8 @@ $role= Auth::user()->getRole->role;
     <script src="/js/demo/datatables-demo.js"></script>
 
     @yield('script')
-
+    @stack('scripts')
+    
     <script>
         function getRandomString(length) {
             var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
