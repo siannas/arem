@@ -135,11 +135,13 @@ class FormulirController extends Controller
         $user = Auth::user();
         try{
             $formulir = Formulir::findOrFail($id);
+            $jawaban = \App\Jawaban::where('id_user', $user->id)
+                                        ->where('id_formulir', $id)->first();
         }catch(QueryException $exception){
             return back()->withError($exception->getMessage())->withInput();
         }
-        
-        return view('form.formGenerated', [ 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan ]);
+
+        return view('form.formGenerated', [ 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan, 'jawaban' => $jawaban ]);
     }
 
     /**
@@ -170,7 +172,7 @@ class FormulirController extends Controller
         ]);
 
         $jawaban->fill([
-            'id_user_sekolah' => is_null($jawaban->id_user_sekolah) ?  $sekolah : $jawaban->id_user_sekolah,
+            'id_user_sekolah' => is_null($jawaban->id_user_sekolah) ?  $sekolah->id : $jawaban->id_user_sekolah,
             'json' => $req['json'],
             'validasi' => is_null($jawaban->validasi) ? 0 : $jawaban->validasi
         ]);

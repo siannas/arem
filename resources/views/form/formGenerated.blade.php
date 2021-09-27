@@ -87,7 +87,14 @@ Validasi
                                         @foreach ($p->opsi as $index => $o)
                                             @if (is_object($o) and $o->{'if-selected'}->tipe === 2 )
                                                 <div class="col-12 collapse" style="flex:1" id="{{ $o->{'if-selected'}->id }}-container">
-                                                    <input type="text" class="form-control" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id }}" placeholder="{{ $o->{'if-selected'}->pertanyaan }}" disabled>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id }}" placeholder="{{ $o->{'if-selected'}->pertanyaan }}" disabled>
+                                                        @if (isset($o->{'if-selected'}->suffix))
+                                                            <div class="input-group-append">
+                                                                <div class="input-group-text" >{{ $o->{'if-selected'}->suffix }}</div>
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             @endif
                                         @endforeach
@@ -211,6 +218,27 @@ $(document).ready(function () {
             $('#loading').modal('hide');
         }, 1000);
     })
+
+@if($jawaban)
+const jawabans = @json(json_decode($jawaban->json));
+
+for(var id in jawabans){
+    var val = jawabans[id];
+    if(!val.length) continue;
+    var $jwb = $('input[name="'+id+'"]').filter(':not([type=hidden])');
+    var type = $jwb.attr('type');
+    switch (type) {
+        case 'text':
+            $jwb.val(val);
+            break;
+        case 'radio':
+            $jwb = $jwb.filter('[value="'+val+'"]')
+            $jwb.prop("checked", true);       
+            myPertanyaanOnChange(id, val);    
+            break;
+    }
+}
+@endif
 })
 </script>
 @endsection

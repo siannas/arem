@@ -276,6 +276,7 @@ const myOptions = function(id, optionData=""){
     }else{
         var data_ = optionData['if-selected'];
         value = optionData['0'];
+        idRandom = data_['id'];
         id_ = id+'_'+data_['id']+'_container';
         ifSelectedOpsi = '<option value="none">None</option><option value="2" selected >Isian</option>';
         additionalHtml = myPertanyaanTambahan({'value': (data_.tipe).toString()}, id_, data_['id'], data_)
