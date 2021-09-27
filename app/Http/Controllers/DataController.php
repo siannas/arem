@@ -42,23 +42,22 @@ class DataController extends Controller
             // $user = User::find($id_user->id);
             // $siswa = $user->users()->where('id_role',1)->get();
 
-            $dataSiswa = User::find($id_user->id)->users()->where('id_role', 1)
+            $dataSiswa = User::findOrFail($id_user->id)->users()->where('id_role', 1)
             ->leftJoin('jawaban', 'users.id', '=', 'jawaban.id_user')
             ->select('users.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.created_at')
             ->whereIn('jawaban.id_formulir', $cekForm)->get();
-
+            
             if (count($dataSiswa)!=0){
                 foreach($dataSiswa as $unit){
                     $idSiswa[] = $unit->id;
                 }
-                $dataSiswaB = User::find($id_user->id)->select('id', 'nama', 'username', 'kelas')->where('id_role',1)->whereNotIn('id', $idSiswa)->get();
+                $dataSiswaB = User::find($id_user->id)->users()->select('users.id', 'users.nama', 'users.username', 'users.kelas')->where('id_role',1)->whereNotIn('users.id', $idSiswa)->get();
                 $dataCampur = $dataSiswa->concat($dataSiswaB);
 
                 return view('data.dataSiswa', ['dataSiswa' => $dataCampur]);
             }
             else{
-                $dataSiswa = User::where('id_role',1)->get();
-
+                $dataSiswa = User::findOrFail($id_user->id)->users()->where('id_role',1)->get();
                 return view('data.dataSiswa', ['dataSiswa'=>$dataSiswa]);
             }
         }
@@ -84,10 +83,30 @@ class DataController extends Controller
         return view('data.dataSekolah', ['dataSekolah' => $dataSekolah]);
     }
     public function detailSekolah($id){
+        $tahunAjar = Metadata::where('key', 'tahun-ajaran')->first();
+        $cekForm = Formulir::select('id')->where('tahun_ajaran', $tahunAjar->data)->get();
+        
         $detailSekolah = User::findOrFail($id);
-        $siswa = $detailSekolah->users()->where('id_role', 1)->get();
+        $dataSiswa = User::findOrFail($id)->users()->where('id_role', 1)
+        ->leftJoin('jawaban', 'users.id', '=', 'jawaban.id_user')
+        ->select('users.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.created_at')
+        ->whereIn('jawaban.id_formulir', $cekForm)->get();
+        
+        if (count($dataSiswa)!=0){
+            foreach($dataSiswa as $unit){
+                $idSiswa[] = $unit->id;
+            }
+            $dataSiswaB = User::findOrFail($id)->users()->select('users.id', 'users.nama', 'users.username', 'users.kelas')->where('users.id_role',1)->whereNotIn('users.id', $idSiswa)->get();
+            $dataCampur = $dataSiswa->concat($dataSiswaB);
 
-        return view('data.detailSekolah', ['sekolah' => $detailSekolah, 'siswa' => $siswa]);
+            return view('data.detailSekolah', ['sekolah' => $detailSekolah, 'siswa' => $dataCampur]);
+        }
+        else{
+            $dataSiswa = User::where('id_role',1)->get();
+
+            return view('data.detailSekolah', ['sekolah' => $detailSekolah, 'siswa'=>$dataSiswa]);
+        }
+        
     }
 
     public function dataKelurahan(){

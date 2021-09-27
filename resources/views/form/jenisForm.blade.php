@@ -146,12 +146,15 @@ Validasi
                 <div class="card-body">
                     <div class="row no-gutters align-items-center text-center" style="height:100%">
                         <div class="col mr-2">
-                            <a href="/tambah-form" class="btn btn-primary btn-icon-split btn-md">
+                            <form action="{{route('pertanyaan.store', [$formulir->id])}}" method="POST">
+                            @csrf
+                            <button class="btn btn-primary btn-icon-split btn-md">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-plus"></i>
                                 </span>
                                 <span class="text">Tambah</span>
-                            </a>
+                            </button>
+                            </form>
                         </div>
                     </div>
                 </div>

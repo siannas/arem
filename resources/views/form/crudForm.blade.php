@@ -48,7 +48,8 @@ active
                     </form>
                 </div>
                 <div class="card-footer">
-                    <button  class="btn btn-primary" onclick="$('#mainform').trigger('submit')">Simpan</button>
+                    <a href="/formulir/{{$id_form}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
+                    <button  class="btn btn-primary" onclick="$('#mainform').trigger('submit')"><i class="fas fa-fw fa-save"></i> Simpan</button>
                 </div>
             </div>
         </div>

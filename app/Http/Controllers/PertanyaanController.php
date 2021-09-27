@@ -23,7 +23,7 @@ class PertanyaanController extends Controller
                 [
                     "judul"=> "Belum ada judul",
                     "gambar-petunjuk" => null,
-                    "pertanyaan" => null
+                    "pertanyaan" => []
                 ]
             )
         ]);
@@ -31,8 +31,8 @@ class PertanyaanController extends Controller
         $pertanyaan_baru->formulir()->associate($formulir);
 
         $pertanyaan_baru->save();
-
-        return $pertanyaan_baru;
+        // return dd($pertanyaan_baru);
+        return redirect()->action('FormulirController@show', $formulir)->with('success', 'Data Berhasil Ditambahkan');
     }
 
     /**
@@ -45,8 +45,9 @@ class PertanyaanController extends Controller
     {
         $pertanyaan = Pertanyaan::findOrFail($id);
         $judul = $pertanyaan->judul;
+        $id_form = $pertanyaan->id_formulir;
         $pertanyaan = json_decode($pertanyaan->json);
-        return view('form.crudForm', ['id_pertanyaan'=>$id, 'judul' => $judul , 'pertanyaan' => $pertanyaan]);
+        return view('form.crudForm', ['id_pertanyaan'=>$id, 'judul' => $judul , 'pertanyaan' => $pertanyaan, 'id_form' => $id_form]);
     }
 
     /**

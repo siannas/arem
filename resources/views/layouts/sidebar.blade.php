@@ -46,7 +46,7 @@ $role= Auth::user()->getRole->role;
     </div>
 
     <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('dataStatus')">
+    <li class="nav-item @yield('siswaStatus')">
         <a class="nav-link" href="/data-siswa">
             <i class="fas fa-fw fa-users"></i>
             <span>Data Siswa</span></a>
