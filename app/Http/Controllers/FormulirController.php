@@ -8,6 +8,7 @@ use App\Formulir;
 use App\Pertanyaan;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Database\QueryException;
+use Auth;
 
 class FormulirController extends Controller
 {
@@ -131,6 +132,7 @@ class FormulirController extends Controller
     }
 
     public function generate($id){
+        $user = Auth::user();
         try{
             $formulir = Formulir::findOrFail($id);
         }catch(QueryException $exception){
@@ -138,5 +140,43 @@ class FormulirController extends Controller
         }
         
         return view('form.formGenerated', [ 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeOrUpdateJawaban(Request $request, $id)
+    {
+        $formulir = Formulir::findOrFail($id);
+        $user = Auth::user();
+        $nama_tabel = $user->getTable();
+        $sekolah = $user->parents()->where(["id_role"=>2])->first([$nama_tabel.".id"]);
+        
+        $validator = Validator::make($request->all(), [
+            'json' => 'required'
+        ]);
+        
+        if ($validator->fails()) {
+            throw new HttpResponseException(response()->json($validator->errors(), 422));
+        }
+
+        $req = $request->all();
+        $jawaban = \App\Jawaban::firstOrNew([
+            'id_user' => $user->id,
+            'id_formulir' => $formulir->id,
+        ]);
+
+        $jawaban->fill([
+            'id_user_sekolah' => is_null($jawaban->id_user_sekolah) ?  $sekolah : $jawaban->id_user_sekolah,
+            'json' => $req['json'],
+            'validasi' => is_null($jawaban->validasi) ? 0 : $jawaban->validasi
+        ]);
+
+        $jawaban->save();
+
+        return $jawaban;
     }
 }

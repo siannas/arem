@@ -18,13 +18,13 @@ Validasi
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Jenis Pemeriksaan</h1>
-    
+    @include('form.alert')
     <div class="row">
         @foreach ($allPertanyaan as $key => $ap)
         @php
             $json = json_decode($ap->json);
         @endphp
-        <div class="col-lg-12">
+        <form action="#" class="col-lg-12" id="form-{{$key}}">
 
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
@@ -40,6 +40,7 @@ Validasi
                                 </div>
                                 <div class="col-12 col-md-7" style="padding:0">
                                     <div class="row" style="margin:0px">
+                                        <input type="hidden" name="{{ $p->id }}" value="" /> 
                                         @foreach ($p->opsi as $index => $o)
                                         <label class="radio-inline col-6 col-md-4">
                                             <input type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o }}"> {{ $o }}
@@ -72,6 +73,7 @@ Validasi
                                 <div class="col-12 col-md-7" style="padding:0">
                                     <div class="row" style="margin:0px">
                                         @foreach ($p->opsi as $index => $o)
+                                            <input type="hidden" name="{{ $p->id }}" value="" /> 
                                             @if (is_object($o))
                                                 <label class="radio-inline col-6 col-md-4">
                                                     <input type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o->{'0'} }}"> {{ $o->{'0'} }}
@@ -85,7 +87,7 @@ Validasi
                                         @foreach ($p->opsi as $index => $o)
                                             @if (is_object($o) and $o->{'if-selected'}->tipe === 2 )
                                                 <div class="col-12 collapse" style="flex:1" id="{{ $o->{'if-selected'}->id }}-container">
-                                                    <input type="text" class="form-control" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id }}" placeholder="{{ $o->{'if-selected'}->pertanyaan }}">
+                                                    <input type="text" class="form-control" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id }}" placeholder="{{ $o->{'if-selected'}->pertanyaan }}" disabled>
                                                 </div>
                                             @endif
                                         @endforeach
@@ -102,7 +104,7 @@ Validasi
                                             <div class="row" style="margin:0px">
                                                 @foreach ($o->{'if-selected'}->opsi as $index2 => $o2)
                                                 <label class="radio-inline col-6 col-md-4">
-                                                    <input type="radio" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id.'__'.$index2 }}" value="{{ $o2 }}"> {{ $o2 }}
+                                                    <input type="radio" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id.'__'.$index2 }}" value="{{ $o2 }}" > {{ $o2 }}
                                                 </label>
                                                 @endforeach
                                             </div>
@@ -131,10 +133,13 @@ Validasi
                     @endforeach
                 </div>
             </div>
-        </div>
+        </form>
         @endforeach
     </div>
-    <button class="btn btn-primary float"><i class="fas fa-fw fa-save"></i></button>
+    <form action="#" id="mainform" hidden>
+        @csrf
+    </form>
+    <button class="btn btn-primary float" onclick="$('#mainform').trigger('submit')"><i class="fas fa-fw fa-save"></i></button>
 </div>
 @endsection
 
@@ -150,6 +155,7 @@ Validasi
         //jika ada pertanyaan tambahan yang masih terbuka maka harus ditutup
         if(myTempData[keyAktif]) { 
             myTempData[keyAktif].collapse('hide');
+            myTempData[keyAktif].find(':input').prop('disabled', true);
             myTempData[keyAktif] = null;
         }
 
@@ -159,6 +165,7 @@ Validasi
             const idPertanyaanBaru = myData[keyNew]['id'];
             const idContainer = idPertanyaanBaru+"-container";
             myTempData[keyAktif] = $('#'+idContainer );
+            myTempData[keyAktif].find(':input').prop('disabled', false);
             myTempData[keyAktif].collapse('show');
         }
     }
@@ -182,6 +189,28 @@ Validasi
 <script>
 $(document).ready(function () {
     bsCustomFileInput.init()
+
+    $('#mainform').submit(async function(e){
+        e.preventDefault();
+        $('#loading').modal('show');
+        var obj = $("form[id^='form-']");
+        var all= {};
+        $.each(obj, function(i, val) {
+            Object.assign(all,getFormData($(val)));
+        });
+        
+        try {
+            let data = {'json': JSON.stringify(all)};
+            const res = await myRequest.put( '{{ route('jawaban.store.update', ['formulir'=> $formulir]) }}' , data)
+            myAlert('Berhasil menyimpan');
+        } catch(err) {
+            myAlert('gagal, '+JSON.stringify(err['statusText']),'danger');
+        }
+
+        setTimeout(() => {
+            $('#loading').modal('hide');
+        }, 1000);
+    })
 })
 </script>
 @endsection

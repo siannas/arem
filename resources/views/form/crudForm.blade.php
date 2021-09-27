@@ -169,35 +169,6 @@ var myQuestions = {};
 var myUrutan = [];
 var jsonPertanyaan = @json($pertanyaan);
 
-function getFormData($form){
-    var unindexed_array = $form.serializeArray();
-    var indexed_array = {};
-
-    $.map(unindexed_array, function(n, i){
-        var key =n['name'];
-        var is_arr=false;
-        if(/(\[\d+\])$/.test(key)){
-            key = key.replace( /(\[\d+\])$/, "");
-            is_arr=true;
-        }else if(/(\[\])$/.test(key)){
-            key = key.replace( /(\[\])$/, "");
-            is_arr=true;
-        }
-
-        if(is_arr && !(key in indexed_array)) indexed_array[key] = [];            
-        if(typeof n['value'] === 'string') n['value']=n['value'].trim()
-
-        if(is_arr){
-            indexed_array[key].push( n['value']);
-        }else{
-            indexed_array[key] = n['value'];
-        }
-        
-    });
-
-    return indexed_array;
-}
-
 $('#mainform').submit(async function(e){
     e.preventDefault();
     $('#loading').modal('show');
@@ -262,7 +233,6 @@ $('#mainform').submit(async function(e){
         const res = await myRequest.put( '{{ route('pertanyaan.update', ['pertanyaan'=> $id_pertanyaan]) }}' , data)
         myAlert('Berhasil menyimpan');
     } catch(err) {
-        console.log(err)
         myAlert('gagal, '+JSON.stringify(err['statusText']),'danger');
     }
 

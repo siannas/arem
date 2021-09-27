@@ -15,8 +15,7 @@ class Jawaban extends Model
 
     protected $fillable = [
         'id_user',
-        'data',
-        'id_user',
+        'id_user_sekolah',
         'id_formulir',
         'json',
         'validasi',

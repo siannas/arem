@@ -16,6 +16,10 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     });
 
+    Route::middleware(['role:Siswa'])->group(function () {
+        Route::put('/jawaban/{formulir}', 'FormulirController@storeOrUpdateJawaban')->name('jawaban.store.update');        
+    });
+
     Route::middleware(['role:Siswa,Kota'])->group(function () {
         Route::get('/form', function () {
             return view('form.form');
