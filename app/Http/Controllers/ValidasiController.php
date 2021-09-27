@@ -21,10 +21,9 @@ class ValidasiController extends Controller
             
         }
         else{
-            $user = User::find($id_user->id);
-            $dataSiswa = $user->users()->where('id_role',1)->get();
+            // $dataSiswa = User::findOrFail($id_user->id)->users()->where('id_role',1)->get();
             $dataValid = Jawaban::select('id_user')->where('validasi', 0)->get();
-            $siswa = $dataSiswa->where('id', $dataValid->id_user);
+            $siswa = User::findOrFail($id_user->id)->users()->where('id_role',1)->whereIn('users.id', $dataValid)->get();
         }
     
         return view('validasi', ['siswa' => $siswa]);

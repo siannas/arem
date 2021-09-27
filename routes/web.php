@@ -75,7 +75,7 @@ Route::post('/formulir/duplicate/{id}', 'FormulirController@duplicate');
 Route::resource('/pertanyaan', PertanyaanController::class)->except([
     'index', 'create', 'edit', 'store'
 ]);
-Route::post('/pertanyaan/{formulir}', 'PertanyaanController@store')->name('pertanyaan.store');
+Route::post('/pertanyaan/add/{formulir}', 'PertanyaanController@store')->name('pertanyaan.store');
 
 Route::get('/formulir/user/{formulir}', 'FormulirController@generate');
 
