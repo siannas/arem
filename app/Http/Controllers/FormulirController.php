@@ -141,7 +141,7 @@ class FormulirController extends Controller
             return back()->withError($exception->getMessage())->withInput();
         }
 
-        return view('form.formGenerated', [ 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan, 'jawaban' => $jawaban ]);
+        return view('form.formGenerated', ['user'=>$user, 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan, 'jawaban' => $jawaban ]);
     }
 
     /**

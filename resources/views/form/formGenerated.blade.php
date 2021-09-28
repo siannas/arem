@@ -126,12 +126,22 @@ Validasi
                                 </div>
                                 <div class="col-12 col-md-7">
                                     <div class="input-group">
+                                    <input type="text" name="{{ $p->id }}" id="{{ $p->id }}" hidden readonly>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
-                                        <label class="custom-file-label" for="inputGroupFile04">Pilih file</label>
+                                        <input type="file" class="custom-file-input" name="{{ $p->id }}-file-dummy" id="{{ $p->id }}-file-dummy" onchange="myToggleButtonUpload('{{ $p->id }}','upload')">
+                                        <label class="custom-file-label" for="{{ $p->id }}-file-dummy">Pilih file</label>
                                     </div>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04">Upload</button>
+                                    <div class="input-group-append" id="{{ $p->id }}-btn-container">
+                                        <button id="{{ $p->id }}-btn-upload" class="btn btn-outline-primary" type="button" onclick="myUpload('{{ $p->id }}-file-dummy','{{ $p->id }}')" hidden>Upload</button>
+                                        <button id="{{ $p->id }}-btn-loading" class="btn btn-outline-primary" hidden>
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        </button>
+                                        <a id="{{ $p->id }}-btn-link" type="button" class="btn btn-outline-primary" onclick="" href="" target="_blank" hidden>
+                                            Link
+                                        </a>
+                                        <button id="{{ $p->id }}-btn-danger" type="button" class="btn btn-outline-danger" onclick="" hidden>
+                                            Gagal
+                                        </button>
                                     </div>
                                     </div>
                                 </div>
@@ -190,7 +200,40 @@ Validasi
             @endforeach
         @endif
     @endforeach
+    const myUpload = async function(id_dummy, id){
+        myToggleButtonUpload(id,'loading');
+        var input = $('#'+id_dummy);
+        var formData = new FormData();
+        formData.append('_token', "{{ csrf_token() }}");
+        formData.append('file', input[0].files[0]);
 
+        try {
+            const res = await myRequest.upload( '{{ route('file.upload', ['id_user'=> $user, 'id_form'=>$formulir , 'id_pertanyaan'=> '']) }}/'+id , formData);
+            console.log(res);
+            $('#'+id+'-btn-link').attr('href',res);
+            $('#'+id).val(res);
+            myToggleButtonUpload(id,'link');
+        } catch (err) {
+            myToggleButtonUpload(id,'gagal');
+        }
+    }
+
+    const myToggleButtonUpload = function(id, type){
+        var button;
+        const container = $('#'+id+'-btn-container');
+        const active = container.find('button:not(button:hidden)');
+        active.attr('disabled',true);
+        active.attr('hidden',true);
+
+        button = $('#'+id+'-btn-'+type);
+
+        button.attr('disabled',false);
+        button.attr('hidden',false);
+        // -btn-upload
+        // -btn-loading
+        // -btn-link
+        // -btn-danger
+    }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
 <script>
@@ -230,6 +273,10 @@ for(var id in jawabans){
     switch (type) {
         case 'text':
             $jwb.val(val);
+            if(val.substr(0,4) === 'http'){ //jika link file
+                myToggleButtonUpload(id,'link');
+                $('#'+id+'-file-dummy').next().text(val)
+            }
             break;
         case 'radio':
             $jwb = $jwb.filter('[value="'+val+'"]')
