@@ -274,6 +274,7 @@ for(var id in jawabans){
         case 'text':
             $jwb.val(val);
             if(val.substr(0,4) === 'http'){ //jika link file
+                $('#'+id+'-btn-link').attr('href',val);
                 myToggleButtonUpload(id,'link');
                 $('#'+id+'-file-dummy').next().text(val)
             }
