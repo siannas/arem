@@ -31,7 +31,7 @@ class DataController extends Controller
                 return view('data.dataSiswa', ['dataSiswa' => $dataCampur]);
             }
             else{
-                $dataSiswa = User::where('id_role',1)->get();
+                $dataSiswa = User::select('id','nama', 'id_role', 'username', 'kelas', 'tahun_ajaran')->where('id_role',1)->get();
 
                 return view('data.dataSiswa', ['dataSiswa'=>$dataSiswa]);
             }
@@ -57,7 +57,7 @@ class DataController extends Controller
                 return view('data.dataSiswa', ['dataSiswa' => $dataCampur]);
             }
             else{
-                $dataSiswa = User::findOrFail($id_user->id)->users()->where('id_role',1)->get();
+                $dataSiswa = $id_user->users()->select('users.id','users.nama', 'users.id_role', 'users.username', 'users.kelas', 'users.tahun_ajaran')->where('id_role',1)->get();
                 return view('data.dataSiswa', ['dataSiswa'=>$dataSiswa]);
             }
         }
@@ -83,6 +83,7 @@ class DataController extends Controller
         return view('data.dataSekolah', ['dataSekolah' => $dataSekolah]);
     }
     public function detailSekolah($id){
+        $id_user= Auth::user();
         $tahunAjar = Metadata::where('key', 'tahun-ajaran')->first();
         $cekForm = Formulir::select('id')->where('tahun_ajaran', $tahunAjar->data)->get();
         
@@ -102,8 +103,7 @@ class DataController extends Controller
             return view('data.detailSekolah', ['sekolah' => $detailSekolah, 'siswa' => $dataCampur]);
         }
         else{
-            $dataSiswa = User::where('id_role',1)->get();
-
+            $dataSiswa = User::findOrFail($id)->users()->select('users.id','users.nama', 'users.id_role', 'users.username', 'users.kelas', 'users.tahun_ajaran')->where('id_role',1)->get();
             return view('data.detailSekolah', ['sekolah' => $detailSekolah, 'siswa'=>$dataSiswa]);
         }
         
