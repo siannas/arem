@@ -19,7 +19,23 @@ class FormulirController extends Controller
      */
     public function index()
     {
-        $formulir = Formulir::all();
+        $id_user= Auth::user();
+        if($id_user->id==1){
+            $formulir = Formulir::all();
+        }
+        else{
+            $formulir = Formulir::all();
+            $id_form = [];
+            foreach($formulir as $unit){
+                $kelas = explode(',',$unit->kelas);
+                $ada = in_array($id_user->kelas, $kelas);
+                
+                if($ada==True){
+                    array_push($id_form, $unit->id);
+                }
+            }
+            $formulir = Formulir::whereIn('id', $id_form)->get();
+        }
         return view('form.listTahunAjaran', ['formulir' => $formulir]);
     }
 

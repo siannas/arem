@@ -46,9 +46,8 @@ Validasi
             <div class="input-group">
                 <select id="jenjang" class="form-control">
                     <option selected disabled>Pilih Jenjang</option>
-                    <option value="1">SD</option>
-                    <option value="2">SMP</option>
-                    <option value="3">SMA</option>
+                    <option value="1,2,3,4,5,6">SD/MI</option>
+                    <option value="7,8,9,10,11,12">SMP/MTS dan SMA/SMK/MA</option>
                 </select>
             </div>
         </div>
@@ -123,11 +122,9 @@ Validasi
                         <tr>
                             <td>{{ $unit->tahun_ajaran }}</td>
                             @if($unit->kelas==='1,2,3,4,5,6')
-                            <td>SD</td>
-                            @elseif($unit->kelas==='7,8,9')
-                            <td>SMP</td>
-                            @elseif($unit->kelas==='10,11,12')
-                            <td>SMA</td>
+                            <td>SD/MI</td>
+                            @elseif($unit->kelas==='7,8,9,10,11,12')
+                            <td>SMP/MTS dan SMA/SMK/MA</td>
                             @endif
 
                             @if($unit->status===1)
