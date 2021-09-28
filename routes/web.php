@@ -96,3 +96,5 @@ Route::get('/coba/dong', function(){
     $user = App\User::find(113);
     dd($user->parents()->where('id_role',4)->get());
 });
+
+Route::post('/upload/{id_user}/{id_form}/{id_pertanyaan}', 'FileController@upload')->name('file.upload');
