@@ -345,6 +345,12 @@ $role= Auth::user()->getRole->role;
             <i class="fab fa-fw fa-wpforms"></i>
             <span>Form Skrining</span></a>
     </li>
+    
+    <li class="nav-item @yield('rekapStatus')">
+        <a class="nav-link" href="/rekap">
+            <i class="fas fa-fw fa-file"></i>
+            <span>Rekap Skrining</span></a>
+    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

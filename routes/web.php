@@ -68,7 +68,7 @@ Route::middleware(['auth'])->group(function () {
 Auth::routes(['register' => false]);
 
 Route::resource('/formulir', FormulirController::class)->except([
-    'create', 'edit', 
+    'create', 'edit'
 ]);
 Route::post('/formulir/duplicate/{id}', 'FormulirController@duplicate');
 
@@ -79,6 +79,9 @@ Route::post('/pertanyaan/add/{formulir}', 'PertanyaanController@store')->name('p
 
 Route::get('/formulir/user/{formulir}', 'FormulirController@generate');
 
+Route::resource('/rekap', RekapController::class)->except([
+    'create', 'edit', 'store'
+]);
 
 Route::get('/tes/{id_puskesmas}', function(App\User $id_puskesmas){
     $kelurahan = $id_puskesmas->users;

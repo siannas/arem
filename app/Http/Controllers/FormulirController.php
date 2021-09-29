@@ -61,7 +61,7 @@ class FormulirController extends Controller
 
         $formulir_baru->save();
 
-        return $formulir_baru;
+        return redirect()->action('FormulirController@index')->with('success', 'Data Berhasil Ditambahkan');
     }
 
     /**
@@ -102,7 +102,7 @@ class FormulirController extends Controller
 
         $formulir->save();
 
-        return $formulir;
+        return redirect()->action('FormulirController@index')->with('success', 'Data Berhasil Diubah');
     }
 
     /**
@@ -119,7 +119,7 @@ class FormulirController extends Controller
         }catch (QueryException $exception) {
             return back()->withError($exception->getMessage())->withInput();
         }
-        return redirect()->action('FormulirController@index')->with('success', 'Data Berhasil Dihapus');;
+        return redirect()->action('FormulirController@index')->with('success', 'Data Berhasil Dihapus');
     }
 
     /**
