@@ -100,7 +100,7 @@ Validasi
                                             @if (is_object($o) and $o->{'if-selected'}->tipe === 2 )
                                                 <div class="col-12 collapse" style="flex:1" id="{{ $o->{'if-selected'}->id }}-container">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id }}" placeholder="{{ $o->{'if-selected'}->pertanyaan }}" disabled>
+                                                        <input type="text" class="form-control invalid" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id }}" placeholder="{{ $o->{'if-selected'}->pertanyaan }}" disabled>
                                                         @if (isset($o->{'if-selected'}->suffix))
                                                             <div class="input-group-append">
                                                                 <div class="input-group-text" >{{ $o->{'if-selected'}->suffix }}</div>
