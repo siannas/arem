@@ -40,6 +40,8 @@ $role= Auth::user()->getRole->role;
         box-shadow: 2px 5px 10px #999;
     }
     </style>
+    <!-- Custom styles for this template -->
+    <link href="/css/custom.css" rel="stylesheet">
 
 
 </head>

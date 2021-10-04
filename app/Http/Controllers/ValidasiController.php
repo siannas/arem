@@ -29,12 +29,16 @@ class ValidasiController extends Controller
         return view('validasi', ['siswa' => $siswa]);
     }
 
-    public function validasiSiswa($id){
-        $jawaban = Jawaban::findOrFail($id);
-        $siswa = User::where('id', $jawaban->id_user)->first();
-        $formulir = Formulir::where('id', $jawaban->id_formulir)->first();
-        $pertanyaan = $formulir->pertanyaan;
+    public function validasiSiswa($id_jawaban){
+        $jawaban = Jawaban::findOrFail($id_jawaban);
+        try{
+            $siswa = User::where('id', $jawaban->id_user)->first();
+            $formulir = Formulir::where('id', $jawaban->id_formulir)->first();
+            $pertanyaan = $formulir->pertanyaan;
+        }catch(QueryException $exception){
+            return back()->withError($exception->getMessage())->withInput();
+        }
         
-        return view('validasiSiswa', ['siswa' => $siswa, 'formulir' => $formulir, 'allPertanyaan' => $pertanyaan]);
+        return view('validasiSiswa', ['siswa' => $siswa, 'formulir' => $formulir, 'allPertanyaan' => $pertanyaan, 'jawaban'=>$jawaban ]);
     }
 }
