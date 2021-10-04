@@ -23,4 +23,8 @@ class Jawaban extends Model
     public function getUser(){
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    public function getFormulir(){
+        return $this->belongsTo(Formulir::class, 'id_formulir');
+    }
 }

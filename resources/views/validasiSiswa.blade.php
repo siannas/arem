@@ -198,6 +198,10 @@ var myPertanyaanOnChange = function(id, value){
     }
 }
 
+@foreach ($allPertanyaan as $key => $ap)
+@php
+    $json = json_decode($ap->json);
+@endphp
 @foreach ($json->pertanyaan as $p)
 myData[@json($p->id)] = @json($p);
 @if ($p->tipe === 3)
@@ -210,6 +214,7 @@ myData[@json($p->id)] = @json($p);
     @endif
     @endforeach
 @endif
+@endforeach
 @endforeach
 
 const myToggleButtonUpload = function(id, type){
