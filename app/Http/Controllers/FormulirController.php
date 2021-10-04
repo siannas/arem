@@ -156,7 +156,6 @@ class FormulirController extends Controller
         }catch(QueryException $exception){
             return back()->withError($exception->getMessage())->withInput();
         }
-
         return view('form.formGenerated', ['user'=>$user, 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan, 'jawaban' => $jawaban ]);
     }
 
