@@ -9,6 +9,25 @@ active
 @endsection
 
 @section('content')
+<!-- Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="previewModalLabel">Pratinjau Pertanyaan</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="previewModalBody">
+            ...
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
 <div class="container-fluid">
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Tambah Form Skrining</h1>
@@ -50,6 +69,7 @@ active
                 <div class="card-footer">
                     <a href="/formulir/{{$id_form}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
                     <button  class="btn btn-primary" onclick="$('#mainform').trigger('submit')"><i class="fas fa-fw fa-save"></i> Simpan</button>
+                    <button  class="btn btn-info" id="previewButton" data-toggle="modal" data-target="#previewModal" ><i class="fas fa-fw fa-eye"></i> Pratinjau</button>
                 </div>
             </div>
         </div>
@@ -170,8 +190,7 @@ var myQuestions = {};
 var myUrutan = [];
 var jsonPertanyaan = @json($pertanyaan);
 
-$('#mainform').submit(async function(e){
-    e.preventDefault();
+const simpanAtauPreview = async function(isPreview=false){
     $('#loading').modal('show');
     var obj = $("form");
     var all= {};
@@ -226,21 +245,45 @@ $('#mainform').submit(async function(e){
         "pertanyaan": json
     }
 
-    try {
-        let data = {
-            'judul': all['judul'],
-            'json': JSON.stringify(jsonPertanyaan)
-        };
-        const res = await myRequest.put( '{{ route('pertanyaan.update', ['pertanyaan'=> $id_pertanyaan]) }}' , data)
-        myAlert('Berhasil menyimpan');
-    } catch(err) {
-        myAlert('gagal, '+JSON.stringify(err['statusText']),'danger');
+    if(isPreview){
+        try {
+            let data = {
+                'judul': all['judul'],
+                'json': JSON.stringify(jsonPertanyaan)
+            };
+            const res = await myRequest.post( '{{ route('pertanyaan.preview') }}' , data)
+            $('#previewModalBody').html(res);
+            // myAlert('Berhasil Preview');
+        } catch(err) {
+            myAlert('gagal, '+JSON.stringify(err['statusText']),'danger');
+        }
+    }else{
+        try {
+            let data = {
+                'judul': all['judul'],
+                'json': JSON.stringify(jsonPertanyaan)
+            };
+            const res = await myRequest.put( '{{ route('pertanyaan.update', ['pertanyaan'=> $id_pertanyaan]) }}' , data)
+            myAlert('Berhasil menyimpan');
+        } catch(err) {
+            myAlert('gagal, '+JSON.stringify(err['statusText']),'danger');
+        }
     }
 
     setTimeout(() => {
         $('#loading').modal('hide');
     }, 1000);
-})
+}
+
+$('#mainform').submit(function(e){
+    e.preventDefault();
+    simpanAtauPreview();
+});
+
+$('#previewButton').on('click',function(e){
+    console.log('asdfsfd')
+    simpanAtauPreview(true);
+});
 
 const myToggleInput = function(self, id_container){
     const elem = $('#'+id_container);

@@ -90,4 +90,22 @@ class PertanyaanController extends Controller
         $pertanyaan->delete();
         return redirect()->action('FormulirController@show', $id_form)->with('success', 'Data Berhasil Dihapus');;
     }
+
+    public function preview(Request $request){
+        $validator = Validator::make($request->all(), [
+            'judul' => 'required',
+            'json' => 'required',
+        ]);
+        
+        if ($validator->fails()) {
+            throw new HttpResponseException(response()->json($validator->errors(), 422));
+        }
+
+        $json = json_decode($request->input('json'));
+        
+        $contents = \View::make('form.pertanyaanPreview')->with('json', $json);
+        $response = \Response::make($contents, 200);
+        $response->header('Content-Type', 'text/plain');
+        return $response;
+    }
 }

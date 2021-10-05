@@ -77,6 +77,8 @@ Route::resource('/pertanyaan', PertanyaanController::class)->except([
 ]);
 Route::post('/pertanyaan/add/{formulir}', 'PertanyaanController@store')->name('pertanyaan.store');
 
+Route::post('/pertanyaan/generate/preview', 'PertanyaanController@preview')->name('pertanyaan.preview');
+
 Route::get('/formulir/user/{formulir}', 'FormulirController@generate');
 
 Route::resource('/rekap', RekapController::class)->except([
