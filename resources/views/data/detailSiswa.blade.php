@@ -52,7 +52,23 @@ Validasi
                     <div class="card-body">
                         <h6 class="card-subtitle mb-3"><b>{{ $ap->judul }}</b></h6>
                         @foreach ($json->pertanyaan as $p)
-                            @if ($p->tipe === 2)
+                            @if ($p->tipe === 1)
+                                <div class="row" style="padding-top:20px">
+                                    <div class="col-12 col-md-5" style="margin-bottom:5px">
+                                        {{ $p->pertanyaan }}
+                                    </div>
+                                    <div class="col-12 col-md-7" style="padding:0">
+                                        <div class="row" style="margin:0px">
+                                            <input type="hidden" name="{{ $formId.$p->id }}" value="" /> 
+                                            @foreach ($p->opsi as $index => $o)
+                                            <label class="radio-inline col-6 col-md-4">
+                                                <input class="invalid" type="radio" name="{{ $formId.$p->id }}" id="{{ $formId.$p->id.'__'.$index }}" value="{{ $o }}"> {{ $o }}
+                                            </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif ($p->tipe === 2)
                                 <div class="row" style="padding-top:20px">
                                     <div class="col-12 col-md-5" style="margin-bottom:5px">
                                         {{ $p->pertanyaan }}
@@ -167,7 +183,7 @@ Validasi
 var myData = {}
 var myTempData = {}
 
-var myPertanyaanOnChange = function(id, value){
+var myPertanyaanOnChange = function(id, value, formId=''){
     myTempData['selected'+id] = value;
     const keyAktif = 'additional'+id; //key pertanyaan tamabahan yg sedang aktif
 
@@ -181,7 +197,7 @@ var myPertanyaanOnChange = function(id, value){
     //cek jika jawaban menimbulkan pertanyaan baru
     const keyNew = (id+value);
     if( keyNew in myData ) { 
-        const idPertanyaanBaru = myData[keyNew]['id'];
+        const idPertanyaanBaru = formId+myData[keyNew]['id'];
         const idContainer = idPertanyaanBaru+"-container";
         myTempData[keyAktif] = $('#'+idContainer );
         myTempData[keyAktif].find(':input').prop('disabled', false);
@@ -205,7 +221,7 @@ var myPertanyaanOnChange = function(id, value){
     @if ($p->tipe === 3)
         console.log('{{$formId.$p->id}}');
         $('input[name={{ $formId.$p->id }}]:radio').change(function(){
-            myPertanyaanOnChange('{{$formId.$p->id}}', this.value);
+            myPertanyaanOnChange('{{$formId.$p->id}}', this.value, '{{$formId}}');
         });
         @foreach ($p->opsi as $index => $o)
         @if (is_object($o))
@@ -262,7 +278,7 @@ for(var id in jawabans){
             $jwb.removeClass('invalid')
             $jwb = $jwb.filter('[value="'+val+'"]')
             $jwb.prop("checked", true);
-            myPertanyaanOnChange(formId+id, val);    
+            myPertanyaanOnChange(formId+id, val, formId);    
             break;
     }
 }
