@@ -261,7 +261,7 @@ const myToggleCard = function(self, id_card){
     // console.log(elem.);
 }
 
-const myOptions = function(id, optionData=""){
+const myOptions = function(id, optionData="", withDeleteButton=false){
     var idRandom;
     var ifSelectedOpsi;
     var additionalHtml = '';
@@ -290,13 +290,26 @@ const myOptions = function(id, optionData=""){
         <input type="text" name="${id+'_opsi[]'}" class="form-control d-inline" placeholder="Pilihan" value="${ value }">
         <input type="text" name="${id+'_child[]'}" value="${idRandom}" readonly hidden>
         <div class="input-group-append">
-            <select name="${id+'_opsi_tipe[]'}" class="custom-select" placeholder="" style="border-radius: 0 5.6px 5.6px 0;" onchange="myPertanyaanTambahan(this,'${id_}', '${idRandom}')">
+            <select name="${id+'_opsi_tipe[]'}" class="custom-select" placeholder="" style="border-radius: ${withDeleteButton ? '0' : '0 5.6px 5.6px 0' } ;" onchange="myPertanyaanTambahan(this,'${id_}', '${idRandom}')">
                 <option disabled>Jika dipilih</option>
                 ${ ifSelectedOpsi }
             </select>
+            ${withDeleteButton ? '<button class="btn btn-danger font-weight-bold" style="padding: 0 13px;" type="button" id="delete" onclick="$(\'#'+id_+'\').remove()"><i class="fas fa-times"></i></button>' : ''}
         </div>
     </div>`;
     return html + additionalHtml;
+}
+
+const myButtonTambahOpsi = function(onclick_str){
+    return `<div class="input-group mb-3" >
+        <div class="input-group-prepend align-items-center" style="padding: 0 12px;">
+            <input type="radio" aria-label="Radio button" style="width: 1em;height: 1em;" disabled>
+        </div>
+        <div class="input-group-append">
+            <button class="btn btn-success font-weight-bold" type="button" onclick="${onclick_str}" ><i class="fas fa-plus"></i>&nbsp Tambah</button>
+        </div>
+    </div>
+    `
 }
 
 const myPertanyaan = function(tipe, id, data={}){
@@ -333,14 +346,16 @@ const myPertanyaan = function(tipe, id, data={}){
 
         html = '';
         if(data.opsi){
-            for (let opsi of data.opsi) {
-                html = html + myOptions(id, opsi);
+            for (let key in data.opsi) {
+                html = html + myOptions(id, data.opsi[key], key>1);
             }
         }else{
-            for (let i = 1; i < 3; i++) {
-                html = html + myOptions(id);
+            for (let i = 0; i < 3; i++) {
+                html = html + myOptions(id, "", i>1);
             }
         }
+
+        html = html + myButtonTambahOpsi('myTambahOpsi(this,\''+id+'\')');
         
         subPertanyaan.append(html);
         $("#accordionPertanyaan").append(container);
@@ -419,6 +434,12 @@ const myPertanyaan = function(tipe, id, data={}){
 
         $("#accordionPertanyaan").append(container);
     }
+}
+
+const myTambahOpsi = function(self, id){
+    var btn_parent = $(self).parent().parent();
+    html = myOptions(id, "", true);
+    btn_parent.before(html);
 }
 
 const myPertanyaanTambahan = function(self, id_neighbor, id_baru, dataTambahan={}){
