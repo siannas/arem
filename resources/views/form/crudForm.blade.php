@@ -294,7 +294,7 @@ const myOptions = function(id, optionData="", withDeleteButton=false){
                 <option disabled>Jika dipilih</option>
                 ${ ifSelectedOpsi }
             </select>
-            ${withDeleteButton ? '<button class="btn btn-danger font-weight-bold" style="padding: 0 13px;" type="button" id="delete" onclick="$(\'#'+id_+'\').remove()"><i class="fas fa-times"></i></button>' : ''}
+            ${withDeleteButton ? '<button class="btn btn-danger font-weight-bold" style="padding: 0 13px;" type="button" id="delete" onclick="$(\'#'+id_+'\').remove();$(\'#'+id_+'_tambahan\').remove()"><i class="fas fa-times"></i></button>' : ''}
         </div>
     </div>`;
     return html + additionalHtml;
