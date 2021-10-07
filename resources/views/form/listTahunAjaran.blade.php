@@ -126,7 +126,7 @@ Validasi
                                     @if($role==='Kota')
                                     <form action="{{route('formulir.show', [$unit->id])}}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i></button></form>
                                     <button type="button" class="btn btn-sm btn-warning mr-1" data-toggle="modal" data-target="#edit-{{$unit->id}}"><i class="fas fa-fw fa-edit"></i></button>
-                                    <form action="/formulir/duplicate/{{ $unit->id }}" method="POST" class="mr-1">
+                                    <form action="{{url('/formulir/duplicate/'.$unit->id)}}" method="POST" class="mr-1">
                                     @csrf
                                         <button class="btn btn-sm btn-secondary"><i class="fas fa-fw fa-copy"></i></button>
                                     </form>
@@ -156,7 +156,7 @@ Validasi
                                     </div>
                                     
                                     @elseif($role==='Siswa')
-                                    <form action="/formulir/user/{{ $unit->id }}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form>
+                                    <form action="{{url('/formulir/user/'.$unit->id)}}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form>
                                     @endif
                                 </div>
                             </td>

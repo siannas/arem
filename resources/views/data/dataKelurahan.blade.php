@@ -46,7 +46,7 @@ Validasi
                         <tr>
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
-                            <td><form action="/data-kelurahan/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form></td>
+                            <td><form action="{{url('/data-kelurahan/'.$unit->id)}}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form></td>
                         </tr>
                         @endforeach
                     </tbody>
