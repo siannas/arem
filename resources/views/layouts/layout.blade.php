@@ -74,18 +74,18 @@ $role= Auth::user()->getRole->role;
                         </a>
                         <!-- Dropdown - Messages -->
                         <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="menuDropdown">
-                            <li><a href="/" class="btn btn-light" style="border-color:#fff; width:100%;">Home</a></li>
-                            <li><a href="/formulir" class="btn btn-light" style="border-color:#fff; width:100%;">Form</a></li>
-                            <li><a href="/kie" class="btn btn-light" style="border-color:#fff; width:100%;">KIE</a></li>
+                            <li><a href="{{ url('/') }}" class="btn btn-light" style="border-color:#fff; width:100%;">Home</a></li>
+                            <li><a href="{{ url('/formulir') }}" class="btn btn-light" style="border-color:#fff; width:100%;">Form</a></li>
+                            <li><a href="{{ url('/kie') }}" class="btn btn-light" style="border-color:#fff; width:100%;">KIE</a></li>
                         </div>
                     </button>
 
                     <!-- Topbar Search -->
                     <div
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <a href="/" class="btn btn-light" style="border-color:#fff;">Home</a>
-                        <a href="/formulir" class="btn btn-light">Form</a>
-                        <a href="/kie" class="btn btn-light">KIE</a>
+                        <a href="{{ url('/') }}" class="btn btn-light" style="border-color:#fff;">Home</a>
+                        <a href="{{ url('/formulir') }}" class="btn btn-light">Form</a>
+                        <a href="{{ url('/kie') }}" class="btn btn-light">KIE</a>
                     </div>
                     @else
                     <!-- Sidebar Toggle (Topbar) -->

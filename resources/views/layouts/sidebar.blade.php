@@ -14,7 +14,7 @@ $role= Auth::user()->getRole->role;
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/')}}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -26,13 +26,13 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item @yield('dashboardStatus')">
-        <a class="nav-link" href="/">
+        <a class="nav-link" href="{{ url('/')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="/validasi">
+        <a class="nav-link" href="{{ url('/validasi')}}">
             <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>
@@ -47,7 +47,7 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('siswaStatus')">
-        <a class="nav-link" href="/data-siswa">
+        <a class="nav-link" href="{{ url('/data-siswa')}}">
             <i class="fas fa-fw fa-users"></i>
             <span>Data Siswa</span></a>
     </li>
@@ -69,7 +69,7 @@ $role= Auth::user()->getRole->role;
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/')}}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -81,13 +81,13 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item @yield('dashboardStatus')">
-        <a class="nav-link" href="/">
+        <a class="nav-link" href="{{ url('/')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="/validasi">
+        <a class="nav-link" href="{{ url('/validasi')}}">
             <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>
@@ -101,13 +101,13 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('siswaStatus')">
-        <a class="nav-link" href="/data-siswa">
+        <a class="nav-link" href="{{ url('/data-siswa')}}">
             <i class="fas fa-fw fa-users"></i>
             <span>Data Siswa</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('sekolahStatus')">
-        <a class="nav-link" href="/data-sekolah">
+        <a class="nav-link" href="{{ url('/data-sekolah')}}">
             <i class="fas fa-fw fa-school"></i>
             <span>Data Sekolah</span></a>
     </li>
@@ -129,7 +129,7 @@ $role= Auth::user()->getRole->role;
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/')}}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -141,13 +141,13 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item @yield('dashboardStatus')">
-        <a class="nav-link" href="/">
+        <a class="nav-link" href="{{ url('/')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="/validasi">
+        <a class="nav-link" href="{{ url('/validasi')}}">
             <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>
@@ -162,19 +162,19 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('siswaStatus')">
-        <a class="nav-link" href="/data-siswa">
+        <a class="nav-link" href="{{ url('/data-siswa')}}">
             <i class="fas fa-fw fa-users"></i>
             <span>Data Siswa</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('sekolahStatus')">
-        <a class="nav-link" href="/data-sekolah">
+        <a class="nav-link" href="{{ url('/data-sekolah')}}">
             <i class="fas fa-fw fa-school"></i>
             <span>Data Sekolah</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('kelurahanStatus')">
-        <a class="nav-link" href="/data-kelurahan">
+        <a class="nav-link" href="{{ url('/data-kelurahan')}}">
             <i class="fas fa-fw fa-university"></i>
             <span>Data Kelurahan</span></a>
     </li>
@@ -196,7 +196,7 @@ $role= Auth::user()->getRole->role;
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/')}}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -208,13 +208,13 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item @yield('dashboardStatus')">
-        <a class="nav-link" href="/">
+        <a class="nav-link" href="{{ url('/')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="/validasi">
+        <a class="nav-link" href="{{ url('/validasi')}}">
             <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>
@@ -229,25 +229,25 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('siswaStatus')">
-        <a class="nav-link" href="/data-siswa">
+        <a class="nav-link" href="{{ url('/data-siswa')}}">
             <i class="fas fa-fw fa-users"></i>
             <span>Data Siswa</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('sekolahStatus')">
-        <a class="nav-link" href="/data-sekolah">
+        <a class="nav-link" href="{{ url('/data-sekolah')}}">
             <i class="fas fa-fw fa-school"></i>
             <span>Data Sekolah</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('kelurahanStatus')">
-        <a class="nav-link" href="/data-kelurahan">
+        <a class="nav-link" href="{{ url('/data-kelurahan')}}">
             <i class="fas fa-fw fa-university"></i>
             <span>Data Kelurahan</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('puskesmasStatus')">
-        <a class="nav-link" href="/data-puskesmas">
+        <a class="nav-link" href="{{ url('/data-puskesmas')}}">
             <i class="fas fa-fw fa-hospital"></i>
             <span>Data Puskesmas</span></a>
     </li>
@@ -269,7 +269,7 @@ $role= Auth::user()->getRole->role;
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/')}}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -281,13 +281,13 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item @yield('dashboardStatus')">
-        <a class="nav-link" href="/">
+        <a class="nav-link" href="{{ url('/')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="/validasi">
+        <a class="nav-link" href="{{ url('/validasi')}}">
             <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>
@@ -302,31 +302,31 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('siswaStatus')">
-        <a class="nav-link" href="/data-siswa">
+        <a class="nav-link" href="{{ url('/data-siswa')}}">
             <i class="fas fa-fw fa-users"></i>
             <span>Data Siswa</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('sekolahStatus')">
-        <a class="nav-link" href="/data-sekolah">
+        <a class="nav-link" href="{{ url('/data-sekolah')}}">
             <i class="fas fa-fw fa-school"></i>
             <span>Data Sekolah</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('kelurahanStatus')">
-        <a class="nav-link" href="/data-kelurahan">
+        <a class="nav-link" href="{{ url('/data-kelurahan')}}">
             <i class="fas fa-fw fa-university"></i>
             <span>Data Kelurahan</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('puskesmasStatus')">
-        <a class="nav-link" href="/data-puskesmas">
+        <a class="nav-link" href="{{ url('/data-puskesmas')}}">
             <i class="fas fa-fw fa-hospital"></i>
             <span>Data Puskesmas</span></a>
     </li>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('kecamatanStatus')">
-        <a class="nav-link" href="/data-kecamatan">
+        <a class="nav-link" href="{{ url('/data-kecamatan')}}">
             <i class="fas fa-fw fa-landmark"></i>
             <span>Data Kecamatan</span></a>
     </li>
@@ -341,13 +341,13 @@ $role= Auth::user()->getRole->role;
 
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('formStatus')">
-        <a class="nav-link" href="/formulir">
+        <a class="nav-link" href="{{ url('/formulir')}}">
             <i class="fab fa-fw fa-wpforms"></i>
             <span>Form Skrining</span></a>
     </li>
     
     <li class="nav-item @yield('rekapStatus')">
-        <a class="nav-link" href="/rekap">
+        <a class="nav-link" href="{{ url('/rekap')}}">
             <i class="fas fa-fw fa-file"></i>
             <span>Rekap Skrining</span></a>
     </li>
