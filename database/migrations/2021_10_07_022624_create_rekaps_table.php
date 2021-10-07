@@ -16,7 +16,7 @@ class CreateRekapsTable extends Migration
         Schema::create('rekap', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_formulir')->unsigned();
-            $table->json('json');
+            $table->string('nama_file');
             $table->foreign('id_formulir')->references('id')->on('formulir');
             $table->timestamps();
         });

@@ -114,3 +114,43 @@
         </div>
     @endif
 @endforeach
+<script>
+var myData = {}
+var myTempData = {}
+
+var myPertanyaanOnChange = function(id, value){
+    myTempData['selected'+id] = value;
+    const keyAktif = 'additional'+id; //key pertanyaan tamabahan yg sedang aktif
+
+    //jika ada pertanyaan tambahan yang masih terbuka maka harus ditutup
+    if(myTempData[keyAktif]) { 
+        myTempData[keyAktif].collapse('hide');
+        myTempData[keyAktif].find(':input').prop('disabled', true);
+        myTempData[keyAktif] = null;
+    }
+
+    //cek jika jawaban menimbulkan pertanyaan baru
+    const keyNew = (id+value);
+    if( keyNew in myData ) { 
+        const idPertanyaanBaru = myData[keyNew]['id'];
+        const idContainer = idPertanyaanBaru+"-container";
+        myTempData[keyAktif] = $('#'+idContainer );
+        myTempData[keyAktif].find(':input').prop('disabled', false);
+        myTempData[keyAktif].collapse('show');
+    }
+}
+
+@foreach ($json->pertanyaan as $p)
+    myData['preview-'+@json($p->id)] = @json($p);
+    @if ($p->tipe === 3)
+        $('input[name={{ "preview-".$p->id }}]:radio').change(function(){
+            myPertanyaanOnChange('preview-'+@json($p->id), this.value);
+        });
+        @foreach ($p->opsi as $index => $o)
+        @if (is_object($o))
+            myData["{{ 'preview-'.$p->id.$o->{'0'} }}"] = @json($o->{'if-selected'});
+        @endif
+        @endforeach
+    @endif
+@endforeach
+</script>

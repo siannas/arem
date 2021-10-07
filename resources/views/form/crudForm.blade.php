@@ -281,7 +281,6 @@ $('#mainform').submit(function(e){
 });
 
 $('#previewButton').on('click',function(e){
-    console.log('asdfsfd')
     simpanAtauPreview(true);
 });
 
