@@ -164,7 +164,7 @@ Validasi
     </div>
         <div class="card-footer text-right">
             <button class="btn btn-warning"><i class="fas fa-fw fa-check"></i> Validasi</button>
-            <a href="/validasi" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
+            <a href="{{url('/validasi')}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
         </div>
     </div>
 </div>

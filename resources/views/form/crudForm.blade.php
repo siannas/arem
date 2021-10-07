@@ -67,7 +67,7 @@ active
                     </form>
                 </div>
                 <div class="card-footer">
-                    <a href="/formulir/{{$id_form}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
+                    <a href="{{url('/formulir/'.$id_form)}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
                     <button  class="btn btn-primary" onclick="$('#mainform').trigger('submit')"><i class="fas fa-fw fa-save"></i> Simpan</button>
                     <button  class="btn btn-info" id="previewButton" data-toggle="modal" data-target="#previewModal" ><i class="fas fa-fw fa-eye"></i> Pratinjau</button>
                 </div>

@@ -79,7 +79,7 @@ Validasi
 
         </div>
         <div class="card-footer text-right">
-            <a href="/data-sekolah" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
+            <a href="{{url('/data-sekolah')}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
         </div>
     </div>
 </div>
