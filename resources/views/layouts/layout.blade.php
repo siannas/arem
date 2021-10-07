@@ -18,15 +18,15 @@ $role= Auth::user()->getRole->role;
     <title>Aplikasi Remaja | @yield('title')</title>
 
     <!-- Custom fonts for this template-->
-    <link href="/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href=" {{ URL::asset('/plugins/fontawesome-free/css/all.min.css') }} " rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="/css/sb-admin-2.min.css?v=kjhkawhd" rel="stylesheet">
+    <link href="{{ URL::asset('/css/sb-admin-2.min.css?v=kjhkawhd') }}" rel="stylesheet">
     <!-- Custom styles for validasi -->
-    <link href="/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="{{ URL::asset('/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <style>
     .float{
         z-index: 1049;
@@ -41,7 +41,7 @@ $role= Auth::user()->getRole->role;
     }
     </style>
     <!-- Custom styles for this template -->
-    <link href="/css/custom.css" rel="stylesheet">
+    <link href="{{ URL::asset('/css/custom.css') }}" rel="stylesheet">
 
 
 </head>
