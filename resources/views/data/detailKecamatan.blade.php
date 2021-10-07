@@ -53,7 +53,7 @@ Validasi
                         <tr>
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
-                            <td><form action="/data-puskesmas/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form></td>
+                            <td><form action="{{url('/data-puskesmas/'.$unit->id)}}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -62,7 +62,7 @@ Validasi
 
         </div>
         <div class="card-footer text-right">
-            <a href="/data-kecamatan" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
+            <a href="{{url('/data-kecamatan')}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
         </div>
     </div>
 </div>

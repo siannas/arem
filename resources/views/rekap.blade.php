@@ -71,7 +71,7 @@ Dashboard
                             @endif
                             <td>
                                 <div class="row m-1">
-                                    <form action="/rekap/{{ $unit->id }}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form>
+                                    <form action="{{url('/rekap/'.$unit->id)}}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form>
                                 </div>
                             </td>
                         </tr>

@@ -64,7 +64,7 @@ Validasi
                                 @endif
                             </td>
                             <td>{{ $unit->created_at }}</td>
-                            <td><form action="/data-siswa/{{ $unit->id }}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></td></form>
+                            <td><form action="{{url('/data-siswa/'.$unit->id)}}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></td></form>
                         </tr>
                         @endforeach
                         
