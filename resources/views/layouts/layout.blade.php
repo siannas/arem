@@ -163,7 +163,7 @@ $role= Auth::user()->getRole->role;
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
+                                        <img class="rounded-circle" src="{{ URL::asset('img/undraw_profile_1.svg')}}"
                                             alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
@@ -175,7 +175,7 @@ $role= Auth::user()->getRole->role;
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
+                                        <img class="rounded-circle" src="{{URL::asset('img/undraw_profile_2.svg')}}"
                                             alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
@@ -187,7 +187,7 @@ $role= Auth::user()->getRole->role;
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
+                                        <img class="rounded-circle" src="{{ URL::asset('img/undraw_profile_3.svg') }}"
                                             alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
@@ -221,7 +221,7 @@ $role= Auth::user()->getRole->role;
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->nama }}</span>
                                 <img class="img-profile rounded-circle"
-                                    src="/img/undraw_profile.svg">
+                                    src="{{ URL::asset('/img/undraw_profile.svg')}}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -311,28 +311,28 @@ $role= Auth::user()->getRole->role;
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="/plugins/jquery/jquery.min.js"></script>
-    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ URL::asset('/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ URL::asset('/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="/plugins/jquery-easing/jquery.easing.min.js"></script>
+    <script src="{{ URL::asset('/plugins/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="/js/sb-admin-2.min.js"></script>
+    <script src="{{ URL::asset('/js/sb-admin-2.min.js') }}"></script>
 
     <!-- Dashboard plugins -->
-    <script src="/plugins/chart.js/Chart.min.js"></script>
+    <script src="{{ URL::asset('/plugins/chart.js/Chart.min.js') }}"></script>
 
     <!-- Dashboard custom scripts -->
-    <script src="/js/demo/chart-area-demo.js"></script>
-    <script src="/js/demo/chart-pie-demo.js"></script>
+    <script src="{{ URL::asset('/js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ URL::asset('/js/demo/chart-pie-demo.js') }}"></script>
 
     <!-- Tables plugins -->
-    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ URL::asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL::asset('/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
     <!-- Tables custom scripts -->
-    <script src="/js/demo/datatables-demo.js"></script>
+    <script src="{{ URL::asset('/js/demo/datatables-demo.js') }}"></script>
 
     @yield('script')
     @stack('scripts')
