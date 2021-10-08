@@ -18,15 +18,15 @@ $role= Auth::user()->getRole->role;
     <title>Aplikasi Remaja | @yield('title')</title>
 
     <!-- Custom fonts for this template-->
-    <link href=" {{ asset('/plugins/fontawesome-free/css/all.min.css') }} " rel="stylesheet" type="text/css">
+    <link href=" {{ asset('public/plugins/fontawesome-free/css/all.min.css') }} " rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="{{ asset('/css/sb-admin-2.min.css?v=kjhkawhd') }}" rel="stylesheet">
+    <link href="{{ asset('public/css/sb-admin-2.min.css?v=kjhkawhd') }}" rel="stylesheet">
     <!-- Custom styles for validasi -->
-    <link href="{{ asset('/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <style>
     .float{
         z-index: 1049;
@@ -41,7 +41,7 @@ $role= Auth::user()->getRole->role;
     }
     </style>
     <!-- Custom styles for this template -->
-    <link href="{{ asset('/css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/css/custom.css') }}" rel="stylesheet">
 
 
 </head>
@@ -163,7 +163,7 @@ $role= Auth::user()->getRole->role;
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="{{ asset('img/undraw_profile_1.svg')}}"
+                                        <img class="rounded-circle" src="{{ asset('publicimg/undraw_profile_1.svg')}}"
                                             alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
@@ -175,7 +175,7 @@ $role= Auth::user()->getRole->role;
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="{{asset('img/undraw_profile_2.svg')}}"
+                                        <img class="rounded-circle" src="{{asset('publicimg/undraw_profile_2.svg')}}"
                                             alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
@@ -187,7 +187,7 @@ $role= Auth::user()->getRole->role;
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="{{ asset('img/undraw_profile_3.svg') }}"
+                                        <img class="rounded-circle" src="{{ asset('publicimg/undraw_profile_3.svg') }}"
                                             alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
@@ -221,7 +221,7 @@ $role= Auth::user()->getRole->role;
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->nama }}</span>
                                 <img class="img-profile rounded-circle"
-                                    src="{{ asset('/img/undraw_profile.svg')}}">
+                                    src="{{ asset('public/img/undraw_profile.svg')}}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -311,28 +311,28 @@ $role= Auth::user()->getRole->role;
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="{{ asset('/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('public/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('public/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="{{ asset('/plugins/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('public/plugins/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="{{ asset('/js/sb-admin-2.min.js') }}"></script>
+    <script src="{{ asset('public/js/sb-admin-2.min.js') }}"></script>
 
     <!-- Dashboard plugins -->
-    <script src="{{ asset('/plugins/chart.js/Chart.min.js') }}"></script>
+    <script src="{{ asset('public/plugins/chart.js/Chart.min.js') }}"></script>
 
     <!-- Dashboard custom scripts -->
-    <script src="{{ asset('/js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('/js/demo/chart-pie-demo.js') }}"></script>
+    <script src="{{ asset('public/js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ asset('public/js/demo/chart-pie-demo.js') }}"></script>
 
     <!-- Tables plugins -->
-    <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('public/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('public/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
     <!-- Tables custom scripts -->
-    <script src="{{ asset('/js/demo/datatables-demo.js') }}"></script>
+    <script src="{{ asset('public/js/demo/datatables-demo.js') }}"></script>
 
     @yield('script')
     @stack('scripts')
