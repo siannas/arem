@@ -105,3 +105,5 @@ Route::get('/coba/dong', function(){
 });
 
 Route::post('/upload/{id_user}/{id_form}/{id_pertanyaan}', 'FileController@upload')->name('file.upload');
+
+Route::put('/ubah-password', 'ubahPassController@update');
