@@ -47,7 +47,7 @@ Dashboard
                                 <p class="text-gray-700 mb-0">Browse our fully designed UI toolkit! Browse our prebuilt app pages, components, and utilites, and be sure to look at our full documentation!</p>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-xxl-12 text-center"><img class="img-fluid" src="img/undraw_Welcome_re_h3d9.svg" style="max-width: 20rem"></div>
+                        <div class="col-xl-4 col-xxl-12 text-center"><img class="img-fluid" src="{{asset('public/img/undraw_Welcome_re_h3d9.svg')}}" style="max-width: 20rem"></div>
                     </div>
                 </div>
             </div>
@@ -431,7 +431,7 @@ Dashboard
             <div class="card-body">
                 <div class="text-center">
                     <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                        src="img/undraw_posting_photo.svg" alt="...">
+                        src="{{asset('public/img/undraw_posting_photo.svg')}}" alt="...">
                 </div>
                 <p>Add some quality, svg illustrations to your project courtesy of <a
                         target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
