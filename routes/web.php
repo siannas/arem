@@ -81,6 +81,8 @@ Route::post('/pertanyaan/generate/preview', 'PertanyaanController@preview')->nam
 
 Route::get('/formulir/user/{formulir}', 'FormulirController@generate');
 
+Route::get('/rekap/tes/{id}', 'RekapController@tes');
+
 Route::resource('/rekap', RekapController::class)->except([
     'create', 'edit', 'store'
 ]);
