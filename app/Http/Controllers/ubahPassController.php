@@ -14,12 +14,16 @@ class ubahPassController extends Controller
         $check = Hash::check($request->pass_sekarang, $user->password);
         if($check){
             $pass_baru = User::find($user->id);
-            $pass_baru->password = Hash::make($request->pass_baru);
-            $pass_baru->save();
-            return redirect('/data-siswa')->with('success', 'Password Diperbarui');
+            if($request->pass_baru_konfirm==$request->pass_baru){
+                $pass_baru->password = Hash::make($request->pass_baru);
+                $pass_baru->save();
+                return redirect('/')->with('success', 'Password Diperbarui');
+            }
+            else{
+                return redirect('/')->with('error', 'Password Baru Tidak Sama');
+            }
         }
         else{
-            
             return redirect('/')->with('error', 'Password Lama Tidak Sesuai');
         }
         

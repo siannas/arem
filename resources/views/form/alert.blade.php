@@ -1,15 +1,14 @@
 <div id="alert">
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check"></i> Success: {{ session('success') }}
+            <i class="fas fa-check"></i> Success:<small> {{ session('success') }}</small>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
     @elseif (session('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-times"></i>Error
-            <small>{{ session('error') }}</small>
+            <i class="fas fa-times"></i> Error:<small> {{ session('error') }}</small>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>

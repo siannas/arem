@@ -34,7 +34,11 @@ Dashboard
                     <h5 class="text-light">Aplikasi Remaja</h5>
                 </div>
                 <div class="col-12 col-lg-auto text-center text-lg-right text-light">
-                    haha
+                    <h5 class="card-title text-light mb-3"><b>Jenjang 
+                        @if($rekap->kelas==='1,2,3,4,5,6')SD/MI 
+                        @elseif($rekap->kelas==='7,8,9,10,11,12')SMP/MTS dan SMA/SMK/MA @endif
+                    </b></h5>
+                    <h6 class="card-subtitle text-gray-300 mb-2">Tahun Ajaran {{ $rekap->tahun_ajaran }}</h6>
                 </div>
             </div>
         </div>
@@ -155,7 +159,7 @@ Dashboard
         
     </div>
         <div class="card-footer text-right">
-            <a href="/rekap" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
+            <a href="{{url('/rekap')}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
         </div>
     </div>
 </div>
@@ -163,5 +167,45 @@ Dashboard
 @endsection
 
 @section('script')
+<script>
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
 
+// Pie Chart Example
+var ctx = document.getElementsByClassName("myPieChart");
+
+for(let i=0; i<ctx.length; i++){
+    
+  var myPieChart = new Chart(ctx[i], {
+    type: 'doughnut',
+    data: {
+      labels: ["Direct", "Referral", "Social"],
+      datasets: [{
+        data: [55, 30, 15],
+        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+        hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+        hoverBorderColor: "rgba(234, 236, 244, 1)",
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      tooltips: {
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        caretPadding: 10,
+      },
+      legend: {
+        display: false
+      },
+      cutoutPercentage: 60,
+    },
+  });
+}
+</script>
 @endsection
