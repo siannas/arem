@@ -37,7 +37,11 @@ Dashboard
                     <h5 class="text-light">Aplikasi Remaja</h5>
                 </div>
                 <div class="col-12 col-lg-auto text-center text-lg-right text-light">
-                    haha
+                    <h5 class="card-title text-light mb-3"><b>Jenjang 
+                        @if($rekap->kelas==='1,2,3,4,5,6')SD/MI 
+                        @elseif($rekap->kelas==='7,8,9,10,11,12')SMP/MTS dan SMA/SMK/MA @endif
+                    </b></h5>
+                    <h6 class="card-subtitle text-gray-300 mb-2">Tahun Ajaran {{ $rekap->tahun_ajaran }}</h6>
                 </div>
             </div>
         </div>
@@ -165,7 +169,7 @@ Dashboard
         
     </div>
         <div class="card-footer text-right">
-            <a href="/rekap" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
+            <a href="{{url('/rekap')}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
         </div>
     </div>
 </div>

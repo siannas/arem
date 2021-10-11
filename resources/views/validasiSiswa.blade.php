@@ -1,6 +1,10 @@
 @extends('layouts.layout')
 @extends('layouts.sidebar')
 
+@php
+$role= Auth::user()->getRole->role;
+@endphp
+
 @section('title')
 Detail Siswa
 @endsection
@@ -163,8 +167,15 @@ Validasi
         @endforeach
     </div>
         <div class="card-footer text-right">
-            <button class="btn btn-warning"><i class="fas fa-fw fa-check"></i> Validasi</button>
+            
+            <form action="{{url('/validasi/'.$jawaban->id)}}" method="post">
+            @csrf
+            @method('PUT')
+            @if($role==='Sekolah')
+                <button class="btn btn-warning" type="submit"><i class="fas fa-fw fa-check"></i> Validasi</button>
+            @endif
             <a href="{{url('/validasi')}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
+            </form>
         </div>
     </div>
 </div>

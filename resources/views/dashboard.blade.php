@@ -34,7 +34,7 @@ Dashboard
             @endphp
         </p>
     </div>
-
+    @include('form.alert')
     <div class="row">
         <div class="col-xxl-4 col-xl-12 mb-4">
             <div class="card h-100">
@@ -142,8 +142,8 @@ Dashboard
 </div>
 
 <!-- Content Row -->
+@include('form.alert')
 <div class="row">
-
     <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">

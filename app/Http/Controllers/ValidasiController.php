@@ -10,22 +10,28 @@ use Auth;
 
 class ValidasiController extends Controller
 {
-    public function validasi(){
+    public function index(){
         $id_user= Auth::user();
         if($id_user->id==1){
+            // Mencari data user yang sudah memberi jawaban
             $dataValid = User::join('jawaban', 'users.id', '=', 'jawaban.id_user')
             ->select('jawaban.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.updated_at')->get();
-            // $dataValid = Jawaban::where('validasi', 0)->get();
-            $siswa = $dataValid->where('validasi', 0);
-            // $siswa = User::findOrFail($dataValid);
             
+            $siswa = $dataValid->where('validasi', 0);
         }
         else{
-            // $dataSiswa = User::findOrFail($id_user->id)->users()->where('id_role',1)->get();
-            $dataValid = Jawaban::select('id_user')->where('validasi', 0)->get();
-            $siswa = User::findOrFail($id_user->id)->users()->where('id_role',1)->whereIn('users.id', $dataValid)->get();
+            // Mencari data user yang sudah memberi jawaban
+            $dataValid = User::join('jawaban', 'users.id', '=', 'jawaban.id_user')
+            ->select('jawaban.id', 'jawaban.id_user', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.updated_at')->get();
+            
+            // Get data siswa dibawahnya
+            $dataSiswa = $id_user->users()->get();
+            $idSiswa = [];
+            foreach($dataSiswa as $unit){
+                array_push($idSiswa, $unit->id);
+            }
+            $siswa = $dataValid->where('validasi', 0)->whereIn('id_user', $idSiswa);
         }
-    
         return view('validasi', ['siswa' => $siswa]);
     }
 
@@ -40,5 +46,13 @@ class ValidasiController extends Controller
         }
         
         return view('validasiSiswa', ['siswa' => $siswa, 'formulir' => $formulir, 'allPertanyaan' => $pertanyaan, 'jawaban'=>$jawaban ]);
+    }
+
+    public function validasi($id_jawaban){
+        $jawaban = Jawaban::findOrFail($id_jawaban);
+        $jawaban->validasi = 1;
+        $jawaban->save();
+
+        return redirect('/validasi')->with('success', 'Data Berhasil Divalidasi');
     }
 }
