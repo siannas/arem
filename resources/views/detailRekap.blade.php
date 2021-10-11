@@ -22,6 +22,9 @@ Dashboard
 @endsection
 
 @section('content')
+<script>
+    var myData= {};
+</script>
 <div class="container-fluid">
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Rekap Skrining</h1>
@@ -39,16 +42,13 @@ Dashboard
             </div>
         </div>
         <div class="card-body row">
-        @foreach ($pertanyaan as $key => $ap)
-        @php
-            $json = json_decode($ap->json);
-        @endphp
+        @foreach ($rekap as $key => $json)
         <div class="col-lg-12">
 
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ $ap->judul }}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">{{ $json->judul }}</h6>
                 </div>
                 <div class="card-body">
                     @foreach ($json->pertanyaan as $p)
@@ -90,23 +90,33 @@ Dashboard
                                 </div>
                             </div>
                         @elseif ($p->tipe === 3)
-                            <div class="row" style="padding-top:30px" id="98s7dfy-container">
+                            <div class="row" style="padding-top:30px" >
                                 <div class="col-12 col-md-6" style="margin-bottom:5px">
                                     <h5>{{ $p->pertanyaan }}</h5>
                                     <div class="chart-pie pt-4 pb-2">
-                                        <canvas class="myPieChart"></canvas>
+                                        <canvas id="{{ $p->id.'-canvas' }}"></canvas>
                                     </div>
                                     <div class="mt-4 text-center small">
+                                        @php
+                                        $cnt = 0;
+                                        @endphp
+                                        <script>
+                                            myData['{{ $p->id }}'] = {
+                                                'label': [],
+                                                'value': [],
+                                            };
+                                        </script>
                                         @foreach ($p->opsi as $index => $o)
-                                        @if (is_object($o))
                                         <span class="mr-2">
-                                            <i class="fas fa-circle @if($index===0)text-primary @elseif($index===1)text-success @else text-info @endif"></i> {{ $o->{'0'} }}
+                                            <i class="fas fa-circle @if($cnt===0)text-primary @elseif($cnt===1)text-success @else text-info @endif"></i> {{ $index }}
                                         </span>
-                                        @else
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle @if($index===0)text-primary @elseif($index===1)text-success @else text-info @endif"></i> {{ $o }}
-                                        </span>
-                                        @endif
+                                        @php
+                                        $cnt += 1;
+                                        @endphp
+                                        <script>
+                                            myData['{{ $p->id }}']['label'].push('{{$index}}');
+                                            myData['{{ $p->id }}']['value'].push('{{$o}}');
+                                        </script>
                                         @endforeach
                                     </div>
                                 </div>
@@ -163,5 +173,44 @@ Dashboard
 @endsection
 
 @section('script')
+<script>
+const myPieChart2 = function(id, labels, datas) {
+    var chartElem = $('#'+id+'-canvas');
+    // console.log('chartElem',chartElem);
+    // return;
+    new Chart( chartElem, {
+        type: 'doughnut',
+        data: {
+        labels: labels,
+        datasets: [{
+            data: datas,
+            backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+            hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+            hoverBorderColor: "rgba(234, 236, 244, 1)",
+        }],
+        },
+        options: {
+        maintainAspectRatio: false,
+        tooltips: {
+            backgroundColor: "rgb(255,255,255)",
+            bodyFontColor: "#858796",
+            borderColor: '#dddfeb',
+            borderWidth: 1,
+            xPadding: 15,
+            yPadding: 15,
+            displayColors: false,
+            caretPadding: 10,
+        },
+        legend: {
+            display: false
+        },
+        cutoutPercentage: 60,
+        },
+    });
+}
 
+for(var key in myData){
+    myPieChart2(key, myData[key]['label'], myData[key]['value']);
+}
+</script>
 @endsection

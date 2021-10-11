@@ -54,4 +54,10 @@ class User extends Authenticatable
             // ->withPivot('id_role');
     }
 
+    public function rekap()
+    {
+        return $this->hasMany(Rekap::class, 'id_sekolah');
+            // ->withPivot('id_role');
+    }
+
 }
