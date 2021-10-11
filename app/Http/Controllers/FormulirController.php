@@ -26,6 +26,8 @@ class FormulirController extends Controller
         else{
             $formulir = Formulir::all();
             $id_form = [];
+
+            // Cek siswa masuk dalam kategori mana
             foreach($formulir as $unit){
                 $kelas = explode(',',$unit->kelas);
                 $ada = in_array($id_user->kelas, $kelas);
@@ -34,7 +36,7 @@ class FormulirController extends Controller
                     array_push($id_form, $unit->id);
                 }
             }
-            $formulir = Formulir::whereIn('id', $id_form)->get();
+            $formulir = Formulir::where('status', 1)->whereIn('id', $id_form)->get();
         }
         return view('form.listTahunAjaran', ['formulir' => $formulir]);
     }

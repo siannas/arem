@@ -35,11 +35,11 @@ Validasi
                 <label><b>Tahun Ajaran</b></label>
                 <div class="row">
                     <div class="col">
-                        <input type="text" id="tahun1" name="tahun1" class="form-control" placeholder="Tahun 1" oninput="hitungTahun('tahun1', 'tahun2', 'tahun_ajaran')">
+                        <input type="text" id="tahun1" name="tahun1" class="form-control" placeholder="Tahun 1" value="{{date('Y')}}" oninput="hitungTahun('tahun1', 'tahun2', 'tahun_ajaran')">
                     </div>
                     -
                     <div class="col">
-                        <input type="text" id="tahun2" name="tahun2" class="form-control" placeholder="Tahun 2" disabled>
+                        <input type="text" id="tahun2" name="tahun2" class="form-control" placeholder="Tahun 2" value="{{date('Y')+1}}" disabled>
                     </div>
                     <input type="text" id="tahun_ajaran" name="tahun_ajaran" class="form-control" hidden>
                 </div>

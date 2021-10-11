@@ -18,7 +18,7 @@ class DataController extends Controller
 
         if($id_user->id==1){
             $dataSiswa = User::leftJoin('jawaban', 'users.id', '=', 'jawaban.id_user')
-            ->select('users.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.created_at')
+            ->select('users.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.updated_at')
             ->where('id_role', 1)->whereIn('jawaban.id_formulir', $cekForm)->get();
             
             if (count($dataSiswa)!=0){
@@ -44,7 +44,7 @@ class DataController extends Controller
 
             $dataSiswa = User::findOrFail($id_user->id)->users()->where('id_role', 1)
             ->leftJoin('jawaban', 'users.id', '=', 'jawaban.id_user')
-            ->select('users.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.created_at')
+            ->select('users.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.updated_at')
             ->whereIn('jawaban.id_formulir', $cekForm)->get();
             
             if (count($dataSiswa)!=0){
