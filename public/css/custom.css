@@ -17,3 +17,30 @@ input[type='radio'].invalid::before {
     background: radial-gradient(#eaecf4 0%, #eaecf4 50%, red );
     border-color: red;
 }
+
+.nice-scrollbar{
+	overflow-y:hidden;
+}
+
+.nice-scrollbar:hover{
+	overflow-y:scroll;
+}
+
+.nice-scrollbar::-webkit-scrollbar-track
+{
+	/* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); */
+	background-color: #F5F5F5;
+}
+
+.nice-scrollbar::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+.nice-scrollbar::-webkit-scrollbar-thumb
+{
+	background-color: #4e73df;
+	border: 0;
+	border-radius: 5px;
+}

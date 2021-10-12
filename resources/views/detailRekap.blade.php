@@ -37,11 +37,14 @@ Dashboard
                     <h5 class="text-light">Aplikasi Remaja</h5>
                 </div>
                 <div class="col-12 col-lg-auto text-center text-lg-right text-light">
-                    <h5 class="card-title text-light mb-3"><b>Jenjang 
-                        @if($rekap->kelas==='1,2,3,4,5,6')SD/MI 
-                        @elseif($rekap->kelas==='7,8,9,10,11,12')SMP/MTS dan SMA/SMK/MA @endif
-                    </b></h5>
-                    <h6 class="card-subtitle text-gray-300 mb-2">Tahun Ajaran {{ $rekap->tahun_ajaran }}</h6>
+                    <h5 class="card-title text-light mb-3">
+                        <b>{{ $berdasar->nama }}</b>
+                    </h5>
+                    <h6 class="card-subtitle text-gray-300 mb-2">Jenjang 
+                        @if($formulir->kelas==='1,2,3,4,5,6')SD/MI 
+                        @elseif($formulir->kelas==='7,8,9,10,11,12')SMP/MTS dan SMA/SMK/MA @endif
+                    </h6>
+                    <h6 class="card-subtitle text-gray-300 mb-2">Tahun Ajaran {{ $formulir->tahun_ajaran }}</h6>
                 </div>
             </div>
         </div>
@@ -79,23 +82,16 @@ Dashboard
                             </div>
                         @elseif ($p->tipe === 2)
                             <div class="row" style="padding-top:20px">
-                                <div class="col-12 col-md-4" style="margin-bottom:5px">
-                                    <h5>{{ $p->pertanyaan }}</h5>
-                                </div>
-                                <div class="col-12 col-md-7">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="" name="{{ $p->id }}" >
-                                        @if (isset($p->suffix))
-                                            <div class="input-group-append">
-                                                <div class="input-group-text" >{{ $p->suffix }}</div>
-                                            </div>
-                                        @endif
+                                <div class="col-12 col-md-6" style="margin-bottom:5px">
+                                    <h5>{{ $p->pertanyaan }} @if($p->suffix) ( {{ $p->suffix }} ) @endif</h5>
+                                    <div class="pt-4 nice-scrollbar" style="max-height:315px;">
+                                        {!! $tulisan[$p->jawaban[0]] !!}
                                     </div>
                                 </div>
                             </div>
                         @elseif ($p->tipe === 3)
                             <div class="row" style="padding-top:30px" >
-                                <div class="col-12 col-md-6" style="margin-bottom:5px">
+                                <div class="col-12 @if(empty($p->tambahan) === false) col-md-6 @endif " style="margin-bottom:5px">
                                     <h5>{{ $p->pertanyaan }}</h5>
                                     <div class="chart-pie pt-4 pb-2">
                                         <canvas id="{{ $p->id.'-canvas' }}"></canvas>
@@ -124,24 +120,16 @@ Dashboard
                                         @endforeach
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 pt-5">
-                                
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" value="Ini Jawaban 1" disabled>
+                                @if(empty($p->tambahan) === false)
+                                <div class="col-12 col-md-6" >
+                                    @foreach($p->tambahan as $tKey=> $t)
+                                    <h5>{{ $tKey.': '.$t->pertanyaan }} @if($t->suffix) ( {{ $t->suffix }} ) @endif</h5>
+                                    <div class="pt-4 nice-scrollbar" style="max-height:315px;">
+                                        {!! $tulisan[$t->jawaban[0]] !!}
                                     </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" value="Ini Jawaban 2" disabled>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" value="Ini Jawaban 3" disabled>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" value="Ini Jawaban 4" disabled>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" value="Ini Jawaban 5" disabled>
-                                    </div>
+                                    @endforeach
                                 </div>
+                                @endif
                             </div>
                         @elseif ($p->tipe === 4)
                             <div class="row" style="padding-top:20px">

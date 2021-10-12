@@ -76,6 +76,36 @@ Dashboard
                             </td>
                         </tr>
                         @endforeach
+                        <tr>
+                            <td>Puskesmas Simomulyo Surabaya</td>
+                            <td>SMP/MTS dan SMA/SMK/MA</td>
+                            <td><div class="badge bg-success text-white rounded-pill">Aktif</div></td>
+                            <td>
+                                <div class="row m-1">
+                                    <a href="{{url('/rekap/5').'?for=75'}}" class="btn btn-sm btn-primary mr-1"><i class="fas fa-fw fa-eye"></i> Lihat</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Kelurahan Simomulyo Surabaya</td>
+                            <td>SMP/MTS dan SMA/SMK/MA</td>
+                            <td><div class="badge bg-success text-white rounded-pill">Aktif</div></td>
+                            <td>
+                                <div class="row m-1">
+                                    <a href="{{url('/rekap/5').'?for=96'}}" class="btn btn-sm btn-primary mr-1"><i class="fas fa-fw fa-eye"></i> Lihat</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>SMP Negeri 25 Surabaya</td>
+                            <td>SMP/MTS dan SMA/SMK/MA</td>
+                            <td><div class="badge bg-success text-white rounded-pill">Aktif</div></td>
+                            <td>
+                                <div class="row m-1">
+                                    <a href="{{url('/rekap/5').'?for=108'}}" class="btn btn-sm btn-primary mr-1"><i class="fas fa-fw fa-eye"></i> Lihat</a>
+                                </div>
+                            </td>
+                        </tr>                        
                     </tbody>
                 </table>
             </div>

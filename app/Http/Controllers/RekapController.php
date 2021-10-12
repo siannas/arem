@@ -18,13 +18,17 @@ class RekapController extends Controller
     }
 
     public function show(Request $request, $id){
+        $formulir = Formulir::findOrFail($id);
         $for = $request->input('for'); //id user sekolah/kelurahan/puskesmas/kecamatan/dinas
         $sekolahs = [];
+        $berdasar = null;
+        $tulisan = [];
         if($for){
             //dapatin 1 user sekaligus data rekapnya
             $user = User::where('id', $for)->with(['rekap' => function ($query) use ($id) {
                 $query->where('id_formulir', $id);
             }])->first();
+            $berdasar=$user;
 
             if(!$user or $user->id_role === 1){
                 return back();
@@ -42,8 +46,32 @@ class RekapController extends Controller
 
         $jml = count($sekolahs);
 
+        if($jml === 1){
+            foreach ($rekap as $key => $r) {
+                foreach ($r->pertanyaan as $key2 => $aa) {
+                    switch ($aa->tipe) {
+                        case 3:
+                            foreach ($aa->tambahan as $tkey => $t) {
+                                $t->jawaban = [$t->jawaban];
+                                $tulisan[$t->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$t->jawaban[0]);
+                            }
+                            break;
+                        case 2:
+                            $aa->jawaban = [$aa->jawaban];
+                            $tulisan[$aa->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$aa->jawaban[0]);
+                            break;
+                        case 4:
+                            $aa->jawaban = [$aa->jawaban];
+                            $tulisan[$aa->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$aa->jawaban[0]);
+                            break;
+                    }
+                }
+            }            
+        }
+
         for ($i=1; $i < $jml ; $i++) { 
             $curr = json_decode($sekolahs[$i]->rekap[0]->json);
+            $sekolah_id = $sekolahs[$i]->id;
             foreach ($rekap as $key => $r) {
                 foreach ($r->pertanyaan as $key2 => $aa) {
                     switch ($aa->tipe) {
@@ -51,13 +79,41 @@ class RekapController extends Controller
                             foreach ($aa->opsi as $key3 => $opsi) {
                                 $rekap[$key]->pertanyaan[$key2]->opsi->{$key3} += $curr[$key]->pertanyaan[$key2]->opsi->{$key3};
                             }
-                        }
+                            foreach ($aa->tambahan as $tkey => $t) {
+                                if(is_array($t->jawaban) === false){
+                                    $t->jawaban = [$t->jawaban];
+                                    $tulisan[$t->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$t->jawaban[0]);
+                                }
+                                $jawaban_baru = $curr[$key]->pertanyaan[$key2]->tambahan->{$tkey}->jawaban;
+                                // array_push($t->jawaban, $jawaban_baru);
+                                $tulisan[$t->jawaban[0]] .= Storage::get('sekolah/'.$sekolah_id.'/'.$jawaban_baru);
+                            }
+                            break;
+                        case 2:
+                            if(is_array($aa->jawaban) === false){
+                                $aa->jawaban = [$aa->jawaban];
+                                $tulisan[$aa->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$aa->jawaban[0]);
+                            }  
+                            $jawaban_baru = $curr[$key]->pertanyaan[$key2]->jawaban;
+                            // array_push($t->jawaban, $jawaban_baru);                            
+                            $tulisan[$aa->jawaban[0]] .= Storage::get('sekolah/'.$sekolah_id.'/'.$jawaban_baru);
+                            break;
+                        case 4:
+                            if(is_array($aa->jawaban) === false){
+                                $aa->jawaban = [$aa->jawaban];
+                                $tulisan[$aa->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$aa->jawaban[0]);
+                            }  
+                            $jawaban_baru = $curr[$key]->pertanyaan[$key2]->jawaban;
+                            // array_push($t->jawaban, $jawaban_baru);                            
+                            $tulisan[$aa->jawaban[0]] .= Storage::get('sekolah/'.$sekolah_id.'/'.$jawaban_baru);
+                            break;
+                    }
                 }
             }
         }
 
         $pertanyaan = Pertanyaan::where('id_formulir', $id)->get();
-        return view('detailRekap', ['rekap' => $rekap, 'pertanyaan' => $pertanyaan, ]);
+        return view('detailRekap', ['rekap' => $rekap, 'pertanyaan' => $pertanyaan, 'formulir'=>$formulir, 'berdasar'=> $berdasar, 'tulisan'=>$tulisan]);
     }
 
     /**
