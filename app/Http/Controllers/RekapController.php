@@ -36,7 +36,9 @@ class RekapController extends Controller
                 //dapatin semua user sekolah sekaligus data rekapnya
                 $sekolahs = $user->users()->where('id_role', 2)->with(['rekap' => function ($query) use ($id) {
                     $query->where('id_formulir', $id);
-                }])->get();
+                }])->whereHas('rekap', function ($query) use ($id) {
+                    $query->where('id_formulir', $id);
+                })->get();
             }else{
                 $sekolahs = [$user];
             }
@@ -75,6 +77,10 @@ class RekapController extends Controller
             foreach ($rekap as $key => $r) {
                 foreach ($r->pertanyaan as $key2 => $aa) {
                     switch ($aa->tipe) {
+                        case 1:
+                            foreach ($aa->opsi as $key3 => $opsi) {
+                                $rekap[$key]->pertanyaan[$key2]->opsi->{$key3} += $curr[$key]->pertanyaan[$key2]->opsi->{$key3};
+                            }
                         case 3:
                             foreach ($aa->opsi as $key3 => $opsi) {
                                 $rekap[$key]->pertanyaan[$key2]->opsi->{$key3} += $curr[$key]->pertanyaan[$key2]->opsi->{$key3};
@@ -158,6 +164,12 @@ class RekapController extends Controller
                         }
                         $pp->opsi = (object) $opsi;
                         $pp->tambahan = $tambahan;
+                    }else if($pp->tipe === 1){ //pertanyaan tipe 1 jaga-jaga
+                        $opsi = [];
+                        foreach ($pp->opsi as $o) {
+                            $opsi[$o] = 0;
+                        }
+                        $pp->opsi = (object) $opsi;
                     }else if($pp->tipe === 2 || $pp->tipe === 4){ //pertanyaan isian atau upload gambar
                         $pp->jawaban = null;
                     }
@@ -186,6 +198,9 @@ class RekapController extends Controller
                             //throw $th;
                         }
                         break;
+                    case 1:
+                        $key = $jawaban[$aa->id];
+                        $aa->opsi->{$key}+=1;
                     case 2:
                         $namafile = "sekolah/".$jawaban_raw->id_user_sekolah."/".$formulir->id."_".$aa->id.".html";
                         Storage::append($namafile, '<div class="form-group"><input type="text" class="form-control" value="'.$jawaban[$aa->id].'" disabled></div>');
@@ -193,7 +208,9 @@ class RekapController extends Controller
                         break;
                     case 4:
                         $namafile = "sekolah/".$jawaban_raw->id_user_sekolah."/".$formulir->id."_".$aa->id.".html";
-                        Storage::append($namafile, 'Appended Text');
+                        preg_match('/[^\/]+$/', $jawaban[$aa->id], $matches);
+                        $judulGambar = $matches[0];
+                        Storage::append($namafile, '<div class="form-group"><a href="'.$jawaban[$aa->id].'" target="_blank" ><input type="text" class="form-control" value="Link: '.$judulGambar.'" disabled></a></div>');
                         $aa->jawaban = $formulir->id."_".$aa->id.".html";
                         break;
                 }

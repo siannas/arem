@@ -105,7 +105,17 @@ Dashboard
                                     <a href="{{url('/rekap/5').'?for=108'}}" class="btn btn-sm btn-primary mr-1"><i class="fas fa-fw fa-eye"></i> Lihat</a>
                                 </div>
                             </td>
-                        </tr>                        
+                        </tr>   
+                        <tr>
+                            <td>Kelurahan Simomulyo Surabaya</td>
+                            <td>SD/MI</td>
+                            <td><div class="badge bg-success text-white rounded-pill">Aktif</div></td>
+                            <td>
+                                <div class="row m-1">
+                                    <a href="{{url('/rekap/1').'?for=96'}}" class="btn btn-sm btn-primary mr-1"><i class="fas fa-fw fa-eye"></i> Lihat</a>
+                                </div>
+                            </td>
+                        </tr>                     
                     </tbody>
                 </table>
             </div>

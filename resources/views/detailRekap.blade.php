@@ -64,25 +64,37 @@ Dashboard
                                 <div class="col-12" style="margin-bottom:5px">
                                     <h5>{{ $p->pertanyaan }}</h5>
                                     <div class="chart-pie pt-4 pb-2">
-                                        <canvas class="myPieChart"></canvas>
+                                        <canvas id="{{ $p->id.'-canvas' }}"></canvas>
                                     </div>
                                     <div class="mt-4 text-center small">
+                                        @php
+                                        $cnt = 0;
+                                        @endphp
+                                        <script>
+                                            myData['{{ $p->id }}'] = {
+                                                'label': [],
+                                                'value': [],
+                                            };
+                                        </script>
+                                        @foreach ($p->opsi as $index => $o)
                                         <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
+                                            <i class="fas fa-circle @if($cnt===0)text-primary @elseif($cnt===1)text-success @else text-info @endif"></i> {{ $index }}
                                         </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span>
+                                        @php
+                                        $cnt += 1;
+                                        @endphp
+                                        <script>
+                                            myData['{{ $p->id }}']['label'].push('{{$index}}');
+                                            myData['{{ $p->id }}']['value'].push('{{$o}}');
+                                        </script>
+                                        @endforeach
                                     </div>
                                 </div>
                                 
                             </div>
                         @elseif ($p->tipe === 2)
                             <div class="row" style="padding-top:20px">
-                                <div class="col-12 col-md-6" style="margin-bottom:5px">
+                                <div class="col-12 " style="margin-bottom:5px">
                                     <h5>{{ $p->pertanyaan }} @if($p->suffix) ( {{ $p->suffix }} ) @endif</h5>
                                     <div class="pt-4 nice-scrollbar" style="max-height:315px;">
                                         {!! $tulisan[$p->jawaban[0]] !!}
@@ -123,28 +135,22 @@ Dashboard
                                 @if(empty($p->tambahan) === false)
                                 <div class="col-12 col-md-6" >
                                     @foreach($p->tambahan as $tKey=> $t)
+                                    @if($p->opsi->{$tKey} !== 0)
                                     <h5>{{ $tKey.': '.$t->pertanyaan }} @if($t->suffix) ( {{ $t->suffix }} ) @endif</h5>
                                     <div class="pt-4 nice-scrollbar" style="max-height:315px;">
                                         {!! $tulisan[$t->jawaban[0]] !!}
                                     </div>
+                                    @endif
                                     @endforeach
                                 </div>
                                 @endif
                             </div>
                         @elseif ($p->tipe === 4)
                             <div class="row" style="padding-top:20px">
-                                <div class="col-12 col-md-5" style="margin-bottom:5px">
+                                <div class="col-12" style="margin-bottom:5px">
                                     <h5>{{ $p->pertanyaan }}</h5>
-                                </div>
-                                <div class="col-12 col-md-7">
-                                    <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
-                                        <label class="custom-file-label" for="inputGroupFile04">Pilih file</label>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04">Upload</button>
-                                    </div>
+                                    <div class="pt-4 nice-scrollbar" style="max-height:315px;">
+                                        {!! $tulisan[$p->jawaban[0]] !!}
                                     </div>
                                 </div>
                             </div>

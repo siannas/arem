@@ -144,6 +144,9 @@ Validasi
                                         </button>
                                     </div>
                                     </div>
+                                    <div id="{{ $p->id }}-alert">
+                                        <p class="text-danger"><i>* File harus berformat .jpg/.jpeg/.png dan maksimal 512 KB</i></p>
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -209,12 +212,11 @@ Validasi
 
         try {
             const res = await myRequest.upload( '{{ route('file.upload', ['id_user'=> $user, 'id_form'=>$formulir , 'id_pertanyaan'=> '']) }}/'+id , formData);
-            console.log(res);
             $('#'+id+'-btn-link').attr('href',res);
             $('#'+id).val(res);
             myToggleButtonUpload(id,'link');
         } catch (err) {
-            myToggleButtonUpload(id,'gagal');
+            myToggleButtonUpload(id,'danger');
         }
     }
 

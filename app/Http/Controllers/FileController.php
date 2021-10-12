@@ -31,6 +31,9 @@ class FileController extends Controller
             $request->file('file'),
             $filename
         );
-        return response( url('storage/'.$id_user.'/'.$filename) );
+        // preg_match( '/^[a-zA-Z:]+\/\/[a-zA-Z\d.:]+/', url('/'), $matches);
+        // $additional_path = substr(url('/'), strlen($matches[0]));
+        // return response( $additional_path.'/public/storage/'.$id_user.'/'.$filename );
+        return response( url('/public/storage/'.$id_user.'/'.$filename) );
     }
 }
