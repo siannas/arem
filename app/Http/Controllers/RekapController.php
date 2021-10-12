@@ -141,7 +141,7 @@ class RekapController extends Controller
                 'id_sekolah' => $jawaban_raw->id_user_sekolah,
                 'json' => null
             ]);
-
+ 
             //inisialisasi json rekap jika belum ada
             $allRes = [];
             foreach( $pertanyaan as $p){
@@ -211,7 +211,7 @@ class RekapController extends Controller
                         $namafile = "sekolah/".$jawaban_raw->id_user_sekolah."/".$formulir->id."_".$aa->id.".html";
                         preg_match('/[^\/]+$/', $jawaban[$aa->id], $matches);
                         $judulGambar = $matches[0];
-                        Storage::append($namafile, '<div class="form-group"><a href="'.$jawaban[$aa->id].'" target="_blank" ><input type="text" class="form-control" value="Link: '.$judulGambar.'" disabled></a></div>');
+                        Storage::append($namafile, '<div class="form-group"><a href="'.$jawaban[$aa->id].'" target="_blank" ><input type="text" class="form-control" value="Link: '.$judulGambar.'" readonly style="cursor: pointer;"></a></div>');
                         $aa->jawaban = $formulir->id."_".$aa->id.".html";
                         break;
                 }
