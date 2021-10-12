@@ -187,12 +187,12 @@ class RekapController extends Controller
                         $key = $jawaban[$aa->id];
                         $aa->opsi->{$key}+=1;
                         try {
-                            if($aa->tambahan[$key]){
-                                $id_ = $aa->tambahan[$key]->id;
+                            if($aa->tambahan->{$key}){
+                                $id_ = $aa->tambahan->{$key}->id;
                                 //append to file
                                 $namafile = "sekolah/".$jawaban_raw->id_user_sekolah."/".$formulir->id."_".$id_.".html";
                                 Storage::append($namafile, '<div class="form-group"><input type="text" class="form-control" value="'.$jawaban[$id_].'" disabled></div>');
-                                $aa->tambahan[$key]->jawaban = $formulir->id."_".$id_.".html";
+                                $aa->tambahan->{$key}->jawaban = $formulir->id."_".$id_.".html";
                             }
                         } catch (\Throwable $th) {
                             //throw $th;
