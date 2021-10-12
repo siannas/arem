@@ -34,6 +34,6 @@ class FileController extends Controller
         // preg_match( '/^[a-zA-Z:]+\/\/[a-zA-Z\d.:]+/', url('/'), $matches);
         // $additional_path = substr(url('/'), strlen($matches[0]));
         // return response( $additional_path.'/public/storage/'.$id_user.'/'.$filename );
-        return response( url('/public/storage/'.$id_user.'/'.$filename) );
+        return response( url('/storage/app/public/'.$id_user.'/'.$filename) );
     }
 }
