@@ -66,9 +66,10 @@ class DataController extends Controller
     }
     public function detailSiswa($id){
         $detailSiswa = User::findOrFail($id);
+        $sekolah = $detailSiswa->parents()->first();
         $allJawaban = Jawaban::where('id_user', $detailSiswa->id)->with('getFormulir','getFormulir.pertanyaan')->get();
         
-        return view('data.detailSiswa', ['siswa' => $detailSiswa, 'allJawaban'=>$allJawaban]);
+        return view('data.detailSiswa', ['siswa' => $detailSiswa, 'allJawaban'=>$allJawaban, 'sekolah'=>$sekolah]);
     }
 
     public function dataSekolah(){

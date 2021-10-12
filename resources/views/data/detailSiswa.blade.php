@@ -27,6 +27,7 @@ Validasi
                 <div class="col-12 col-lg-auto text-center text-lg-right">
                     <h5 class="card-title text-light mb-3"><b>{{ $siswa->nama }}</b></h5>
                     <h6 class="card-subtitle text-gray-300 mb-2">NIK {{ $siswa->username }}</h6>
+                    <h6 class="card-subtitle text-gray-300 mb-2">{{ $sekolah->nama }}</h6>
                 </div>
             </div>
         </div>

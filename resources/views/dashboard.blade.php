@@ -47,7 +47,7 @@ Dashboard
                                 <p class="text-gray-700 mb-0">Browse our fully designed UI toolkit! Browse our prebuilt app pages, components, and utilites, and be sure to look at our full documentation!</p>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-xxl-12 text-center"><img class="img-fluid" src="{{asset('public/img/undraw_Welcome_re_h3d9.svg')}}" style="max-width: 20rem"></div>
+                        <div class="col-xl-4 col-xxl-12 text-center"><img class="img-fluid" src="{{asset('public/img/undraw_Welcome_re_h3d9.svg')}}"></div>
                     </div>
                 </div>
             </div>

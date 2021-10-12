@@ -8,8 +8,8 @@ $role= Auth::user()->getRole->role;
         
 @endsection
 
-@elseif($role==='Sekolah')
-<!-- SEKOLAH -->
+@elseif($role==='Kota'||$role==='Kecamatan'||$role==='Puskesmas'||$role==='Kelurahan'||$role==='Sekolah')
+
 @section('sidebar')
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -37,300 +37,47 @@ $role= Auth::user()->getRole->role;
             <span>Validasi</span></a>
     </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Master Data</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Data:</h6>
+                <a class="collapse-item @yield('siswaStatus')" href="{{ url('/data-siswa')}}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Data Siswa</span></a>
 
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Data
-    </div>
+                @if($role==='Kota'||$role==='Kecamatan'||$role==='Puskesmas'||$role==='Kelurahan')
+                <a class="collapse-item @yield('sekolahStatus')" href="{{ url('/data-sekolah')}}">
+                    <i class="fas fa-fw fa-school"></i>
+                    <span>Data Sekolah</span></a>
+                @endif
 
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('siswaStatus')">
-        <a class="nav-link" href="{{ url('/data-siswa')}}">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Data Siswa</span></a>
-    </li>
+                @if($role==='Kota'||$role==='Kecamatan'||$role==='Puskesmas')
+                <a class="collapse-item @yield('kelurahanStatus')" href="{{ url('/data-kelurahan')}}">
+                    <i class="fas fa-fw fa-university"></i>
+                    <span>Data Kelurahan</span></a>
+                @endif
 
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+                @if($role==='Kota'||$role==='Kecamatan')
+                <a class="collapse-item @yield('puskesmasStatus')" href="{{ url('/data-puskesmas')}}">
+                    <i class="fas fa-fw fa-hospital"></i>
+                    <span>Data Puskesmas</span></a>
+                @endif
 
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
+                @if($role==='Kota')
+                <a class="collapse-item @yield('kecamatanStatus')" href="{{ url('/data-kecamatan')}}">
+                    <i class="fas fa-fw fa-landmark"></i>
+                    <span>Data Kecamatan</span></a>
+                @endif
 
-</ul>
-@endsection
-
-@elseif($role==='Kelurahan')
-<!-- KELURAHAN -->
-@section('sidebar')
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/')}}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
+            </div>
         </div>
-        <div class="sidebar-brand-text mx-3">Aplikasi<sup>Remaja</sup></div>
-    </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item @yield('dashboardStatus')">
-        <a class="nav-link" href="{{ url('/')}}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
     </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="{{ url('/validasi')}}">
-            <i class="fas fa-fw fa-check-circle"></i>
-            <span>Validasi</span></a>
-    </li>
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Data
-    </div>
-
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('siswaStatus')">
-        <a class="nav-link" href="{{ url('/data-siswa')}}">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Data Siswa</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('sekolahStatus')">
-        <a class="nav-link" href="{{ url('/data-sekolah')}}">
-            <i class="fas fa-fw fa-school"></i>
-            <span>Data Sekolah</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
-</ul>
-@endsection
-
-@elseif($role==='Puskesmas')
-<!-- PUSKESMAS -->
-@section('sidebar')
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/')}}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">Aplikasi<sup>Remaja</sup></div>
-    </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item @yield('dashboardStatus')">
-        <a class="nav-link" href="{{ url('/')}}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="{{ url('/validasi')}}">
-            <i class="fas fa-fw fa-check-circle"></i>
-            <span>Validasi</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Data
-    </div>
-
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('siswaStatus')">
-        <a class="nav-link" href="{{ url('/data-siswa')}}">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Data Siswa</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('sekolahStatus')">
-        <a class="nav-link" href="{{ url('/data-sekolah')}}">
-            <i class="fas fa-fw fa-school"></i>
-            <span>Data Sekolah</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('kelurahanStatus')">
-        <a class="nav-link" href="{{ url('/data-kelurahan')}}">
-            <i class="fas fa-fw fa-university"></i>
-            <span>Data Kelurahan</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
-</ul>
-@endsection
-
-@elseif($role==='Kecamatan')
-<!-- KECAMATAN -->
-@section('sidebar')
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/')}}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">Aplikasi<sup>Remaja</sup></div>
-    </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item @yield('dashboardStatus')">
-        <a class="nav-link" href="{{ url('/')}}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="{{ url('/validasi')}}">
-            <i class="fas fa-fw fa-check-circle"></i>
-            <span>Validasi</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Data
-    </div>
-
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('siswaStatus')">
-        <a class="nav-link" href="{{ url('/data-siswa')}}">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Data Siswa</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('sekolahStatus')">
-        <a class="nav-link" href="{{ url('/data-sekolah')}}">
-            <i class="fas fa-fw fa-school"></i>
-            <span>Data Sekolah</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('kelurahanStatus')">
-        <a class="nav-link" href="{{ url('/data-kelurahan')}}">
-            <i class="fas fa-fw fa-university"></i>
-            <span>Data Kelurahan</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('puskesmasStatus')">
-        <a class="nav-link" href="{{ url('/data-puskesmas')}}">
-            <i class="fas fa-fw fa-hospital"></i>
-            <span>Data Puskesmas</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
-</ul>
-@endsection
-
-@elseif($role==='Kota')
-<!-- KOTA/DINAS -->
-@section('sidebar')
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/')}}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">Aplikasi<sup>Remaja</sup></div>
-    </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item @yield('dashboardStatus')">
-        <a class="nav-link" href="{{ url('/')}}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="{{ url('/validasi')}}">
-            <i class="fas fa-fw fa-check-circle"></i>
-            <span>Validasi</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Data
-    </div>
-
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('siswaStatus')">
-        <a class="nav-link" href="{{ url('/data-siswa')}}">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Data Siswa</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('sekolahStatus')">
-        <a class="nav-link" href="{{ url('/data-sekolah')}}">
-            <i class="fas fa-fw fa-school"></i>
-            <span>Data Sekolah</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('kelurahanStatus')">
-        <a class="nav-link" href="{{ url('/data-kelurahan')}}">
-            <i class="fas fa-fw fa-university"></i>
-            <span>Data Kelurahan</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('puskesmasStatus')">
-        <a class="nav-link" href="{{ url('/data-puskesmas')}}">
-            <i class="fas fa-fw fa-hospital"></i>
-            <span>Data Puskesmas</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('kecamatanStatus')">
-        <a class="nav-link" href="{{ url('/data-kecamatan')}}">
-            <i class="fas fa-fw fa-landmark"></i>
-            <span>Data Kecamatan</span></a>
-    </li>
-
+    
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -339,13 +86,15 @@ $role= Auth::user()->getRole->role;
         Form Skrining
     </div>
 
+    @if($role==='Kota')
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('formStatus')">
         <a class="nav-link" href="{{ url('/formulir')}}">
             <i class="fab fa-fw fa-wpforms"></i>
             <span>Form Skrining</span></a>
     </li>
-    
+    @endif
+
     <li class="nav-item @yield('rekapStatus')">
         <a class="nav-link" href="{{ url('/rekap')}}">
             <i class="fas fa-fw fa-file"></i>
@@ -363,8 +112,4 @@ $role= Auth::user()->getRole->role;
 </ul>
 @endsection
 
-@else
-@section('sidebar')
-
-@endsection
 @endif
