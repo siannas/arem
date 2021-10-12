@@ -186,6 +186,7 @@ class RekapController extends Controller
                     case 3:
                         $key = $jawaban[$aa->id];
                         $aa->opsi->{$key}+=1;
+                        $aa->tambahan = (object) $aa->tambahan;
                         try {
                             if($aa->tambahan->{$key}){
                                 $id_ = $aa->tambahan->{$key}->id;
