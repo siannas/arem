@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\UserPivot;
 use App\Metadata;
 use App\Jawaban;
 use App\Formulir;
@@ -11,6 +12,18 @@ use Auth;
 
 class DataController extends Controller
 {
+    public function dashboard(){
+        $dataSekolah = User::where('id_role', 2)->get();
+        $sekolah = UserPivot::where('id_child', Auth::user()->id)->get();
+        $detailSekolah = [];
+        if(count($sekolah)>0){
+            $sekolah = UserPivot::where('id_child', Auth::user()->id)->whereIn('id_user', $dataSekolah)->first();
+            $detailSekolah = User::find($sekolah->id_user);
+        }
+        
+        return view('dashboard', ['sekolah'=>$detailSekolah]);
+    }
+
     public function dataSiswa(){
         $id_user= Auth::user();
         $tahunAjar = Metadata::where('key', 'tahun-ajaran')->first();
@@ -70,6 +83,14 @@ class DataController extends Controller
         $allJawaban = Jawaban::where('id_user', $detailSiswa->id)->with('getFormulir','getFormulir.pertanyaan')->get();
         
         return view('data.detailSiswa', ['siswa' => $detailSiswa, 'allJawaban'=>$allJawaban, 'sekolah'=>$sekolah]);
+    }
+    public function pindahSiswa($id){
+        try{
+            UserPivot::where('id_child', $id)->delete();
+        }catch(QueryException $exception){
+            return back()->withError($exception->getMessage())->withInput();
+        }
+        return redirect()->action('DataController@dataSiswa')->with('success', 'Data Berhasil Dihapus');
     }
 
     public function dataSekolah(){

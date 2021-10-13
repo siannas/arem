@@ -12,9 +12,7 @@
 */
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        return view('dashboard');
-    });
+    Route::get('/', 'DataController@dashboard');
 
     Route::middleware(['role:Siswa'])->group(function () {
         Route::put('/jawaban/{formulir}', 'FormulirController@storeOrUpdateJawaban')->name('jawaban.store.update');        
@@ -108,3 +106,4 @@ Route::get('/coba/dong', function(){
 Route::post('/upload/{id_user}/{id_form}/{id_pertanyaan}', 'FileController@upload')->name('file.upload');
 
 Route::put('/ubah-password', 'ubahPassController@update');
+Route::delete('/keluar/{id}', 'DataController@pindahSiswa')->name('siswa.keluar');

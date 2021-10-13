@@ -64,7 +64,7 @@ $role= Auth::user()->getRole->role;
 
                 @if($role==='Kota'||$role==='Kecamatan')
                 <a class="collapse-item @yield('puskesmasStatus')" href="{{ url('/data-puskesmas')}}">
-                    <i class="fas fa-fw fa-hospital"></i>
+                    <i class="fas fa-fw fa-clinic-medical"></i>
                     <span>Data Puskesmas</span></a>
                 @endif
 

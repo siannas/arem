@@ -38,7 +38,6 @@ Validasi
                         <tr>
                             <th>NIK</th>
                             <th>Nama</th>
-                            <th>Kelas</th>
                             <th>Status</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
@@ -48,7 +47,6 @@ Validasi
                         <tr>
                             <th>NIK</th>
                             <th>Nama</th>
-                            <th>Kelas</th>
                             <th>Status</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
@@ -59,7 +57,6 @@ Validasi
                         <tr>
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
-                            <td>{{ $unit->kelas }}</td>
                             <td>
                                 @if($unit->validasi===1)
                                 <div class="badge bg-success text-white rounded-pill">Tervalidasi</div>
