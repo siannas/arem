@@ -19,6 +19,7 @@ class Jawaban extends Model
         'id_formulir',
         'json',
         'validasi',
+        'status_rekap',
     ];
     public function getUser(){
         return $this->belongsTo(User::class, 'id_user');
