@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\doRekap::class
     ];
 
     /**
@@ -26,6 +26,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        // Masukkan Kode Anda Disini
+        $schedule->command('doRekap')->everyMinute()->name('rekap')->withoutOverlapping();
     }
 
     /**
