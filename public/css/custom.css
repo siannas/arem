@@ -1,4 +1,4 @@
-input[type=text].invalid{
+input[type=text].invalid , label.invalid{
     border-color: red;
     color: red;
 }
