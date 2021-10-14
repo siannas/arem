@@ -13,15 +13,18 @@ use Auth;
 class DataController extends Controller
 {
     public function dashboard(){
-        $dataSekolah = User::where('id_role', 2)->get();
-        $sekolah = UserPivot::where('id_child', Auth::user()->id)->get();
-        $detailSekolah = [];
-        if(count($sekolah)>0){
-            $sekolah = UserPivot::where('id_child', Auth::user()->id)->whereIn('id_user', $dataSekolah)->first();
-            $detailSekolah = User::find($sekolah->id_user);
+        if(Auth::user()->id_role==1){
+            $dataSekolah = User::where('id_role', 2)->get();
+            $sekolah = UserPivot::where('id_child', Auth::user()->id)->get();
+            $detailSekolah = [];
+            if(count($sekolah)>0){
+                $sekolah = UserPivot::where('id_child', Auth::user()->id)->whereIn('id_user', $dataSekolah)->first();
+                $detailSekolah = User::find($sekolah->id_user);
+            }
+            
+            return view('dashboard', ['sekolah'=>$detailSekolah]);
         }
-        
-        return view('dashboard', ['sekolah'=>$detailSekolah]);
+        return view('dashboard');
     }
 
     public function dataSiswa(){
