@@ -43,7 +43,7 @@ Validasi
                                         <input type="hidden" name="{{ $p->id }}" value="" /> 
                                         @foreach ($p->opsi as $index => $o)
                                         <label class="radio-inline col-6 col-md-4">
-                                            <input type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o }}"> {{ $o }}
+                                            <input class="invalid" type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o }}"> {{ $o }}
                                         </label>
                                         @endforeach
                                     </div>
@@ -56,7 +56,7 @@ Validasi
                                 </div>
                                 <div class="col-12 col-md-7">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="" name="{{ $p->id }}" >
+                                        <input type="text" class="form-control invalid" placeholder="" name="{{ $p->id }}" onfocusout="myTextOnFocusOut(this, this.value)">
                                         @if (isset($p->suffix))
                                             <div class="input-group-append">
                                                 <div class="input-group-text" >{{ $p->suffix }}</div>
@@ -76,11 +76,11 @@ Validasi
                                             <input type="hidden" name="{{ $p->id }}" value="" /> 
                                             @if (is_object($o))
                                                 <label class="radio-inline col-6 col-md-4">
-                                                    <input type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o->{'0'} }}"> {{ $o->{'0'} }}
+                                                    <input class="invalid" type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o->{'0'} }}"> {{ $o->{'0'} }}
                                                 </label>
                                             @else
                                                 <label class="radio-inline col-6 col-md-4">
-                                                    <input type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o }}"> {{ $o }}
+                                                    <input class="invalid" type="radio" name="{{ $p->id }}" id="{{ $p->id.'__'.$index }}" value="{{ $o }}"> {{ $o }}
                                                 </label>
                                             @endif
                                         @endforeach
@@ -88,7 +88,8 @@ Validasi
                                             @if (is_object($o) and $o->{'if-selected'}->tipe === 2 )
                                                 <div class="col-12 collapse" style="flex:1" id="{{ $o->{'if-selected'}->id }}-container">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id }}" placeholder="{{ $o->{'if-selected'}->pertanyaan }}" disabled>
+                                                        <input type="text" class="form-control invalid" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id }}" placeholder="{{ $o->{'if-selected'}->pertanyaan }}"
+                                                            onfocusout="myTextOnFocusOut(this, this.value)" disabled>
                                                         @if (isset($o->{'if-selected'}->suffix))
                                                             <div class="input-group-append">
                                                                 <div class="input-group-text" >{{ $o->{'if-selected'}->suffix }}</div>
@@ -111,7 +112,7 @@ Validasi
                                             <div class="row" style="margin:0px">
                                                 @foreach ($o->{'if-selected'}->opsi as $index2 => $o2)
                                                 <label class="radio-inline col-6 col-md-4">
-                                                    <input type="radio" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id.'__'.$index2 }}" value="{{ $o2 }}" > {{ $o2 }}
+                                                    <input class="invalid" type="radio" name="{{ $o->{'if-selected'}->id }}" id="{{ $o->{'if-selected'}->id.'__'.$index2 }}" value="{{ $o2 }}" > {{ $o2 }}
                                                 </label>
                                                 @endforeach
                                             </div>
@@ -177,6 +178,9 @@ Validasi
             myTempData[keyAktif].collapse('hide');
             myTempData[keyAktif].find(':input').prop('disabled', true);
             myTempData[keyAktif] = null;
+        }else{
+            var $jwb = $('input[name="'+id+'"]').filter(':not([type=hidden])');
+            $jwb.removeClass('invalid');
         }
 
         //cek jika jawaban menimbulkan pertanyaan baru
@@ -189,10 +193,29 @@ Validasi
             myTempData[keyAktif].collapse('show');
         }
     }
+    var myTextOnFocusOut = function(self, value){
+        var $jwb = $(self);
+        var filteredval = $jwb.val().trim();
+        $jwb.val(filteredval);
+        if(filteredval === ''){
+            $jwb.addClass('invalid');
+        }else{
+            $jwb.removeClass('invalid');
+        }
+    }
 
+    @foreach ($allPertanyaan as $key => $ap)
+    @php
+        $json = json_decode($ap->json);
+    @endphp
     @foreach ($json->pertanyaan as $p)
         myData[@json($p->id)] = @json($p);
-        @if ($p->tipe === 3)
+        console.log(@json($p))
+        @if ($p->tipe === 1)
+            $('input[name={{ $p->id }}]:radio').change(function(){
+                myPertanyaanOnChange(@json($p->id), this.value);
+            });
+        @elseif ($p->tipe === 3)
             $('input[name={{ $p->id }}]:radio').change(function(){
                 myPertanyaanOnChange(@json($p->id), this.value);
             });
@@ -202,6 +225,7 @@ Validasi
             @endif
             @endforeach
         @endif
+    @endforeach
     @endforeach
     const myUpload = async function(id_dummy, id){
         myToggleButtonUpload(id,'loading');
@@ -280,8 +304,10 @@ for(var id in jawabans){
                 myToggleButtonUpload(id,'link');
                 $('#'+id+'-file-dummy').next().text(val)
             }
+            $jwb.removeClass('invalid');
             break;
         case 'radio':
+            $jwb.removeClass('invalid')
             $jwb = $jwb.filter('[value="'+val+'"]')
             $jwb.prop("checked", true);       
             myPertanyaanOnChange(id, val);    
