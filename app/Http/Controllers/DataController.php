@@ -9,6 +9,7 @@ use App\Metadata;
 use App\Jawaban;
 use App\Formulir;
 use Auth;
+use Hash;
 
 class DataController extends Controller
 {
@@ -94,6 +95,17 @@ class DataController extends Controller
             return back()->withError($exception->getMessage())->withInput();
         }
         return redirect()->action('DataController@dataSiswa')->with('success', 'Data Berhasil Dihapus');
+    }
+
+    public function resetPasswordSiswa($id){
+        try{
+            $siswa = User::find($id);
+            $siswa->password = Hash::make($siswa->username);
+            $siswa->save();
+        }catch(QueryException $exception){
+            return back()->withError($exception->getMessage())->withInput();
+        }
+        return back()->with('success', 'Password Berhasil di-reset');
     }
 
     public function dataSekolah(){

@@ -81,7 +81,8 @@ Validasi
                             <td>{{ $unit->updated_at }}</td>
                             <td><a href="{{url('/data-siswa/'.$unit->id)}}" class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i></a>
                                 @if($role==='Sekolah')
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-sign-out-alt" data-toggle="modal" data-target="#keluar{{ $unit->id }}"></i></button>
+                                <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#detail{{ $unit->id }}"  data-toggle="tooltip" data-placement="top" title="Detail Siswa"><i class="fas fa-fw fa-key" ></i></button>
+                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#keluar{{ $unit->id }}"><i class="fas fa-fw fa-sign-out-alt" ></i></button>
                                 <div class="modal modal-danger fade" id="keluar{{ $unit->id }}" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
@@ -95,11 +96,35 @@ Validasi
                                             <form action="{{ route('siswa.keluar', [$unit->id]) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <h5 class="text-center">Yakin Ingin Mengeluarkan Siswa dari Sekolah?</h5>
+                                                <h5 class="text-center">Yakin ingin mengeluarkan Siswa dari Sekolah?</h5>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
                                                 <button type="submit" class="btn btn-danger">Ya</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal modal-danger fade" id="detail{{ $unit->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Detail Siswa</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                            <form action="{{ route('admin.resetpassword', [$unit->id]) }}" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <h5 class="text-center">Yakin ingin me-<i>reset</i> Password Siswa?</h5>
+                                                <p class="text-center">Siswa dapat login menggunakan password berupa NIK.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                <button type="submit" class="btn btn-danger">Reset Password</button>
                                             </div>
                                             </form>
                                         </div>

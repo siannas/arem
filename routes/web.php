@@ -29,6 +29,10 @@ Route::middleware(['auth'])->group(function () {
             return view('form.listTahunAjaran');
         });
     });
+
+    Route::middleware(['role:Sekolah'])->group(function () {
+        Route::post('/resetpassword/{id}', 'DataController@resetPasswordSiswa')->name('admin.resetpassword');
+    });
     
     Route::middleware(['role:Sekolah,Kelurahan,Puskesmas,Kecamatan,Kota'])->group(function () {
         Route::get('/data-siswa', 'DataController@dataSiswa');
