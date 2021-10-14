@@ -161,11 +161,11 @@ Validasi
                                 </div>
                             </td>
                         </tr>
-                        <div class="modal fade" id="edit-{{$unit->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="edit-{{$unit->id}}" tabindex="-1" aria-labelledby="edit-{{$unit->id}}ModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Edit Form Skrining</h5>
+                                    <h5 class="modal-title" id="edit-{{$unit->id}}ModalLabel">Edit Form Skrining</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -195,7 +195,7 @@ Validasi
                                         <div class="form-group">
                                             <label><b>Jenjang</b></label>
                                             <div class="input-group">
-                                                <select id="jenjang" class="form-control">
+                                                <select id="jenjang" class="form-control" name="kelas">
                                                     <option disabled>Pilih Jenjang</option>
                                                     <option value="1,2,3,4,5,6" @if($unit->kelas=="1,2,3,4,5,6") selected @endif>SD/MI</option>
                                                     <option value="7,8,9,10,11,12" @if($unit->kelas=="7,8,9,10,11,12") selected @endif>SMP/MTS dan SMA/SMK/MA</option>
@@ -203,7 +203,7 @@ Validasi
                                             </div>
                                         </div>
                                         <div class="custom-control custom-switch mt-4">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch{{$unit->id}}">
+                                            <input type="checkbox" class="custom-control-input" id="customSwitch{{$unit->id}}" @if($unit->status===1) checked @endif name="status">
                                             <label class="custom-control-label" for="customSwitch{{$unit->id}}">Aktifkan</label>
                                         </div>
                                     </div>
@@ -222,7 +222,6 @@ Validasi
         </div>
     </div>
 </div>
-          
 @endsection
 
 @section('script')

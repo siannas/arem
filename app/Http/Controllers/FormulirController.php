@@ -101,6 +101,7 @@ class FormulirController extends Controller
         }
 
         $formulir->fill($request->all());
+        $formulir->fill(['status'=> $request->input('status')==='on'? 1 : 0]);
 
         $formulir->save();
 
