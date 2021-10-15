@@ -47,9 +47,44 @@ Dashboard
                                 <p class="text-gray-700 mb-0">
                                     @if($sekolah) 
                                     Anda Terdaftar Sebagai Siswa di {{$sekolah->nama}} 
-                                    @else 
+                                    @elseif($dataPengajuan)
+                                    Anda Sudah Mendaftar. Status sedang diverifikasi.
+                                    @else
                                     Anda Tidak Terdaftar Pada Sekolah Manapun, Segera Lakukan Pendaftaran Melalui Link Berikut:
-                                    <br><button class="btn btn-primary mt-3" style="width:50%">Daftar</button>
+                                    <br><button class="btn btn-primary mt-3" style="width:50%" data-toggle="modal" data-target="#daftar">Daftar</button>
+                                    <div class="modal modal-danger fade" id="daftar" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Daftar Sekolah</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                <form action="{{ route('dashboard.pengajuan') }}" method="POST">
+                                                    @csrf
+                                                    <h5 class="text-center">Silahkan Pilih Sekolah Yang Ingin Didaftar</h5>
+                                                    <div class="form-group">
+                                                        <div id="sekolahParent" class="input-group">
+                                                            <select id="sekolah" name="sekolah" class="form-control">
+                                                                <option selected disabled>Pilih Sekolah</option>
+                                                                @foreach($dataSekolah as $unit)
+                                                                <option value="{{$unit->id}}">{{$unit->nama}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
+                                                    <button type="submit" class="btn btn-danger">Ya</button>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                     @endif
                                 </p>
                             </div>
@@ -63,6 +98,18 @@ Dashboard
     </div>
 </div>
 @endsection
+@section('script')
+<script>
+$(document).ready(function() {
+    $('#sekolah').select2({
+        tags: true,
+        width: 'style',
+        dropdownParent: $("#sekolahParent")
+    });
+});
+</script>
+@endsection
+
 @else
 @section('content')
 <div class="container-fluid">

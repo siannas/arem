@@ -15,7 +15,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', 'DataController@dashboard');
 
     Route::middleware(['role:Siswa'])->group(function () {
+        Route::post('/pengajuan', 'DataController@pengajuan')->name('dashboard.pengajuan');
         Route::put('/jawaban/{formulir}', 'FormulirController@storeOrUpdateJawaban')->name('jawaban.store.update');        
+    });
+
+    Route::middleware(['role:Sekolah'])->group(function () {
+        Route::get('/verifikasi', 'DataController@verifikasi');
+        Route::put('/verifikasi/{id}', 'DataController@verifikasiSiswa');
+        Route::delete('/verifikasi/tolak/{id}', 'DataController@tolakSiswa');
     });
 
     Route::middleware(['role:Siswa,Kota'])->group(function () {

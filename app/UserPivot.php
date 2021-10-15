@@ -12,5 +12,6 @@ class UserPivot extends Pivot
      * @var string
      */
     protected $table = 'user_pivot';
-
+    
+    public $timestamps = false;
 }

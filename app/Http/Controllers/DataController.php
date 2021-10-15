@@ -8,6 +8,7 @@ use App\UserPivot;
 use App\Metadata;
 use App\Jawaban;
 use App\Formulir;
+use App\Pengajuan;
 use Auth;
 use Hash;
 
@@ -22,11 +23,72 @@ class DataController extends Controller
                 $sekolah = UserPivot::where('id_child', Auth::user()->id)->whereIn('id_user', $dataSekolah)->first();
                 $detailSekolah = User::find($sekolah->id_user);
             }
+
+            $dataPengajuan = Pengajuan::where('id_user', Auth::user()->id)->where('verifikasi', 0)->first();
+            // dd($dataPengajuan);
             
-            return view('dashboard', ['sekolah'=>$detailSekolah]);
+            return view('dashboard', ['sekolah'=>$detailSekolah, 'dataSekolah'=>$dataSekolah, 'dataPengajuan'=>$dataPengajuan]);
         }
         return view('dashboard');
     }
+
+    public function pengajuan(){
+        
+        $pengajuan = new Pengajuan();
+        $pengajuan->id_user = Auth::user()->id;
+        $pengajuan->id_user_sekolah = request('sekolah');
+        $pengajuan->verifikasi = 0;
+
+        $pengajuan->save();
+
+        return redirect()->action('DataController@dashboard')->with('success', 'Pengajuan Berhasil');
+    }
+
+    public function verifikasi(){
+        $pengajuan = Pengajuan::where('id_user_sekolah', Auth::user()->id)->where('verifikasi', 0)->get();
+        $dataSiswa = [];
+        foreach($pengajuan as $unit){
+            array_push($dataSiswa, User::find($unit->id_user));
+        }
+        return view('verifikasi', ['siswa'=>$dataSiswa]);
+    }
+
+    public function verifikasiSiswa($id){
+        $pengajuan = Pengajuan::where('id_user',$id)->first();
+        $pengajuan->verifikasi=1;
+        
+        // Get semua id parents
+        $listRelasi = [];
+        $relasi = Auth::user()->parents()->get();
+        foreach($relasi as $unit){
+            array_push($listRelasi, $unit->id);
+        }
+        array_push($listRelasi, Auth::user()->id);
+
+        // Simpan setiap id parent dan dipasangkan dengan id siswa
+        foreach($listRelasi as $unit){
+            $relasi = new UserPivot();
+            $relasi->id_user=$unit;
+            $relasi->id_child=$id;
+            $relasi->save();
+        }
+
+        $pengajuan->save();
+
+        return redirect()->action('DataController@verifikasi')->with('success', 'Data Berhasil Diverifikasi');
+    }
+
+    public function tolakSiswa($id)
+    {
+        try {
+            $pengajuan = Pengajuan::where('id_user' ,$id);
+            $pengajuan->delete();
+        }catch (QueryException $exception) {
+            return back()->withError($exception->getMessage())->withInput();
+        }
+        return redirect()->action('DataController@verifikasi')->with('success', 'Pengajuan Siswa Ditolak');
+    }
+
 
     public function dataSiswa(){
         $id_user= Auth::user();

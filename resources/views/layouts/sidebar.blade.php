@@ -37,6 +37,15 @@ $role= Auth::user()->getRole->role;
             <span>Validasi</span></a>
     </li>
 
+    @if($role==='Sekolah')
+    <!-- Nav Item - Tables -->
+    <li class="nav-item @yield('verifikasiStatus')">
+        <a class="nav-link" href="{{ url('/verifikasi')}}">
+            <i class="fas fa-fw fa-user-plus"></i>
+            <span>Verifikasi</span></a>
+    </li>
+    @endif
+
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">

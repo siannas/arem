@@ -27,21 +27,10 @@ $role= Auth::user()->getRole->role;
     <link href="{{ asset('public/css/sb-admin-2.min.css?v=kjhkawhd') }}" rel="stylesheet">
     <!-- Custom styles for validasi -->
     <link href="{{ asset('public/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-    <style>
-    .float{
-        z-index: 1049;
-        position:fixed;
-        width:2.75rem;
-        height:2.75rem;
-        bottom:15px;
-        right:1rem;
-        border-radius:5px;
-        text-align:center;
-        box-shadow: 2px 5px 10px #999;
-    }
-    </style>
     <!-- Custom styles for this template -->
     <link href="{{ asset('public/css/custom.css') }}" rel="stylesheet">
+    <!-- Select2 custom styles -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 
 </head>
@@ -369,6 +358,9 @@ $role= Auth::user()->getRole->role;
 
     <!-- Tables custom scripts -->
     <script src="{{ asset('public/js/demo/datatables-demo.js') }}"></script>
+
+    <!-- Select2 custom scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @yield('script')
     @stack('scripts')
