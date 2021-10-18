@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -25,7 +26,15 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected function redirectTo()
+    {
+        $user = Auth::user();
+        $profil = \App\Profile::where('id_user',$user->id)->first();
+        if(is_null($profil)){
+            session(['profil' => false]);
+        }
+        return '/';
+    }
 
     public function username()
     {

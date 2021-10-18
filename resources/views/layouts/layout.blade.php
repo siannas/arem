@@ -217,7 +217,7 @@ $role= Auth::user()->getRole->role;
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
+                                    Profil {!! session()->exists('profil') ? '<br><i class="text-danger">*Belum mengisi profil</i>' : '' !!}
                                 </a>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ubahModal">
                                     <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>

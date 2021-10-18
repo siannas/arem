@@ -118,3 +118,5 @@ Route::post('/upload/{id_user}/{id_form}/{id_pertanyaan}', 'FileController@uploa
 
 Route::put('/ubah-password', 'ubahPassController@update');
 Route::delete('/keluar/{id}', 'DataController@pindahSiswa')->name('siswa.keluar');
+
+Route::put('/profil/update', 'ProfileController@update')->middleware('auth')->name('profil.update');
