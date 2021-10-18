@@ -160,7 +160,10 @@ Validasi
     <form action="#" id="mainform" hidden>
         @csrf
     </form>
+    @if($jawaban->validasi===0)
     <button class="btn btn-primary float" onclick="$('#mainform').trigger('submit')"><i class="fas fa-fw fa-save"></i></button>
+    @endif
+    
 </div>
 @endsection
 
@@ -282,7 +285,7 @@ $(document).ready(function () {
             const res = await myRequest.put( '{{ route('jawaban.store.update', ['formulir'=> $formulir]) }}' , data)
             myAlert('Berhasil menyimpan');
         } catch(err) {
-            myAlert('gagal, '+JSON.stringify(err['statusText']),'danger');
+            myAlert(JSON.stringify(err['statusText']),'danger');
         }
 
         setTimeout(() => {

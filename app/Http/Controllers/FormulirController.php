@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Validator;
 use Illuminate\Http\Request;
 use App\Formulir;
+use App\Jawaban;
 use App\Pertanyaan;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Database\QueryException;
@@ -36,7 +37,15 @@ class FormulirController extends Controller
                     array_push($id_form, $unit->id);
                 }
             }
-            $formulir = Formulir::where('status', 1)->whereIn('id', $id_form)->get();
+            $riwayatJawaban = Jawaban::where('id_user', $id_user->id)->where('validasi', 1)->get();
+            $idRiwayat = [];
+            foreach($riwayatJawaban as $unit){
+                array_push($idRiwayat, $unit->id_formulir);
+            }
+            $formulir = Formulir::where('status', 1)->whereNotIn('id', $idRiwayat)->whereIn('id', $id_form)->get();
+            $riwayat = Formulir::whereIn('id', $idRiwayat)->get();
+
+            return view('form.listTahunAjaran', ['formulir' => $formulir, 'riwayat' => $riwayat]);
         }
         return view('form.listTahunAjaran', ['formulir' => $formulir]);
     }
@@ -75,6 +84,7 @@ class FormulirController extends Controller
     public function show($id)
     {
         $formulir = Formulir::findOrFail($id);
+    
         $pertanyaan = $formulir->pertanyaan;
         return view('form.jenisForm', ['formulir' => $formulir, 'pertanyaan' => $pertanyaan]);
     }
@@ -188,11 +198,12 @@ class FormulirController extends Controller
             'id_user' => $user->id,
             'id_formulir' => $formulir->id,
         ]);
-
+        
         $jawaban->fill([
             'id_user_sekolah' => is_null($jawaban->id_user_sekolah) ?  $sekolah->id : $jawaban->id_user_sekolah,
             'json' => $req['json'],
-            'validasi' => is_null($jawaban->validasi) ? 0 : $jawaban->validasi
+            'validasi' => is_null($jawaban->validasi) ? 0 : $jawaban->validasi,
+            'status_rekap' => is_null($jawaban->status_rekap) ? 0 : $jawaban->status_rekap
         ]);
 
         $jawaban->save();

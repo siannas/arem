@@ -30,8 +30,14 @@ $alertContainer = $('#alert');
 
 const myAlert = function(msg, tipe=''){
     $alert = $($alert_).clone();
-    if(tipe==='danger') $alert.addClass('alert-danger');
-    else $alert.addClass('alert-success');
+    if(tipe==='danger') {
+        $alert.addClass('alert-danger');
+        msg='<i class="fas fa-times"></i> Error:<small> '+msg+'</small>';
+    }
+    else{
+        $alert.addClass('alert-success');
+        msg='<i class="fas fa-check"></i> Success:<small> '+msg+'</small>';
+    } 
     $alert.prepend(msg);
     $alertContainer.empty();
     $alertContainer.append($alert);

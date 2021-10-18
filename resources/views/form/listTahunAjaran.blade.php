@@ -66,6 +66,8 @@ Validasi
 </div>
 
 <div class="container-fluid">
+
+    @if($role==='Kota')
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Daftar Form Skrining</h1>
     @include('form.alert')
@@ -76,7 +78,7 @@ Validasi
             <div class="row">
                 <div class="col align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Daftar Form Skrining</h6>
-                </div>   
+                </div>
                 @if($role==='Kota')
                 <div class="col text-right">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambah">
@@ -221,6 +223,108 @@ Validasi
             </div>
         </div>
     </div>
+    @endif
+
+    @if($role==='Siswa')
+    <div class="row">
+        <div class="col-xxl-4 col-xl-12 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-body h-100 p-5">
+                    <div class="row align-items-center">
+                        <div class="col-xl-8 col-xxl-12">
+                            <div class="text-center text-xl-start text-xxl-center mb-4 mb-xl-0 mb-xxl-4 mr-xl-4">
+                                <h2 class="text-primary mb-4">Form Skrining Aktif</h2>
+                                @if(count($formulir)!=0)
+                                    @foreach($formulir as $unit)
+                                    <form action="{{url('/formulir/user/'.$unit->id)}}" method="GET">
+                                    <button type="submit" class="btn btn-primary shadow h-100 p-3 mb-3" style="width:100%">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="font-weight-bold text-light text-uppercase mb-1">
+                                                    @if($unit->kelas==='1,2,3,4,5,6')
+                                                    SD/MI
+                                                    @elseif($unit->kelas==='7,8,9,10,11,12')
+                                                    SMP/MTS dan SMA/SMK/MA
+                                                    @endif
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-light">Tahun Ajaran {{ $unit->tahun_ajaran }}</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-pen fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </button>
+                                    </form>
+                                    @endforeach
+                                @else
+                                    <button class="btn btn-primary shadow h-100 p-3 mb-3" style="width:100%" disabled>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="h5 mb-0 font-weight-bold text-light">Tidak Ada Form Skrining Aktif</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-pen fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-xxl-12 text-center"><img class="img-fluid" src="{{asset('public/img/undraw_fill_form_re_cwyf.svg')}}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <div class="col align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Riwayat Skrining</h6>
+                </div>   
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Tahun Ajaran</th>
+                            <th>Jenjang</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Tahun Ajaran</th>
+                            <th>Jenjang</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach($riwayat as $unit)
+                        <tr>
+                            <td>{{ $unit->tahun_ajaran }}</td>
+                            @if($unit->kelas==='1,2,3,4,5,6')
+                            <td>SD/MI</td>
+                            @elseif($unit->kelas==='7,8,9,10,11,12')
+                            <td>SMP/MTS dan SMA/SMK/MA</td>
+                            @endif
+                            <td>
+                                <div class="row m-1">
+                                    <form action="{{url('/formulir/user/'.$unit->id)}}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>
 @endsection
 
