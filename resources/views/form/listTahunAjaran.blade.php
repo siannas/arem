@@ -270,7 +270,7 @@ Validasi
                                 @endif
                             </div>
                         </div>
-                        <div class="col-xl-4 col-xxl-12 text-center"><img class="img-fluid" src="{{asset('public/img/undraw_fill_form_re_cwyf.svg')}}"></div>
+                        <div class="col-xl-4 col-xxl-12 text-center"><img class="img-fluid" src="{{asset('public/img/undraw_Setup_wizard_re_nday.svg')}}"></div>
                     </div>
                 </div>
             </div>
