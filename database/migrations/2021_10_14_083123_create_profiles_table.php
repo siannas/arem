@@ -18,7 +18,7 @@ class CreateProfilesTable extends Migration
             $table->integer('id_user')->unsigned();
             $table->string('gender', 1)->nullable();
             $table->string('email')->nullable();
-            $table->string('telp',14)->nullable();
+            $table->string('telp',16)->nullable();
             $table->string('alamat')->nullable();
             $table->string('asal')->nullable();
             $table->date('tanggal_lahir')->nullable();

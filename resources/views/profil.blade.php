@@ -83,7 +83,7 @@ Dashboard
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputNoHP">Nomor HP</label>
-                                <input class="form-control" id="telp" name="telp" type="tel" placeholder="Masukkan no HP" value="@if(is_null($profil)==false){{$profil->telp}}@endif">
+                                <input class="form-control" id="telp" name="telp" type="tel" placeholder="Masukkan no HP" value="@if(is_null($profil)==false){{$profil->telp}}@endif" maxlength="16">
                             </div>
                             <!-- Form Group (birthday)-->
                             <div class="col-md-6">
@@ -105,4 +105,31 @@ Dashboard
     
 </div>
 
+@endsection
+
+@section('script')
+<script>
+    const inputFilter = function($this, inputFilter) {
+    return $this.on("keyup", function() {
+      if (inputFilter(this.value)) {
+				var val = this.value;
+        val = val.replace(/-/g, '');
+        var vals = val.match(/.{1,4}/g).join('-');        
+        this.value = vals;
+        this.oldValue = vals;
+        this.oldSelectionStart = this.selectionStart;
+        this.oldSelectionEnd = this.selectionEnd;
+      } else if (this.hasOwnProperty("oldValue")) {      
+        this.value = this.oldValue;
+        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+      } else {
+        this.value = "";
+      }
+    });
+  };
+
+inputFilter($("#telp"), function(value) {
+    return /^[\d-]*$/.test(value);    // Allow digits only, using a RegExp
+  });
+</script>
 @endsection
