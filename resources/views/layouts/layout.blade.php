@@ -215,10 +215,12 @@ $role= Auth::user()->getRole->role;
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                @if($role=='Siswa')
+                                <a class="dropdown-item" href="{{route('profil.show')}}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profil {!! session()->exists('no-profil') ? '<br><i class="text-danger">*Belum mengisi profil</i>' : '' !!}
                                 </a>
+                                @endif
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ubahModal">
                                     <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Ubah Password

@@ -10,6 +10,12 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ProfileController extends Controller
 {
+    public function show(){
+        $id = Auth::user()->id;
+        $profil = Profile::where('id_user', $id)->first();
+        
+        return view('profil', ['profil'=>$profil]);
+    }
     /**
      * Update the specified resource in storage.
      *

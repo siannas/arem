@@ -92,8 +92,7 @@ class DataController extends Controller
 
     public function dataSiswa(){
         $id_user= Auth::user();
-        $tahunAjar = Metadata::where('key', 'tahun-ajaran')->first();
-        $cekForm = Formulir::select('id')->where('tahun_ajaran', $tahunAjar->data)->get();
+        $cekForm = Formulir::select('id')->where('status', 1)->get();
 
         if($id_user->id==1){
             $dataSiswa = User::leftJoin('jawaban', 'users.id', '=', 'jawaban.id_user')

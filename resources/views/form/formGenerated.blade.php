@@ -164,9 +164,9 @@ Validasi
     <form action="#" id="mainform" hidden>
         @csrf
     </form>
-    @if($jawaban->validasi===0)
+    @if(is_null($jawaban) || $jawaban->validasi===0)
     <button class="btn btn-primary float" onclick="$('#mainform').trigger('submit')"><i class="fas fa-fw fa-save"></i></button>
-    @endif
+    @endif    
     
 </div>
 @endsection
@@ -328,4 +328,12 @@ for(var id in jawabans){
 @endif
 })
 </script>
+@if(is_null($jawaban)==false && $jawaban->validasi===1)
+<script>
+$(document).ready(function () {
+$('input[type="text"]').attr('readonly', true);
+$('input[type="radio"]:not(:checked)').attr('disabled', true);
+});
+</script>
+@endif
 @endsection
