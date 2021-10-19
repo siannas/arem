@@ -39,6 +39,7 @@ Validasi
         @foreach ($allPertanyaan as $key => $ap)
         @php
             $json = json_decode($ap->json);
+            $deskripsi = (property_exists($json, 'deskripsi') and !empty($json->deskripsi)) ? $json->deskripsi : null;
         @endphp
         <form action="#" class="col-lg-12" id="form-{{$key}}">
 
@@ -46,6 +47,9 @@ Validasi
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">{{ $ap->judul }}</h6>
+                    @if(isset($deskripsi))
+                    <p class="mb-0 mt-2">{{$deskripsi}}</p>
+                    @endif
                 </div>
                 <div class="card-body">
                     @foreach ($json->pertanyaan as $p)
