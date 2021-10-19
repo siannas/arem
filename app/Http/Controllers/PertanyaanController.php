@@ -47,7 +47,8 @@ class PertanyaanController extends Controller
         $judul = $pertanyaan->judul;
         $id_form = $pertanyaan->id_formulir;
         $pertanyaan = json_decode($pertanyaan->json);
-        return view('form.crudForm', ['id_pertanyaan'=>$id, 'judul' => $judul , 'pertanyaan' => $pertanyaan, 'id_form' => $id_form]);
+        $deskripsi = property_exists($pertanyaan, 'deskripsi') ? $pertanyaan->deskripsi : '';        
+        return view('form.crudForm', ['id_pertanyaan'=>$id, 'judul' => $judul , 'pertanyaan' => $pertanyaan, 'id_form' => $id_form, 'deskripsi' => $deskripsi]);
     }
 
     /**

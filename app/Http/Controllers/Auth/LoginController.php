@@ -30,7 +30,7 @@ class LoginController extends Controller
     {
         $user = Auth::user();
         $profil = \App\Profile::where('id_user',$user->id)->first();
-        if(is_null($profil)){
+        if( $user->getRole->role === 'Siswa' and is_null($profil)){
             session(['no-profil' => true]);
         }
         return '/';

@@ -47,7 +47,7 @@ active
                     </div>
                     <div class="form-group">
                         <label><b>Deskripsi</b></label>
-                        <textarea class="form-control" rows="2" placeholder="Masukkan Deskripsi Pertanyaan" name="deskripsi"></textarea>
+                        <textarea class="form-control" rows="2" placeholder="Masukkan Deskripsi Pertanyaan" name="deskripsi" >{{ $deskripsi }}</textarea>
                     </div>
                     <div class="form-group">
                         <label><b>Tipe Pertanyaan</b></label>
@@ -97,7 +97,7 @@ active
                 <div class="card-body">
                     <div class="form-group">
                         <div class="mb-2" id="sub-pertanyaan">
-                            <input type="text" class="form-control mb-3" placeholder="Pertanyaan" id="pertanyaan" >
+                            <input type="text" class="form-control mb-3" placeholder="Pertanyaan" id="pertanyaan" onfocusout="myTextOnFocusOut(this, this.value)">
                         </div>  
                     </div>
                 </div>
@@ -125,12 +125,12 @@ active
                         </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control mb-3" placeholder="Pertanyaan" id="pertanyaan" >  
+                        <input type="text" class="form-control mb-3" placeholder="Pertanyaan" id="pertanyaan" onfocusout="myTextOnFocusOut(this, this.value)">  
                     </div>
                     <div class="form-group row collapse" id="suffixContainer">
                         <label class="col-sm-3 col-form-label">Suffix</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="Suffix" id="suffix" disabled>
+                            <input type="text" class="form-control" placeholder="Suffix" id="suffix" disabled onfocusout="myTextOnFocusOut(this, this.value)">
                         </div>
                     </div>
                 </div>
@@ -151,7 +151,7 @@ active
             <div id="collapse" class="collapse" data-parent="#accordionPertanyaan">
                 <div class="card-body">
                     <div class="form-group">
-                        <input type="text" class="form-control mb-3" placeholder="Perintah" id="pertanyaan" >  
+                        <input type="text" class="form-control mb-3" placeholder="Perintah" id="pertanyaan" onfocusout="myTextOnFocusOut(this, this.value)">  
                     </div>
                 </div>
             </div>
@@ -170,13 +170,13 @@ active
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Pertanyaan</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" placeholder="Perintah Pertanyaan" id="tambahan-pertanyaan">
+                    <input type="text" class="form-control" placeholder="Perintah Pertanyaan" id="tambahan-pertanyaan" onfocusout="myTextOnFocusOut(this, this.value)">
                 </div>
             </div>
             <div class="form-group row collapse" id="suffixContainer">
                 <label class="col-sm-3 col-form-label">Suffix</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" placeholder="Suffix" id="tambahan-suffix" disabled>
+                    <input type="text" class="form-control" placeholder="Suffix" id="tambahan-suffix" disabled onfocusout="myTextOnFocusOut(this, this.value)">
                 </div>
             </div>
         </div>
@@ -240,7 +240,8 @@ const simpanAtauPreview = async function(isPreview=false){
     }
     
     jsonPertanyaan = {
-        "judul": all['judul'],
+        "judul": all['judul'].trim(),
+        "deskripsi": all['deskripsi'].trim(),
         "gambar-petunjuk": null,
         "pertanyaan": json
     }
@@ -329,8 +330,8 @@ const myOptions = function(id, optionData="", withDeleteButton=false){
         <div class="input-group-prepend align-items-center" style="padding: 0 12px;">
             <input type="radio" aria-label="Radio button" style="width: 1em;height: 1em;" disabled>
         </div>
-        <input type="text" name="${id+'_opsi[]'}" class="form-control d-inline" placeholder="Pilihan" value="${ value }">
-        <input type="text" name="${id+'_child[]'}" value="${idRandom}" readonly hidden>
+        <input type="text" name="${id+'_opsi[]'}" class="form-control d-inline" placeholder="Pilihan" value="${ value }" onfocusout="myTextOnFocusOut(this, this.value)">
+        <input type="text" name="${id+'_child[]'}" value="${idRandom}" readonly hidden onfocusout="myTextOnFocusOut(this, this.value)">
         <div class="input-group-append">
             <select name="${id+'_opsi_tipe[]'}" class="custom-select" placeholder="" style="border-radius: ${withDeleteButton ? '0' : '0 5.6px 5.6px 0' } ;" onchange="myPertanyaanTambahan(this,'${id_}', '${idRandom}')">
                 <option disabled>Jika dipilih</option>
@@ -367,7 +368,7 @@ const myPertanyaan = function(tipe, id, data={}){
         var pertanyaan = elem.find('#pertanyaan');
         pertanyaan.prop('id', id+'_pertanyaan');
         pertanyaan.attr('name', id+'_pertanyaan');
-        pertanyaan.attr('onfocusout', 'updatePertanyaan(this.value,"'+id+'_judul" )');
+        pertanyaan.attr('onfocusout', 'updatePertanyaan(this,"'+id+'_judul" )');
         pertanyaan.val(data.pertanyaan || "");
 
         var deleteButton = elem.find('#delete');
@@ -411,7 +412,7 @@ const myPertanyaan = function(tipe, id, data={}){
         var pertanyaan = elem.find('#pertanyaan');
         pertanyaan.prop('id', id+'_pertanyaan');
         pertanyaan.attr('name', id+'_pertanyaan');
-        pertanyaan.attr('onfocusout', 'updatePertanyaan(this.value,"'+id+'_judul" )');
+        pertanyaan.attr('onfocusout', 'updatePertanyaan(this,"'+id+'_judul" )');
         pertanyaan.val(data.pertanyaan || "");
 
         var deleteButton = elem.find('#delete');
@@ -457,7 +458,7 @@ const myPertanyaan = function(tipe, id, data={}){
         var pertanyaan = elem.find('#pertanyaan');
         pertanyaan.prop('id', id+'_pertanyaan');
         pertanyaan.attr('name', id+'_pertanyaan');
-        pertanyaan.attr('onfocusout', 'updatePertanyaan(this.value,"'+id+'_judul" )');
+        pertanyaan.attr('onfocusout', 'updatePertanyaan(this,"'+id+'_judul" )');
         pertanyaan.val(data.pertanyaan || "");
 
         var deleteButton = elem.find('#delete');
@@ -532,9 +533,13 @@ const myPertanyaanTambahan = function(self, id_neighbor, id_baru, dataTambahan={
     return '';
 }
 
-const updatePertanyaan = function(val, id_judul){
-    if (val === "") val = "Pertanyaan";
-    $('#'+id_judul).text(val);
+const updatePertanyaan = function(self, id_judul){
+    var $jwb = $(self);
+    var filteredval = $jwb.val().trim();
+    $jwb.val(filteredval);
+
+    if (filteredval === "") filteredval = "Pertanyaan";
+    $('#'+id_judul).text(filteredval);
 }
 
 var i = 0; /* Set Global Variable i */
@@ -594,6 +599,17 @@ function addPertanyaan(){
         myQuestions[randomId]=questionObj;
         myPertanyaan('4',randomId);
     }
+}
+
+var myTextOnFocusOut = function(self, value){
+    var $jwb = $(self);
+    var filteredval = $jwb.val().trim();
+    $jwb.val(filteredval);
+    // if(filteredval === ''){
+    //     $jwb.addClass('invalid');
+    // }else{
+    //     $jwb.removeClass('invalid');
+    // }
 }
 
 $( document ).ready(function() {
