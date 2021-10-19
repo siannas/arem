@@ -30,13 +30,17 @@ Dashboard
     <!-- Profil -->
     <div class="row">
 
+        <form action="{{route('profil.upload')}}" method="post" enctype="multipart/form-data" id="photo-form" style="display: none;">
+            @csrf
+            <input type="file" id="photo" name="file" hidden>
+        </form>
         <div class="col-xl-4">
             <div class="card mb-4 mb-xl-0">
                 <div class="card-header font-weight-bold text-primary">Foto Profil</div>
                 <div class="card-body text-center">
-                    <img class="img-account-profile rounded-circle mb-2" src="{{ asset('public/img/undraw_profile.svg')}}" alt="" style="height:10rem">
+                    <img class="img-account-profile rounded-circle mb-2" src="{{ isset($profil->foto) ? $profil->foto : asset('public/img/undraw_profile.svg')}}" alt="" style="height:10rem">
                     <div class="small font-italic text-muted mb-4">JPG atau PNG tidak lebih dari 1 MB</div>
-                    <button class="btn btn-primary" type="button">Upload Foto</button>
+                    <button class="btn btn-primary" type="button" id="trigger-photo">Upload Foto</button>
                 </div>
             </div>
         </div>
@@ -131,5 +135,13 @@ Dashboard
 inputFilter($("#telp"), function(value) {
     return /^[\d-]*$/.test(value);    // Allow digits only, using a RegExp
   });
+
+$("#trigger-photo").click(function(){
+    $("#photo").click();
+});
+
+document.getElementById("photo").onchange = function() {
+    document.getElementById("photo-form").submit();
+};
 </script>
 @endsection

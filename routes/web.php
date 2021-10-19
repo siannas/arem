@@ -122,3 +122,5 @@ Route::delete('/keluar/{id}', 'DataController@pindahSiswa')->name('siswa.keluar'
 Route::put('/profil/update', 'ProfileController@update')->middleware('auth')->name('profil.update');
 
 Route::get('/profil', 'ProfileController@show')->name('profil.show');
+
+Route::post('/profil/upload', 'ProfileController@upload')->name('profil.upload');

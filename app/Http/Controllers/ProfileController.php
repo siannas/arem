@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Profile;
 use Auth;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -48,6 +49,44 @@ class ProfileController extends Controller
         $profil->save();
 
         $request->session()->forget('no-profil');
+        return back()->with('success', 'Data Berhasil Diubah');
+    }
+
+    public function upload(Request $request)
+    {
+        $user= Auth::user();
+        $profil = \App\Profile::firstOrNew([
+            'id_user' => $user->id,
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'file'  =>  'required|file|mimetypes:image/jpeg,image/png,application/pdf|max:512'
+        ]);
+        
+        if ($validator->fails()) {
+            return back()->withError($validator->errors()->first('file'));
+        }
+
+        $mime = $request->file('file')->getMimeType();
+        $pattern = '/[a-zA-Z]+$/' ;
+        preg_match($pattern, $mime, $matches);
+        $mime = $matches[0];
+
+        $filename = $user->id.'.'.$mime;
+        $path = Storage::putFileAs(
+            'photos/',
+            $request->file('file'),
+            $filename
+        );
+        
+        $url = url('/storage/app/photos/'.$filename);
+
+        $profil->fill(['foto'=>$url]);
+
+        $profil->save();
+
+        $request->session()->forget('no-profil');
+
         return back()->with('success', 'Data Berhasil Diubah');
     }
 }
