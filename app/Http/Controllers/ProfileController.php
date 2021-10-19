@@ -41,6 +41,7 @@ class ProfileController extends Controller
 
         $profil->save();
 
+        $request->session()->forget('no-profil');
         return back()->with('success', 'Data Berhasil Diubah');
     }
 }
