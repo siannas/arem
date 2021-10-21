@@ -124,3 +124,9 @@ Route::put('/profil/update', 'ProfileController@update')->middleware('auth')->na
 Route::get('/profil', 'ProfileController@show')->name('profil.show');
 
 Route::post('/profil/upload', 'ProfileController@upload')->name('profil.upload');
+
+use Maatwebsite\Excel\Facades\Excel;
+
+Route::get('/tis', function(){
+    return Excel::download(new \App\Exports\Template, 'template.xlsx');
+});

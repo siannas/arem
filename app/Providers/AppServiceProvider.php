@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+Use \Maatwebsite\Excel\Sheet;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,14 @@ class AppServiceProvider extends ServiceProvider
         {
             \URL::forceScheme('https');
         }
+
+        Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) { 
+            $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
+        });
+
+        Sheet::macro('styleColumnDimension', function (Sheet $sheet, string $cell, int $width) { 
+            $sheet->getDelegate()->getColumnDimension($cell)->setWidth($width);
+        });
     }
 
     /**
