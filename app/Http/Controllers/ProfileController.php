@@ -89,4 +89,15 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Data Berhasil Diubah');
     }
+
+    public function deleteFoto(){
+        $user = Auth::user();
+        $profil = Profile::where('id_user', $user->id)->first();
+
+        $profil->fill(['foto'=>null]);
+
+        $profil->save();
+
+        return back()->with('success', 'Foto Berhasil Dihapus');
+    }
 }

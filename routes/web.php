@@ -125,6 +125,8 @@ Route::get('/profil', 'ProfileController@show')->name('profil.show');
 
 Route::post('/profil/upload', 'ProfileController@upload')->name('profil.upload');
 
+Route::delete('/profil/delete', 'ProfileController@deleteFoto')->name('profil.hapus');
+
 use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/tis', function(){

@@ -4,7 +4,7 @@
 @php
 use App\Profile;
 $role = Auth::user()->getRole->role;
-$foto = Profile::select('foto')->where('id_user', Auth::user()->id)->get();
+$foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -93,7 +93,7 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->get();
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->nama }}</span>
-                                <img class="img-profile rounded-circle" src="{{ isset($foto) ? $foto : asset('public/img/undraw_profile.svg')}}" alt="">
+                                <img class="img-profile rounded-circle" src="{{ isset($foto->foto) ? $foto->foto : asset('public/img/undraw_profile.svg')}}" alt="">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

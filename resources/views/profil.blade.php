@@ -34,7 +34,14 @@ Profil
             <div class="card mb-4 mb-xl-0">
                 <div class="card-header font-weight-bold text-primary">Foto Profil</div>
                 <div class="card-body text-center">
-                    <img class="img-account-profile rounded-circle mb-2" src="{{ isset($profil->foto) ? $profil->foto : asset('public/img/undraw_profile.svg')}}" alt="" style="height:10rem">
+                    <img class="img-account-profile rounded-circle mb-2" src="{{ isset($profil->foto) ? $profil->foto : asset('public/img/undraw_profile.svg')}}" alt="" style="height:10rem;">
+                    @if(isset($profil->foto))
+                    <form action="{{route('profil.hapus')}}" method="post">
+                    @csrf
+                    @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-circle btn-danger" style="position: relative; top: -150px; right: -60px"><i class="fas fa-times"></i></button>
+                    </form>
+                    @endif
                     <div class="small font-italic text-muted mb-4">JPG atau PNG tidak lebih dari 1 MB</div>
                     <button class="btn btn-primary" type="button" id="trigger-photo">Upload Foto</button>
                 </div>
