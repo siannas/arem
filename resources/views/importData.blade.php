@@ -37,11 +37,13 @@ Import Data Siswa
                             
                         </div>
                     </div>
+                    <form action="{{route('data-siswa.import.preview')}}" enctype="multipart/form-data" method="POST" id="form">
+                    @csrf
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="file-dummy" id="file-dummy" onchange="myToggleButtonUpload('','upload')">
-                        <label class="custom-file-label" for="file-dummy">Pilih file excel</label>
+                        <input type="file" name="file" id="file" >
+                        <label class="custom-file-label" for="file">Pilih file excel</label>
                     </div>
-                        
+                    </form>
                 </div>
             </div>
         </div>
@@ -59,28 +61,51 @@ Import Data Siswa
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>3578900284760002</td>
-                                    <td>Alesin Ijans</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>3578900284760002</td>
-                                    <td>Alesin Ijans</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>3578900284760002</td>
-                                    <td>Alesin Ijans</td>
-                                </tr>
+                            @if(session('siswa'))
+                            @php
+                            $cnt = 1;
+                            @endphp
+                            @foreach(session('siswa') as $key => $s)
+                                @if(empty($s['nik']) and empty($s['nama']))
+                                @else
+                                    @if($s['double'])
+                                    <tr class="bg-warning">
+                                        <td>{{$cnt}}</td>
+                                        <td>{{$s['nik']}}</td>
+                                        <td>{{$s['nama']}}</td>
+                                    </tr>
+                                    @else
+                                    <tr>
+                                        <td>{{$cnt}}</td>
+                                        @if ($s['nik']) 
+                                        <td>{{$s['nik']}}</td>
+                                        @else
+                                        <td class="bg-danger text-white">kosong</td>
+                                        @endif
+                                        @if ($s['nama'] )
+                                        <td>{{$s['nama']}}</td>
+                                        @else
+                                        <td class="bg-danger text-white">kosong</td>
+                                        @endif
+                                    </tr>
+                                    @endif
+                                    @php
+                                    $cnt += 1;
+                                    @endphp
+                                @endif
+                            @endforeach
+                            @else
+                            <tr>
+                                <td class="text-center" colspan="3">no data</td>
+                            </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="card-footer text-right">
                     <a href="{{ url('/data-siswa') }}" class="btn btn-secondary" type="button">Kembali</a>
-                    <button type="submit" class="btn btn-primary">Import</button>
+                    <button type="submit" class="btn btn-primary" {{ session('siswa') ? '' : 'disabled' }} >Import</button>
                 </div>
             
             </div>
@@ -92,10 +117,12 @@ Import Data Siswa
 @endsection
 
 @section('script')
-<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
 <script>
-    $(document).ready(function () {
-    bsCustomFileInput.init()
-    });
+$(document).ready(function () {
+    document.getElementById("file").onchange = function() {
+        console.log('aye');
+        document.getElementById("form").submit();
+    }
+});
 </script>
 @endsection

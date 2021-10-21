@@ -131,6 +131,5 @@ Route::get('/tis', function(){
     return Excel::download(new \App\Exports\Template, 'template.xlsx');
 });
 
-Route::get('/import', function(){
-    return view('importData');
-})->name('data-siswa.import');
+Route::get('/import', 'ImporSiswaController@index')->name('data-siswa.import');
+Route::post('/import', 'ImporSiswaController@preview')->name('data-siswa.import.preview');
