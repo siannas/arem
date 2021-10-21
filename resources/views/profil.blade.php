@@ -6,19 +6,15 @@ $role= Auth::user()->getRole->role;
 @endphp
 
 @section('title')
-Rekap Skrining
-@endsection
-
-@section('rekapStatus')
-active
+Profil
 @endsection
 
 @section('header')
-Rekap Skrining
+Profil
 @endsection
 
 @section('description')
-Dashboard
+Profil
 @endsection
 
 @section('content')
@@ -91,7 +87,7 @@ Dashboard
                             </div>
                             <!-- Form Group (birthday)-->
                             <div class="col-md-6">
-                                <label class="small mb-1" for="inputTglLahir">Tanggal Lahir</label>
+                                <label class="small mb-1" for="tanggal_lahir">Tanggal Lahir</label>
                                 <input class="form-control" id="tanggal_lahir" type="date" name="tanggal_lahir" value="@if(is_null($profil)==false){{$profil->tanggal_lahir}}@endif">
                             </div>
                         </div>

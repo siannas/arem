@@ -130,3 +130,7 @@ use Maatwebsite\Excel\Facades\Excel;
 Route::get('/tis', function(){
     return Excel::download(new \App\Exports\Template, 'template.xlsx');
 });
+
+Route::get('/import', function(){
+    return view('importData');
+})->name('data-siswa.import');
