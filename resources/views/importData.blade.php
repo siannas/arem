@@ -66,33 +66,30 @@ Import Data Siswa
                             $cnt = 1;
                             @endphp
                             @foreach(session('siswa') as $key => $s)
-                                @if(empty($s['nik']) and empty($s['nama']))
+                                @if($s['double'])
+                                <tr class="bg-warning">
+                                    <td>{{$cnt}}</td>
+                                    <td>{{$s['nik']}}</td>
+                                    <td>{{$s['nama']}}</td>
+                                </tr>
                                 @else
-                                    @if($s['double'])
-                                    <tr class="bg-warning">
-                                        <td>{{$cnt}}</td>
-                                        <td>{{$s['nik']}}</td>
-                                        <td>{{$s['nama']}}</td>
-                                    </tr>
+                                <tr>
+                                    <td>{{$cnt}}</td>
+                                    @if ($s['nik']) 
+                                    <td>{{$s['nik']}}</td>
                                     @else
-                                    <tr>
-                                        <td>{{$cnt}}</td>
-                                        @if ($s['nik']) 
-                                        <td>{{$s['nik']}}</td>
-                                        @else
-                                        <td class="bg-danger text-white">kosong</td>
-                                        @endif
-                                        @if ($s['nama'] )
-                                        <td>{{$s['nama']}}</td>
-                                        @else
-                                        <td class="bg-danger text-white">kosong</td>
-                                        @endif
-                                    </tr>
+                                    <td class="bg-danger text-white">kosong</td>
                                     @endif
-                                    @php
-                                    $cnt += 1;
-                                    @endphp
+                                    @if ($s['nama'] )
+                                    <td>{{$s['nama']}}</td>
+                                    @else
+                                    <td class="bg-danger text-white">kosong</td>
+                                    @endif
+                                </tr>
                                 @endif
+                                @php
+                                $cnt += 1;
+                                @endphp
                             @endforeach
                             @else
                             <tr>
@@ -104,8 +101,11 @@ Import Data Siswa
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <a href="{{ url('/data-siswa') }}" class="btn btn-secondary" type="button">Kembali</a>
-                    <button type="submit" class="btn btn-primary" {{ (session('siswa') and session('boleh_import')) ? '' : 'disabled' }} >Import</button>
+                    <form action="{{route('data-siswa.import.send')}}" method="POST" id="form-send">
+                        @csrf
+                        <a href="{{ url('/data-siswa') }}" class="btn btn-secondary" type="button">Kembali</a>
+                        <button type="submit" class="btn btn-primary" {{ (session('siswa') and session('boleh_import')) ? '' : 'disabled' }} >Import</button>
+                    </form >
                 </div>
             
             </div>
@@ -118,11 +118,21 @@ Import Data Siswa
 
 @section('script')
 <script>
+@if (session('siswa'))
+var siswa = @json(session('siswa'));
+@endif
 $(document).ready(function () {
     document.getElementById("file").onchange = function() {
-        console.log('aye');
         document.getElementById("form").submit();
     }
+
+    $('#form-send').submit(function(e){
+        $("<input />").attr("type", "hidden")
+            .attr("name", "data")
+            .attr("value", JSON.stringify(siswa))
+            .appendTo("#form-send");
+        return true;
+    })
 });
 </script>
 @endsection
