@@ -44,6 +44,10 @@ class RekapController extends Controller
             }
         }
 
+        if($sekolahs[0]->rekap->isEmpty()){
+            return redirect()->back()->with( ['error' => 'Belum ada data rekap yang masuk.'] );
+        }
+
         $rekap = json_decode($sekolahs[0]->rekap[0]->json);
 
         $jml = count($sekolahs);
