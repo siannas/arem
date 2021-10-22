@@ -61,7 +61,7 @@ Import Data Siswa
                                 </tr>
                             </thead>
                             <tbody>
-                            @if(session('siswa'))
+                            @if(session('siswa') and session('jumlah'))
                             @php
                             $cnt = 1;
                             @endphp
@@ -105,7 +105,7 @@ Import Data Siswa
                 </div>
                 <div class="card-footer text-right">
                     <a href="{{ url('/data-siswa') }}" class="btn btn-secondary" type="button">Kembali</a>
-                    <button type="submit" class="btn btn-primary" {{ session('siswa') ? '' : 'disabled' }} >Import</button>
+                    <button type="submit" class="btn btn-primary" {{ (session('siswa') and session('boleh_import')) ? '' : 'disabled' }} >Import</button>
                 </div>
             
             </div>
