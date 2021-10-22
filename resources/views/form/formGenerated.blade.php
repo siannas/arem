@@ -332,6 +332,7 @@ for(var id in jawabans){
 <script>
 $(document).ready(function () {
 $('input[type="text"]').attr('readonly', true);
+$('input[type="file"]').attr('disabled', true);
 $('input[type="radio"]:not(:checked)').attr('disabled', true);
 });
 </script>

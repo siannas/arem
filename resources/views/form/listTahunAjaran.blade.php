@@ -18,7 +18,7 @@ Validasi
 @endsection
 
 @section('content')
-<!-- Modal -->
+<!-- Modal Tambah Formulir -->
 <div class="modal fade" id="tambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -163,6 +163,7 @@ Validasi
                                 </div>
                             </td>
                         </tr>
+                        <!-- Modal Edit Formulir -->
                         <div class="modal fade" id="edit-{{$unit->id}}" tabindex="-1" aria-labelledby="edit-{{$unit->id}}ModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">

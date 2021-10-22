@@ -71,51 +71,12 @@ Dashboard
                             @endif
                             <td>
                                 <div class="row m-1">
-                                    <form action="{{url('/rekap/'.$unit->id)}}" method="GET" class="mr-1"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form>
+                                    <a href="{{url('/rekap/'.$unit->id.'?for='.Auth::user()->id)}}" class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</a>
                                 </div>
                             </td>
                         </tr>
                         @endforeach
-                        <tr>
-                            <td>Puskesmas Simomulyo Surabaya</td>
-                            <td>SMP/MTS dan SMA/SMK/MA</td>
-                            <td><div class="badge bg-success text-white rounded-pill">Aktif</div></td>
-                            <td>
-                                <div class="row m-1">
-                                    <a href="{{url('/rekap/5').'?for=75'}}" class="btn btn-sm btn-primary mr-1"><i class="fas fa-fw fa-eye"></i> Lihat</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Kelurahan Simomulyo Surabaya</td>
-                            <td>SMP/MTS dan SMA/SMK/MA</td>
-                            <td><div class="badge bg-success text-white rounded-pill">Aktif</div></td>
-                            <td>
-                                <div class="row m-1">
-                                    <a href="{{url('/rekap/5').'?for=96'}}" class="btn btn-sm btn-primary mr-1"><i class="fas fa-fw fa-eye"></i> Lihat</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>SMP Negeri 25 Surabaya</td>
-                            <td>SMP/MTS dan SMA/SMK/MA</td>
-                            <td><div class="badge bg-success text-white rounded-pill">Aktif</div></td>
-                            <td>
-                                <div class="row m-1">
-                                    <a href="{{url('/rekap/5').'?for=108'}}" class="btn btn-sm btn-primary mr-1"><i class="fas fa-fw fa-eye"></i> Lihat</a>
-                                </div>
-                            </td>
-                        </tr>   
-                        <tr>
-                            <td>Kelurahan Simomulyo Surabaya</td>
-                            <td>SD/MI</td>
-                            <td><div class="badge bg-success text-white rounded-pill">Aktif</div></td>
-                            <td>
-                                <div class="row m-1">
-                                    <a href="{{url('/rekap/1').'?for=96'}}" class="btn btn-sm btn-primary mr-1"><i class="fas fa-fw fa-eye"></i> Lihat</a>
-                                </div>
-                            </td>
-                        </tr>                     
+                        
                     </tbody>
                 </table>
             </div>

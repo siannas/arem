@@ -9,8 +9,6 @@ use Hash;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Maatwebsite\Excel\Facades\Excel;
 use App\User;
-use Auth;
-use Hash;
 use Illuminate\Support\Facades\DB;
 use App\UserPivot;
 
