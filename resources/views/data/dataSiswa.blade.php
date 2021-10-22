@@ -24,7 +24,6 @@ Validasi
     <h1 class="h3 mb-2 text-gray-800">Data Siswa</h1>
 
     @include('form.alert')
-
     <div class="modal modal-danger fade" id="tambahSiswa" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -34,20 +33,23 @@ Validasi
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <form action="{{route('data-siswa.tambah')}}" method="POST">
+                @csrf
                 <div class="modal-body">
                     <div class="form-group">
                         <label><b>Username(NIK)</b></label>
-                        <input type="text" id="username" name="username" class="form-control" placeholder="Username(NIK)" maxlength="16" autofocus>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Username(NIK)" maxlength="16" required>
                     </div>
                     <div class="form-group">
                         <label><b>Nama</b></label>
-                        <input type="text" id="nama" name="nama" class="form-control" placeholder="Nama">
+                        <input type="text" id="nama" name="nama" class="form-control" placeholder="Nama" required>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -58,12 +60,14 @@ Validasi
                 <div class="col">
                     <h6 class="m-0 font-weight-bold text-primary">Data Siswa</h6>
                 </div>
+                @if($role=='Sekolah')
                 <div class="col text-right">
                     <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#tambahSiswa">
                     Tambah
                     </button>
                     <a href="{{route('data-siswa.import')}}" type="button" class="btn btn-sm btn-success">Import</a>
                 </div>
+                @endif
             </div>
         </div>
         <div class="card-body">

@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Validator;
+use Auth;
+use Hash;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Maatwebsite\Excel\Facades\Excel;
 use App\User;
 use Auth;
 use Hash;
 use Illuminate\Support\Facades\DB;
+use App\UserPivot;
 
 class ImporSiswaController extends Controller
 {
@@ -102,5 +105,38 @@ class ImporSiswaController extends Controller
         
 
         return redirect()->back()->with( ['success' => 'Siswa Berhasil Disimpan'] );
+    }
+
+    public function tambahSiswa(Request $request){
+        
+        // Simpan data siswa baru
+        $siswa_baru = new User($request->all());
+        $siswa_baru->id_role = 1;
+        $siswa_baru->kelas = Auth::user()->kelas;
+        $siswa_baru->password = Hash::make($siswa_baru->username);
+        $siswa_baru->tahun_ajaran = '2021-2022';
+        
+        $siswa_baru->save();
+
+        $id = User::select('id')->where('username', $siswa_baru->username)->first();
+
+        // Memberikan relasi siswa ke parent
+        // Get semua id parents
+        $listRelasi = [];
+        $relasi = Auth::user()->parents()->get();
+        foreach($relasi as $unit){
+            array_push($listRelasi, $unit->id);
+        }
+        array_push($listRelasi, Auth::user()->id);
+        
+        // Simpan setiap id parent dan dipasangkan dengan id siswa
+        foreach($listRelasi as $unit){
+            $relasi = new UserPivot();
+            $relasi->id_user=$unit;
+            $relasi->id_child=$id->id;
+            $relasi->save();
+        }
+
+        return redirect()->action('DataController@dataSiswa')->with('success', 'Data Siswa Berhasil Ditambahkan');
     }
 }

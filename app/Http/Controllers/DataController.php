@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\UserPivot;
-use App\Metadata;
 use App\Jawaban;
 use App\Formulir;
 use App\Pengajuan;
@@ -25,7 +24,6 @@ class DataController extends Controller
             }
 
             $dataPengajuan = Pengajuan::where('id_user', Auth::user()->id)->where('verifikasi', 0)->first();
-            // dd($dataPengajuan);
             
             return view('dashboard', ['sekolah'=>$detailSekolah, 'dataSekolah'=>$dataSekolah, 'dataPengajuan'=>$dataPengajuan]);
         }
@@ -144,7 +142,7 @@ class DataController extends Controller
     }
     public function detailSiswa($id){
         $detailSiswa = User::findOrFail($id);
-        $sekolah = $detailSiswa->parents()->first();
+        $sekolah = $detailSiswa->parents()->where('id_role', 2)->first();
         $allJawaban = Jawaban::where('id_user', $detailSiswa->id)->with('getFormulir','getFormulir.pertanyaan')->get();
         
         return view('data.detailSiswa', ['siswa' => $detailSiswa, 'allJawaban'=>$allJawaban, 'sekolah'=>$sekolah]);
@@ -183,8 +181,7 @@ class DataController extends Controller
     }
     public function detailSekolah($id){
         $id_user= Auth::user();
-        $tahunAjar = Metadata::where('key', 'tahun-ajaran')->first();
-        $cekForm = Formulir::select('id')->where('tahun_ajaran', $tahunAjar->data)->get();
+        $cekForm = Formulir::select('id')->where('status', 1)->get();
         
         $detailSekolah = User::findOrFail($id);
         $dataSiswa = User::findOrFail($id)->users()->where('id_role', 1)
