@@ -137,3 +137,8 @@ Route::get('/import', 'ImporSiswaController@index')->name('data-siswa.import');
 Route::post('/import', 'ImporSiswaController@preview')->name('data-siswa.import.preview');
 Route::post('/import/send', 'ImporSiswaController@send')->name('data-siswa.import.send');
 Route::post('/data-siswa/tambah', 'ImporSiswaController@tambahSiswa')->name('data-siswa.tambah');
+
+
+Route::get('/kie', function(){
+    return view('kie.viewKie');
+});
