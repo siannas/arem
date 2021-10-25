@@ -44,7 +44,7 @@ class RekapController extends Controller
             }
         }
 
-        if($sekolahs[0]->rekap->isEmpty()){
+        if($sekolahs->isEmpty() or $sekolahs[0]->rekap->isEmpty()){
             return redirect()->back()->with( ['error' => 'Belum ada data rekap yang masuk.'] );
         }
 
