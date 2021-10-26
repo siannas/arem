@@ -34,8 +34,8 @@ KIE
     @include('form.alert')
     <div class="row">
         <div class="col-xl-8">
-            <div class="card">
-                <div class="card-body">    
+            <div class="card mb-4">
+                <div class="card-body">
                     <form action="" method="post">
                         <div class="form-group">
                             <label><b>Judul</b></label>
@@ -43,13 +43,9 @@ KIE
                         </div>
                         <label><b>Isi</b></label>
                         <textarea id="summernote" name="summernote" required></textarea>
-                        
-                        
-                        <!-- <div class="bootstrap-tagsinput"><span class="tag label label-info">Amsterdam<span data-role="remove"></span></span> <span class="tag label label-info">Washington<span data-role="remove"></span></span> <span class="tag label label-info">Sydney<span data-role="remove"></span></span> <span class="tag label label-info">Beijing<span data-role="remove"></span></span> <span class="tag label label-info">Cairo<span data-role="remove"></span></span> <input type="text" placeholder=""></div><input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput" style="display: none;"> -->
-          
-                    
                     </form>
                 </div>
+                
             </div>
         </div>
         <div class="col-xl-4">
@@ -57,11 +53,21 @@ KIE
                 <div class="card-body">
                     <div class="form-group">
                         <label><b>Jenjang</b></label>
-                        <input type="text" id="jenjang" name="jenjang" class="form-control" placeholder="Pilih Jenjang" required>
+                        <div class="input-group">
+                            <select id="jenjang" name="jenjang" class="form-control">
+                                <option selected disabled>Pilih Jenjang</option>
+                                <option value="1,2,3,4,5,6">SD/MI</option>
+                                <option value="7,8,9,10,11,12">SMP/MTS dan SMA/SMK/MA</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label><b>Kategori</b></label>
-                        <input type="text" id="kategori" name="kategori" class="form-control" placeholder="Pilih Kategori" required>
+                        <label><b>Kategori</b></label><br>
+                        <select id="kategori" name="kategori" class="form-control" multiple="multiple" required>
+                            <option selected="selected">orange</option>
+                            <option>white</option>
+                            <option selected="selected">purple</option>
+                        </select>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -92,32 +98,13 @@ KIE
 <script>
 $('#summernote').summernote({
     tabsize: 2,
-    height: 300,
-    
-    });
+    height: 300    
+});
 </script>
 <script>
-var cities = new Bloodhound({
-  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  prefetch: 'assets/cities.json'
+$('#kategori').select2({
+    tags: true,
+    width: '100%'
 });
-cities.initialize();
-
-var elt = $('input');
-elt.tagsinput(
-  itemValue: 'value',
-  itemText: 'text',
-  typeaheadjs: {
-    name: 'cities',
-    displayKey: 'text',
-    source: cities.ttAdapter()
-  }
-});
-elt.tagsinput('add', { "value": 1 , "text": "Amsterdam"   , "continent": "Europe"    });
-elt.tagsinput('add', { "value": 4 , "text": "Washington"  , "continent": "America"   });
-elt.tagsinput('add', { "value": 7 , "text": "Sydney"      , "continent": "Australia" });
-elt.tagsinput('add', { "value": 10, "text": "Beijing"     , "continent": "Asia"      });
-elt.tagsinput('add', { "value": 13, "text": "Cairo"       , "continent": "Africa"    });
 </script>
 @endsection
