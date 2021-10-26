@@ -14,15 +14,22 @@ use Hash;
 class DataController extends Controller
 {
     public function dashboard(){
-        if(Auth::user()->id_role==1){
-            $sekolah = UserPivot::where('id_child', Auth::user()->id)->get();
-            $detailSekolah = [];
+        $user = Auth::user();
+        if($user->id_role==1){
+            // Cari relasi yang berhubungan dengan user login
+            $sekolah = UserPivot::where('id_child', $user->id)->get();
             if(count($sekolah)>0){
+                // Get data sekolah
                 $dataSekolah = User::where('id_role', 2)->select('id')->get();
                 $sekolah = UserPivot::where('id_child', Auth::user()->id)->whereIn('id_user', $dataSekolah)->first();
                 $detailSekolah = User::find($sekolah->id_user);
             }
-
+            else{
+                // Get data semua sekolah untuk daftar
+                $dataSekolah = User::where('id_role', 2)->get();;
+                $detailSekolah = [];
+            }
+            // Cari data pengajuan yg blm diverifikasi
             $dataPengajuan = Pengajuan::where('id_user', Auth::user()->id)->where('verifikasi', 0)->first();
             
             return view('dashboard', ['sekolah'=>$detailSekolah, 'dataSekolah'=>$dataSekolah, 'dataPengajuan'=>$dataPengajuan]);

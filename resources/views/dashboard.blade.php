@@ -48,7 +48,7 @@ Dashboard
                                     @if($sekolah) 
                                     Anda Terdaftar Sebagai Siswa di {{$sekolah->nama}} 
                                     @elseif($dataPengajuan)
-                                    Anda Sudah Mendaftar. Status sedang diverifikasi.
+                                    Anda sudah mendaftar. Status sedang menunggu diverifikasi.
                                     @else
                                     Anda Tidak Terdaftar Pada Sekolah Manapun, Segera Lakukan Pendaftaran Melalui Link Berikut:
                                     <br><button class="btn btn-primary mt-3" style="width:50%" data-toggle="modal" data-target="#daftar">Daftar</button>
@@ -65,7 +65,7 @@ Dashboard
                                                 <form action="{{ route('dashboard.pengajuan') }}" method="POST">
                                                     @csrf
                                                     <h5 class="text-center">Silahkan Pilih Sekolah Yang Ingin Didaftar</h5>
-                                                    <div class="form-group">
+                                                    <div class="form-group mt-4">
                                                         <div id="sekolahParent" class="input-group">
                                                             <select id="sekolah" name="sekolah" class="form-control">
                                                                 <option selected disabled>Pilih Sekolah</option>
@@ -79,7 +79,7 @@ Dashboard
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
-                                                    <button type="submit" class="btn btn-danger">Ya</button>
+                                                    <button type="submit" class="btn btn-primary">Ya</button>
                                                 </div>
                                                 </form>
                                             </div>
@@ -102,8 +102,7 @@ Dashboard
 <script>
 $(document).ready(function() {
     $('#sekolah').select2({
-        tags: true,
-        width: 'style',
+        width: '100%',
         dropdownParent: $("#sekolahParent")
     });
 });

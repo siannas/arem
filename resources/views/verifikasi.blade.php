@@ -56,16 +56,16 @@ Verifikasi
                             <td>{{ $unit->nama }}</td>
                             <td>{{ $unit->kelas }}</td>
                             <td>{{ $unit->updated_at }}</td>
-                            <td>
-                                <form action="{{url('/verifikasi/'.$unit->id)}}" method="POST">
+                            <td style="display:flex;">
+                                <form action="{{url('/verifikasi/'.$unit->id)}}" method="POST" class="mr-1">
                                 @csrf
                                 @method('PUT')
-                                <button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-check"></i> Terima</button>
+                                <button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-check"></i></button>
                                 </form>
                                 <form action="{{url('/verifikasi/tolak/'.$unit->id)}}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-times"></i> Tolak</button>
+                                <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-times"></i></button>
                                 </form>
                             </td>
                         </tr>
