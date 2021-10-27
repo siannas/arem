@@ -111,6 +111,23 @@ $role= Auth::user()->getRole->role;
     </li>
 
     <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        KIE
+    </div>
+
+    @if($role==='Kota')
+    <!-- Nav Item - Tables -->
+    <li class="nav-item @yield('kieStatus')">
+        <a class="nav-link" href="{{ url('/kie')}}">
+            <i class="fab fa-fw fa-wpforms"></i>
+            <span>KIE</span></a>
+    </li>
+    @endif
+
+    <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Sidebar Toggler (Sidebar) -->

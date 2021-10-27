@@ -32,7 +32,10 @@ KIE
     </div>
 
     @include('form.alert')
+    <form action="{{route('kie.store')}}" method="post">
+    @csrf
     <div class="row">
+        
         <div class="col-xl-8">
             <div class="card mb-4">
                 <div class="card-body">
@@ -42,7 +45,7 @@ KIE
                             <input type="text" id="judul" name="judul" class="form-control" placeholder="Judul" required>
                         </div>
                         <label><b>Isi</b></label>
-                        <textarea id="summernote" name="summernote" required></textarea>
+                        <textarea id="isi" name="isi" required></textarea>
                     </form>
                 </div>
                 
@@ -63,19 +66,22 @@ KIE
                     </div>
                     <div class="form-group">
                         <label><b>Kategori</b></label><br>
-                        <select id="kategori" name="kategori" class="form-control" multiple="multiple" required>
-                            <option selected="selected">orange</option>
-                            <option>white</option>
-                            <option selected="selected">purple</option>
+                        <select id="kategori" name="kategori[]" class="form-control" multiple="multiple" required>
+                            @foreach($kategori as $unit)
+                            <option>{{$unit->nama_kategori}}</option>
+                            @endforeach
+                            <!-- <option selected="selected">purple</option> -->
                         </select>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </div>
+        
     </div>
+    </form>
 
 </div>
 
@@ -96,7 +102,7 @@ KIE
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js" integrity="sha512-9UR1ynHntZdqHnwXKTaOm1s6V9fExqejKvg5XMawEMToW4sSw+3jtLrYfZPijvnwnnE8Uol1O9BcAskoxgec+g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-$('#summernote').summernote({
+$('#isi').summernote({
     tabsize: 2,
     height: 300    
 });

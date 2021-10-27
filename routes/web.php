@@ -138,5 +138,9 @@ Route::post('/import', 'ImporSiswaController@preview')->name('data-siswa.import.
 Route::post('/import/send', 'ImporSiswaController@send')->name('data-siswa.import.send');
 Route::post('/data-siswa/tambah', 'ImporSiswaController@tambahSiswa')->name('data-siswa.tambah');
 
-
+Route::get('kie', 'KieController@index');
 Route::get('/kie/create', 'KieController@create');
+Route::get('/kie/edit', 'KieController@create')->name('kie.edit');
+Route::post('/kie/create', 'KieController@store')->name('kie.store');
+Route::get('/kie/{id}', 'KieController@show')->name('kie.show');
+Route::delete('/kie/{id}', 'KieController@destroy')->name('kie.destroy');
