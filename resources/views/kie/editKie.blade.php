@@ -114,9 +114,12 @@ Edit KIE
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js" integrity="sha512-9UR1ynHntZdqHnwXKTaOm1s6V9fExqejKvg5XMawEMToW4sSw+3jtLrYfZPijvnwnnE8Uol1O9BcAskoxgec+g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-$('#isi').summernote({
-    tabsize: 2,
-    height: 300    
+// A $( document ).ready() block.
+$( document ).ready(function() {
+    $('#isi').summernote({
+        tabsize: 2,
+        height: 300    
+    });
 });
 </script>
 <script>
