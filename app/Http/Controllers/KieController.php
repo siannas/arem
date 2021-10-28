@@ -13,6 +13,11 @@ class KieController extends Controller
         return view('kie.index', ['kie' => $kie]);
     }
 
+    public function show($id){
+        $kie = KIE::findOrFail($id);
+        return view('kie.showKie', ['kie' => $kie]);
+    }
+
     public function create(){
         $kategori = Kategori::all();
         return view('kie.createKie', ['kategori' => $kategori]);
@@ -34,6 +39,34 @@ class KieController extends Controller
         $kie_baru->save();
         
         return redirect()->action('KieController@index')->with('success', 'Data KIE Berhasil Ditambahkan');
+    }
+
+    public function edit($id){
+        $kie = KIE::findOrFail($id);
+        $kategori = Kategori::all();
+        return view('kie.editKie', ['kie' => $kie, 'kategori' => $kategori]);
+    }
+    
+    public function update(Request $request, $id){
+        
+        $kie = KIE::findOrFail($id);
+
+        $kie->fill($request->all());
+
+        $kategori = request('kategori');
+        // Simpan setiap kategori
+        foreach($kategori as $unit){
+            try{
+                $kategori_baru = new Kategori();
+                $kategori_baru->nama_kategori = $unit;
+                $kategori_baru->save();
+            }catch(\Exception $exception) {}
+        }
+        $kie->kategori = implode(',', $kategori);
+        
+        $kie->save();
+        
+        return redirect()->action('KieController@index')->with('success', 'Data KIE Berhasil Diubah');
     }
 
     public function destroy($id){

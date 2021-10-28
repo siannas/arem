@@ -49,17 +49,15 @@ KIE
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Tahun Ajaran</th>
+                            <th>Judul</th>
                             <th>Jenjang</th>
-                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Tahun Ajaran</th>
+                            <th>Judul</th>
                             <th>Jenjang</th>
-                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </tfoot>
@@ -72,13 +70,11 @@ KIE
                             @elseif($unit->jenjang==='7,8,9,10,11,12')
                             <td>SMP/MTS dan SMA/SMK/MA</td>
                             @endif
-
-                            <td><div class="badge bg-success text-white rounded-pill">Aktif</div></td>
                             <td>
                                 <div class="row m-1">
                                     @if($role==='Kota')
                                     <a href="{{route('kie.show', [$unit->id])}}" class="btn btn-sm btn-primary mr-1"><i class="fas fa-fw fa-eye"></i></a>
-                                    <a href="{{route('kie.edit', [$unit->id])}}" class="btn btn-sm btn-warning mr-1"><i class="fas fa-fw fa-edit"></i></a>
+                                    <a href="{{url('/kie/edit', [$unit->id])}}" class="btn btn-sm btn-warning mr-1"><i class="fas fa-fw fa-edit"></i></a>
                                     <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete{{ $unit->id }}"><i class="fas fa-fw fa-trash-alt"></i></button>
                                     <div class="modal modal-danger fade" id="delete{{ $unit->id }}" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
