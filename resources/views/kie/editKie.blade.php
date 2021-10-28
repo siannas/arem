@@ -43,7 +43,7 @@ Edit KIE
                             <input type="text" id="judul" name="judul" class="form-control" placeholder="Judul" value="{{$kie->judul}}" required>
                         </div>
                         <label><b>Isi</b></label>
-                        <textarea id="isi" name="isi" required>{!! $kie->isi !!}</textarea>
+                        <div id="isi" name="isi" required>{!! $kie->isi !!}</div>
                     </form>
                 </div>
                 
