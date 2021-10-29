@@ -32,7 +32,7 @@ KIE
     </div>
 
     @include('form.alert')
-    <form action="{{route('kie.store')}}" method="post">
+    <form action="{{route('kie.store')}}" method="post" id="kie-form">
     @csrf
     <div class="row">
         
@@ -102,9 +102,32 @@ KIE
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js" integrity="sha512-9UR1ynHntZdqHnwXKTaOm1s6V9fExqejKvg5XMawEMToW4sSw+3jtLrYfZPijvnwnnE8Uol1O9BcAskoxgec+g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-$('#isi').summernote({
-    tabsize: 2,
-    height: 300    
+// A $( document ).ready() block.
+$( document ).ready(function() {
+    $('#isi').summernote({
+        tabsize: 2,
+        height: 300    
+    });
+
+    $('#kie-form').submit(function(e){
+        var konten = $('.note-editable').clone();
+        var foto = konten.find('img')[0];
+        if(foto!== undefined){
+            var foto_str = $(foto).attr('src');
+            foto.remove();
+            $("<input />").attr("type", "hidden")
+                .attr("name", "foto")
+                .attr("value", foto_str)
+                .appendTo("#kie-form");
+        }
+        let strippedString = konten.prop('outerHTML').replace(/(<([^>]+)>)/gi, "");
+        strippedString = strippedString.substr(0,250);
+        $("<input />").attr("type", "hidden")
+            .attr("name", "ringkasan")
+            .attr("value", strippedString)
+            .appendTo("#kie-form");
+        return true;
+    })
 });
 </script>
 <script>

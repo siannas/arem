@@ -18,7 +18,9 @@ class CreateKieTable extends Migration
             $table->string('jenjang', 30);
             $table->string('kategori');
             $table->string('judul');
-            $table->text('isi');
+            $table->string('ringkasan');
+            $table->mediumText('foto');
+            $table->mediumText('isi');
             $table->timestamps();
         });
     }

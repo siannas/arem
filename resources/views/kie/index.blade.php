@@ -49,9 +49,9 @@ KIE
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Judul</th>
+                            <th style="width:60%">Judul</th>
                             <th>Jenjang</th>
-                            <th>Aksi</th>
+                            <th style="width:15%;">Aksi</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -114,6 +114,36 @@ KIE
     </div>
     @endif
 
+    @if($role=='Siswa')
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Daftar KIE</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        @if(count($kie)>0)
+            @foreach($kie as $unit)
+            <div class="card m-3" style="overflow:hidden;">
+                <div class="row no-gutters" style="overflow:hidden;">
+                    @if(empty($unit->foto)) <div class="col-md-4 bg-secondary" style="height:250px; overflow:hidden;"></div>
+                    @else<div class="col-md-4" style="max-height:250px; overflow:hidden;"><img class="img-fluid" style="width:100%; height:100%;" src="{!!$unit->foto!!}"></div>
+                    @endif
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <a href="{{url('/kie',[$unit->id])}}"><h5 class="text-dark">{{$unit->judul}}</h5></a>
+                            <small> @if($unit->jenjang == '1,2,3,4,5,6') SD/MI 
+                                    @else SMP/MTS dan SMA/SMK/MA 
+                                    @endif | {{$unit->kategori}} | {{$unit->created_at}}</small>
+                            <p class="card-text mt-4">{{$unit->ringkasan}}...<a href="{{url('/kie',[$unit->id])}}">baca selengkapnya</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        @else
+        <h3>INI ELSE</h3>
+        @endif
+    </div>
+    @endif
 </div>
 
 @endsection

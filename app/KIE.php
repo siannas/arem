@@ -17,6 +17,8 @@ class KIE extends Model
         'jenjang',
         'kategori',
         'judul',
+        'ringkasan',
+        'foto',
         'isi',
     ];
 }

@@ -133,7 +133,7 @@ $( document ).ready(function() {
                 .appendTo("#kie-form");
         }
         let strippedString = konten.prop('outerHTML').replace(/(<([^>]+)>)/gi, "");
-        strippedString = strippedString.substr(0,254);
+        strippedString = strippedString.substr(0,250);
         $("<input />").attr("type", "hidden")
             .attr("name", "ringkasan")
             .attr("value", strippedString)
