@@ -29,7 +29,7 @@ Edit KIE
         <h1 class="h3 mb-0 text-gray-800">Edit KIE</h1>
     </div>
 
-    <form action="{{url('/kie/edit',[$kie->id])}}" method="post">
+    <form action="{{url('/kie/edit',[$kie->id])}}" method="post" id="kie-form">
     @csrf
     @method('PUT')
     <div class="row">
@@ -120,6 +120,26 @@ $( document ).ready(function() {
         tabsize: 2,
         height: 300    
     });
+
+    $('#kie-form').submit(function(e){
+        var konten = $('.note-editable').clone();
+        var foto = konten.find('img')[0];
+        if(foto!== undefined){
+            var foto_str = $(foto).attr('src');
+            foto.remove();
+            $("<input />").attr("type", "hidden")
+                .attr("name", "foto")
+                .attr("value", foto_str)
+                .appendTo("#kie-form");
+        }
+        let strippedString = konten.prop('outerHTML').replace(/(<([^>]+)>)/gi, "");
+        strippedString = strippedString.substr(0,254);
+        $("<input />").attr("type", "hidden")
+            .attr("name", "ringkasan")
+            .attr("value", strippedString)
+            .appendTo("#kie-form");
+        return true;
+    })
 });
 </script>
 <script>
