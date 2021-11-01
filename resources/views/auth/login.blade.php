@@ -19,11 +19,12 @@
 
     <!-- Custom styles for this template-->
     <link href="{{asset('public/css/sb-admin-2.min.css')}}" rel="stylesheet">
+    <link href="{{asset('public/css/custom.css')}}" rel="stylesheet">
 
 </head>
 
 <body class="bg-gradient-primary">
-
+    <div class="bg-pattern">
     <div class="container">
 
         <!-- Outer Row -->
@@ -36,10 +37,11 @@
                         <!-- Nested Row within Card Body -->    
                         <div class="p-5">
                             <div class="text-center">
-                                <div class="sidebar-brand-icon rotate-n-15">
+                                <!-- <div class="sidebar-brand-icon rotate-n-15">
                                     <i class="fas fa-laugh-wink text-primary" style="font-size:40px"></i>
-                                </div>
-                                <h1 class="h4 text-gray-900 mb-4">Aplikasi Remaja</h1>
+                                </div> -->
+                                <img src="{{ asset('public/img/surabaya_logo.png') }}" alt="" width="77px">
+                                <h1 class="h4 text-gray-900 mb-4">Aplikasi Remaja Surabaya</h1>
                             </div>
                             <form class="user" method="POST" action="{{ route('login') }}">
                                 @csrf
@@ -77,6 +79,7 @@
 
         </div>
 
+    </div>
     </div>
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('public/js/sb-admin-2.min.js')}}"></script>
