@@ -156,7 +156,9 @@ class FormulirController extends Controller
         ]);
 
         $formulir_baru->save();
-        $formulir_baru->pertanyaan()->saveMany($pertanyaan_baru);
+        if(empty($pertanyaan_baru) === false){
+            $formulir_baru->pertanyaan()->saveMany($pertanyaan_baru);
+        }        
         return redirect()->action('FormulirController@index')->with('success', 'Data Berhasil Diduplikat');;
     }
 
