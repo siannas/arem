@@ -112,9 +112,8 @@ KIE
             </div>
         </div>
     </div>
-    @endif
 
-    @if($role=='Siswa')
+    @else
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Daftar KIE</h1>
 

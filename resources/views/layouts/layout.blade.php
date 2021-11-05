@@ -137,7 +137,7 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Aplikasi Remaja <?php echo date("Y");?></span>
+                        <span>&copy; e-Ning Tasiah <?php echo date("Y");?>&nbsp;&nbsp;|&nbsp;&nbsp;IT Dinas Kesehatan Surabaya</span>
                     </div>
                 </div>
             </footer>

@@ -42,9 +42,8 @@ Imunisasi
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="" method="POST">
+            <form action="{{route('imunisasi.simpan')}}" method="POST">
                 @csrf
-                @method('PUT')
                 <div class="modal-body">
                     <div class="form-group">
                         <div class="row">
@@ -108,31 +107,37 @@ Imunisasi
                     <thead>
                         <tr>
                             <th>Tanggal Pemberian</th>
-                            <th>Jenis Vaksin</th>
-                            <th>Dosis</th>
-                            <th>No. Batch Vaksin</th>
+                            <th>Vaksin</th>
                             <th>Petugas</th>
                             <th>Lokasi</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>Tanggal Pemberian</th>
-                            <th>Jenis Vaksin</th>
-                            <th>Dosis</th>
-                            <th>No. Batch Vaksin</th>
+                            <th>Vaksin</th>
                             <th>Petugas</th>
                             <th>Lokasi</th>
+                            <th>Status</th>
                         </tr>
                     </tfoot>
                     <tbody>
                         <tr>
-                            <td>20-10-2021</td>
-                            <td>Moderna</td>
-                            <td>1</td>
-                            <td>21DA32</td>
-                            <td>Agus Zaenal</td>
-                            <td>Dinas Kesehatan</td>
+                            @foreach($imunisasi as $unit)
+                            <td>{{$unit->tanggal}}</td>
+                            <td>Dosis {{$unit->dosis}} {{$unit->vaksin}} (Batch: {{$unit->nomor}})</td>
+                            <td>{{$unit->nama}}</td>
+                            <td>{{$unit->lokasi}}</td>
+                            <td>
+                                @if($unit->validasi==1)
+                                <div class="badge bg-success text-white rounded-pill">Tervalidasi</div>
+                                @elseif($unit->validasi==0)
+                                <div class="badge bg-warning text-white rounded-pill">Belum Tervalidasi</div>
+                                @else
+                                @endif
+                            </td>
+                            @endforeach
                         </tr>
                     </tbody>
                 </table>
