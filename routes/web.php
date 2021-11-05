@@ -145,3 +145,5 @@ Route::get('/kie/edit/{id}', 'KieController@edit');
 Route::put('/kie/edit/{id}', 'KieController@update')->name('kie.update');
 Route::get('/kie/{id}', 'KieController@show')->name('kie.show');
 Route::delete('/kie/{id}', 'KieController@destroy')->name('kie.destroy');
+
+Route::get('tes2', 'RekapController@tes2');

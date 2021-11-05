@@ -17,6 +17,7 @@ class Pertanyaan extends Model
         'judul',
         'json',
         'id_formulir',
+        'json_simpulan',
     ];
 
     /**

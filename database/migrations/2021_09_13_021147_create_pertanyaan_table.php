@@ -18,6 +18,7 @@ class CreatePertanyaanTable extends Migration
             $table->string('judul');
             $table->json('json');
             $table->integer('id_formulir')->unsigned()->nullable();
+            $table->json('json_simpulan')->nullable();
             $table->timestamps();
             $table->foreign('id_formulir')->references('id')->on('formulir')->onUpdate('cascade')->onDelete('cascade');
         });

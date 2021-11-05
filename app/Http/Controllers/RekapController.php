@@ -9,6 +9,7 @@ use App\Jawaban;
 use App\Rekap;
 use App\User;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class RekapController extends Controller
 {
@@ -224,5 +225,316 @@ class RekapController extends Controller
 
         $rekap->fill([ 'json'=>json_encode($allRes) ]);
         $rekap->save();
+    }
+
+    private function cekSimpulanTipeFormula(&$j, &$s, &$at){
+        $vars=[];
+        foreach ($s['vars'] as $k => $v) {
+            $vars['/{{'.$k.'}}/']=$j[$v];
+        }
+        $ma = preg_replace( array_keys($vars), array_values($vars), $s['formula'] );
+        $res=eval('return '.$ma.';');        
+        foreach ($s['range'] as $v) {
+            $compare=explode(',',$v[0]);
+            foreach ($compare as $v2) {
+                $res2=eval('return '.$ma.$v2.';');
+                if($res2){
+                    return $v[1];
+                }                
+            }
+            $at+=1;
+        }
+        return false;
+    }
+
+    // membuat heading Excel
+    private function makeHeadingSimpulan(&$s, &$ac, $coll){ //simpulan, active sheet
+        $r=7;
+        switch($s['tipe']){
+            case 1:   
+                $cell = $ac->getCellByColumnAndRow($coll, $r);
+                $cell->setValue($s['field']);
+                $c = $cell->getColumn();
+                $ac->mergeCells($c.$r.':'.$c.($r+1));
+                break;
+            case 2:
+                $cell = $ac->getCellByColumnAndRow($coll, $r);
+                $cell->setValue($s['field']);
+                $c = $cell->getColumn();
+                $ac->mergeCells($c.$r.':'.$c.($r+1));
+                break;
+            case 3:
+                $at=0;
+                foreach ($s['range'] as $v) {
+                    $cell = $ac->getCellByColumnAndRow($coll+$at, $r);
+                    $cell->setValue($v[1]);
+                    $c = $cell->getColumn();
+                    $ac->mergeCells($c.$r.':'.$c.($r+1));
+                    $at+=1;
+                }
+                break;
+        }
+    }
+
+
+    /**
+     * Store a jawaban to rekap sekolah.
+     *
+     */
+    public function tes2(){
+        $is_new = true;
+
+        $ex = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $ex->getProperties()->setCreator("Maarten Balliauw");
+        $ac = $ex->getActiveSheet();
+        $ac->getCell('A1')->setValue("LAPORAN KEGIATAN KESEHATAN ANAK USIA SEKOLAH DAN REMAJA DISEKOLAH");
+        $ac->getCell('A3')->setValue("PUSKESMAS");
+        $ac->getCell('A4')->setValue("TAHUN");
+        $ac->getCell('A5')->setValue("TRIBULAN");
+
+        $ac->getCell('B3')->setValue(": SIMOMULYO");
+        $ac->getCell('B4')->setValue(": 2021/2022 (Th 2022)");
+        $ac->getCell('B5')->setValue(": I (Juli-September 2021)");
+
+        $ac->getCell('G3')->setValue("KOTA");
+        $ac->getCell('G4')->setValue("PROVINSI");
+        $ac->getCell('G5')->setValue("TAHUN AJARAN");
+
+        $ac->getCell('H3')->setValue(": SURABAYA");
+        $ac->getCell('H4')->setValue(": JAWA TIMUR");
+        $ac->getCell('H5')->setValue(": 2017/2018");
+
+        $ac->mergeCells('A6:A8');
+        $ac->getCell('A6')->setValue("No");
+        $ac->mergeCells('B6:B8');
+        $ac->getCell('B6')->setValue("NAMA SEKOLAH");
+        $ac->mergeCells('C6:C8');
+        $ac->getCell('C6')->setValue("Jumlah Sekolah SMA/SMK/MA/SMALB");
+        $ac->mergeCells('D6:D8');
+        $ac->getCell('D6')->setValue("Jumlah Sekolah SMA/SMK/MA/SMULB yg dijaring");
+        $ac->mergeCells('E6:F7');
+        $ac->getCell('E6')->setValue("Jumlah sasaran Peserta Didik");
+        $ac->getCell('E8')->setValue("L");
+        $ac->getCell('F8')->setValue("P");
+        $ac->mergeCells('G6:G8');
+        $ac->getCell('G6')->setValue("JML");
+        $ac->mergeCells('H6:I7');
+        $ac->getCell('H6')->setValue("Jumlah Peserta Didik yang di jaring");
+        $ac->getCell('H8')->setValue("L");
+        $ac->getCell('I8')->setValue("P");
+        $ac->mergeCells('J6:J8');
+        $ac->getCell('J6')->setValue("JML");
+        
+        $titleStyle = [
+            'font' => [
+                'bold' => true,
+                'size' => 10,
+            ],
+        ];
+
+        $headerStyle = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'wrapText' => true,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        //## Rekap Simpulan ##//
+        $jawaban_raw = Jawaban::findOrFail(17);
+        $formulir = Formulir::findOrFail($jawaban_raw->id_formulir);
+        // $pertanyaan = Pertanyaan::where('id_formulir', $jawaban_raw->id_formulir)->get();
+        $pertanyaan[] = Pertanyaan::find(13);
+        $pertanyaan[] = Pertanyaan::find(15);
+
+        $jawaban = json_decode($jawaban_raw->json, true);
+
+        $rs=[];
+
+        $row = 10;
+
+        $s_count = 0;
+        $pre_count = 0;
+        foreach ($pertanyaan as $k1 => $p) {
+            $pre_count = $s_count;
+            $simpulan = json_decode($p->json_simpulan, true);
+
+            //cek pada semua simpulan
+            foreach ($simpulan as $k2 => $s) {
+                if($is_new) $this->makeHeadingSimpulan($s, $ac, $s_count+11);
+
+                switch($s['tipe']){
+                    case 1:
+                        $id = $s['id'];
+                        if (in_array($jawaban[$id], $s['opsi'])) {
+                            $rs[$s['field']]=1;
+                        }
+
+                        //tambah 1 anak pada kolom dengan field ini
+                        $cell = $ac->getCellByColumnAndRow($s_count+11, $row);
+                        $val = $cell->getValue();
+                        $cell->setValue(empty($val) ? 1 : $val+1);
+                        
+                        $s_count+=1;
+                        break;
+                    case 2:
+                        //apabila jawab salah satu dari array ini
+                        $termasuk = false;
+                        for ($i=0; $i < count($s['on']); $i++) { 
+                            $item = $s['on'][$i];
+                            $id = $item[0];
+                            if($jawaban[$id] === $item[1]){
+                                $termasuk = true;
+                                $rs[$s['field']]=1;
+                                break;
+                            }
+                        }
+
+                        //tambah 1 anak pada kolom dengan field ini
+                        $cell = $ac->getCellByColumnAndRow($s_count+11, $row);
+                        $val = $cell->getValue();
+                        $cell->setValue(empty($val) ? 1 : $val+1);
+
+                        $s_count+=1;
+                        break;
+                    case 3:
+                        $at = 0;
+                        $field = $this->cekSimpulanTipeFormula($jawaban, $s, $at);
+                        if($field){
+                            $rs[$field]=1;
+                                //tambah 1 anak pada kolom dengan field ini
+                            $cell = $ac->getCellByColumnAndRow($s_count+11+$at, $row);
+                            $val = $cell->getValue();
+                            $cell->setValue(empty($val) ? 1 : $val+1);
+                        }
+                        $s_count+=count($s['range']);
+                        break;
+                }
+            }
+            if($is_new){
+                $r=6;
+                //create sub-heading dari simpulan di atas
+                $cell = $ac->getCellByColumnAndRow($pre_count+11, 6);
+                $cell->setValue($p['judul']);
+                $col = $cell->getColumn();
+                $col2 = $ac->getCellByColumnAndRow($s_count-1+11, 6)->getColumn();
+                
+                $ac->mergeCells($col.$r.':'.$col2.$r);
+            }
+        }
+       
+        //## END of Rekap Simpulan ##//
+
+        //bikin iterasi angka
+        if($is_new){
+            
+        }
+
+        $col = $ac->getCellByColumnAndRow($s_count-1+11, 1)->getColumn();
+
+        $ac->getColumnDimension('B')->setWidth(25);
+        $ac->getStyle('A1:H5')->applyFromArray($titleStyle);
+        $ac->getStyle('A6:'.$col.'10')->applyFromArray($headerStyle);
+        
+        $fileName="tes.xlsx";
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
+        header('Cache-Control: max-age=0');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($ex, 'Xlsx');
+        $writer->save('php://output');
+        exit;
+
+        $rekap = Rekap::where('id_formulir', $jawaban_raw->id_formulir)->where('id_sekolah', $jawaban_raw->id_user_sekolah)->first();
+
+        if(!$rekap){
+            $rekap = new Rekap([
+                'id_formulir' => $jawaban_raw->id_formulir,
+                'id_sekolah' => $jawaban_raw->id_user_sekolah,
+                'json' => null
+            ]);
+ 
+            //inisialisasi json rekap jika belum ada
+            $allRes = [];
+            foreach( $pertanyaan as $p){
+                $res = (object) [];
+                $json = json_decode($p->json);
+                $res->judul = $p->judul;
+                $res->pertanyaan = $json->pertanyaan;
+                foreach ($json->pertanyaan as $pp) {
+                    if($pp->tipe === 3){    //pertanyaan pilgan dengan tambahan jawaban
+                        $opsi = [];
+                        $tambahan = [];
+                        foreach ($pp->opsi as $o) {
+                            if(is_object($o)){
+                                $opsi[$o->{'0'}] = 0;
+                                $tambahan[$o->{'0'}] = $o->{'if-selected'};
+                                $tambahan[$o->{'0'}]->jawaban = null;
+                            }else{
+                                $opsi[$o] = 0;
+                            }
+                        }
+                        $pp->opsi = (object) $opsi;
+                        $pp->tambahan = $tambahan;
+                    }else if($pp->tipe === 1){ //pertanyaan tipe 1 jaga-jaga
+                        $opsi = [];
+                        foreach ($pp->opsi as $o) {
+                            $opsi[$o] = 0;
+                        }
+                        $pp->opsi = (object) $opsi;
+                    }else if($pp->tipe === 2 || $pp->tipe === 4){ //pertanyaan isian atau upload gambar
+                        $pp->jawaban = null;
+                    }
+                }
+                $allRes[] = $res;
+            }
+        }else{
+            $allRes = json_decode($rekap->json, false);
+        }
+
+        foreach( $allRes as $a){
+            foreach ($a->pertanyaan as $aa) {
+                switch ($aa->tipe) {
+                    case 3:
+                        $key = $jawaban[$aa->id];
+                        $aa->opsi->{$key}+=1;
+                        $aa->tambahan = (object) $aa->tambahan;
+                        try {
+                            if($aa->tambahan->{$key}){
+                                $id_ = $aa->tambahan->{$key}->id;
+                                //append to file
+                                $namafile = "sekolah/".$jawaban_raw->id_user_sekolah."/".$formulir->id."_".$id_.".html";
+                                Storage::append($namafile, '<div class="form-group"><input type="text" class="form-control" value="'.$jawaban[$id_].'" disabled></div>');
+                                $aa->tambahan->{$key}->jawaban = $formulir->id."_".$id_.".html";
+                            }
+                        } catch (\Throwable $th) {
+                            //throw $th;
+                        }
+                        break;
+                    case 1:
+                        $key = $jawaban[$aa->id];
+                        $aa->opsi->{$key}+=1;
+                    case 2:
+                        $namafile = "sekolah/".$jawaban_raw->id_user_sekolah."/".$formulir->id."_".$aa->id.".html";
+                        Storage::append($namafile, '<div class="form-group"><input type="text" class="form-control" value="'.$jawaban[$aa->id].'" disabled></div>');
+                        $aa->jawaban = $formulir->id."_".$aa->id.".html";
+                        break;
+                    case 4:
+                        $namafile = "sekolah/".$jawaban_raw->id_user_sekolah."/".$formulir->id."_".$aa->id.".html";
+                        preg_match('/[^\/]+$/', $jawaban[$aa->id], $matches);
+                        $judulGambar = $matches[0];
+                        Storage::append($namafile, '<div class="form-group"><a href="'.$jawaban[$aa->id].'" target="_blank" ><input type="text" class="form-control" value="Link: '.$judulGambar.'" readonly style="cursor: pointer;"></a></div>');
+                        $aa->jawaban = $formulir->id."_".$aa->id.".html";
+                        break;
+                }
+            }
+        }
+
+        $rekap->fill([ 'json'=>json_encode($allRes) ]);
+        // $rekap->save();
     }
 }
