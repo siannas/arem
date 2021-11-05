@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Aplikasi Remaja</title>
+    <title>e-Ning Tasiah</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{asset('public/plugins/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -41,7 +41,7 @@
                                     <i class="fas fa-laugh-wink text-primary" style="font-size:40px"></i>
                                 </div> -->
                                 <img src="{{ asset('public/img/surabaya_logo.png') }}" alt="" width="77px">
-                                <h1 class="h4 text-gray-900 mb-4">Aplikasi Remaja Surabaya</h1>
+                                <h1 class="h4 text-gray-900 mb-4">e-Ning Tasiah Surabaya</h1>
                             </div>
                             <form class="user" method="POST" action="{{ route('login') }}">
                                 @csrf

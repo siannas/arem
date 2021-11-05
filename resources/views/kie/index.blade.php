@@ -22,7 +22,7 @@ KIE
 @endsection
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid" style="min-height:75vh">
 
     @if($role==='Kota')
     <!-- Page Heading -->

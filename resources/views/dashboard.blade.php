@@ -42,15 +42,15 @@ Dashboard
                     <div class="row align-items-center">
                         <div class="col-xl-8 col-xxl-12">
                             <div class="text-center text-xl-start text-xxl-center mb-4 mb-xl-0 mb-xxl-4">
-                                <h2 class="text-primary">Selamat Datang di Aplikasi Remaja!</h2>
+                                <h2 class="text-primary">Selamat Datang di e-Ning Tasiah!</h2>
                                 <h1 class="text-secondary">{{Auth::user()->nama}}</h1>
                                 <p class="text-gray-700 mb-0">
                                     @if($sekolah) 
-                                    Anda Terdaftar Sebagai Siswa di {{$sekolah->nama}} 
+                                    Kamu Terdaftar Sebagai Siswa di {{$sekolah->nama}} 
                                     @elseif($dataPengajuan)
-                                    Anda sudah mendaftar. Status sedang menunggu diverifikasi.
+                                    Kamu sudah mendaftar. Status sedang menunggu diverifikasi.
                                     @else
-                                    Anda Tidak Terdaftar Pada Sekolah Manapun, Segera Lakukan Pendaftaran Melalui Link Berikut:
+                                    Kamu Tidak Terdaftar Pada Sekolah Manapun, Segera Lakukan Pendaftaran Melalui Link Berikut:
                                     <br><button class="btn btn-primary mt-3" style="width:50%" data-toggle="modal" data-target="#daftar">Daftar</button>
                                     <div class="modal modal-danger fade" id="daftar" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
