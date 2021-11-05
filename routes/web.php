@@ -127,6 +127,8 @@ Route::post('/profil/upload', 'ProfileController@upload')->name('profil.upload')
 
 Route::delete('/profil/delete', 'ProfileController@deleteFoto')->name('profil.hapus');
 
+Route::get('/imunisasi', 'ImunisasiController@index');
+
 use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/tis', function(){

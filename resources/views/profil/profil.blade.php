@@ -20,11 +20,20 @@ Profil
 @section('content')
 <div class="container-fluid">
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Profil</h1>
+    
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url('/profil')}}">Profil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url('/imunisasi')}}">Imunisasi</a>
+        </li>
+    </ul>
+    <!-- <h1 class="h3 mb-2 text-gray-800">Profil</h1> -->
 
     @include('form.alert')
     <!-- Profil -->
-    <div class="row">
+    <div class="row mt-4">
 
         <form action="{{route('profil.upload')}}" method="post" enctype="multipart/form-data" id="photo-form" style="display: none;">
             @csrf
@@ -52,7 +61,7 @@ Profil
                 <form action="{{route('profil.update')}}" method="post">
                 @csrf
                 @method('PUT')
-                    <div class="card-header font-weight-bold text-primary">Detail Akun</div>
+                    <div class="card-header font-weight-bold text-primary">Detail Profil</div>
                     <div class="card-body">
                         <div class="mb-3">
                             <label class="small mb-1" for="Username">Username (NIK)</label>
