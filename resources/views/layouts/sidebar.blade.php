@@ -15,10 +15,10 @@ $role= Auth::user()->getRole->role;
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/')}}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
+        <div class="sidebar-brand-icon">
+            <img src="{{ asset('public/img/surabaya_logo.png') }}" alt="" width="30px">
         </div>
-        <div class="sidebar-brand-text mx-3">Aplikasi<sup>Remaja</sup></div>
+        <div class="sidebar-brand-text ml-2">e-Ning Tasiah</div>
     </a>
 
     <!-- Divider -->
@@ -29,12 +29,6 @@ $role= Auth::user()->getRole->role;
         <a class="nav-link" href="{{ url('/')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
-    </li>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="{{ url('/validasi')}}">
-            <i class="fas fa-fw fa-check-circle"></i>
-            <span>Validasi</span></a>
     </li>
 
     @if($role==='Sekolah')
@@ -92,6 +86,20 @@ $role= Auth::user()->getRole->role;
 
     <!-- Heading -->
     <div class="sidebar-heading">
+        Data Imunisasi
+    </div>
+    <!-- Nav Item - Tables -->
+    <li class="nav-item @yield('formStatus')">
+        <a class="nav-link" href="{{ url('/formulir')}}">
+            <i class="fas fa-fw fa-check-circle"></i>
+            <span>Validasi</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
         Form Skrining
     </div>
 
@@ -103,6 +111,13 @@ $role= Auth::user()->getRole->role;
             <span>Form Skrining</span></a>
     </li>
     @endif
+
+    <!-- Nav Item - Tables -->
+    <li class="nav-item @yield('validasiStatus')">
+        <a class="nav-link" href="{{ url('/validasi')}}">
+            <i class="fas fa-fw fa-check-circle"></i>
+            <span>Validasi</span></a>
+    </li>
 
     <li class="nav-item @yield('rekapStatus')">
         <a class="nav-link" href="{{ url('/rekap')}}">
@@ -117,15 +132,13 @@ $role= Auth::user()->getRole->role;
     <div class="sidebar-heading">
         KIE
     </div>
-
-    @if($role==='Kota')
+    
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('kieStatus')">
         <a class="nav-link" href="{{ url('/kie')}}">
             <i class="fab fa-fw fa-wpforms"></i>
             <span>KIE</span></a>
     </li>
-    @endif
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

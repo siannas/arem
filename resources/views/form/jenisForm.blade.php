@@ -11,7 +11,7 @@ Jenis Pemeriksaan
 @endsection
 
 @section('header')
-Validasi
+Jenis Pemeriksaan
 @endsection
 
 @section('content')
@@ -81,7 +81,7 @@ active
 @endsection
 
 @section('header')
-Validasi
+Jenis Pemeriksaan
 @endsection
 
 @section('content')

@@ -22,7 +22,7 @@ KIE
 @endsection
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid" style="min-height:75vh">
 
     @if($role==='Kota')
     <!-- Page Heading -->
@@ -112,9 +112,8 @@ KIE
             </div>
         </div>
     </div>
-    @endif
 
-    @if($role=='Siswa')
+    @else
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Daftar KIE</h1>
 

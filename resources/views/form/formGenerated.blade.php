@@ -2,7 +2,7 @@
 @extends('layouts.sidebar')
 
 @section('title')
-Jenis Pemeriksaan
+Form Skrining
 @endsection
 
 @section('formStatus')
@@ -10,14 +10,14 @@ active
 @endsection
 
 @section('header')
-Validasi
+Form Skrining
 @endsection
 
 @section('content')
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Jenis Pemeriksaan</h1>
+    <h1 class="h3 mb-2 text-gray-800">Form Skrining</h1>
     @include('form.alert')
     <div class="row">
         @foreach ($allPertanyaan as $key => $ap)

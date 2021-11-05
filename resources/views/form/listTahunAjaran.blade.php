@@ -81,7 +81,7 @@ Validasi
                 </div>
                 @if($role==='Kota')
                 <div class="col text-right">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambah">
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#tambah">
                 Tambah
                 </button>
                 </div>

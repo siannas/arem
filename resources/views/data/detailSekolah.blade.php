@@ -22,7 +22,7 @@ Validasi
             <div class="row p-4 justify-content-between align-items-center">
                 <div class="col-12 col-lg-auto mb-5 mb-lg-0 text-center text-lg-left">
                     <i class="fas fa-laugh-wink text-light mb-3" style="font-size:50px;"></i>
-                    <h5 class="text-light">Aplikasi Remaja</h5>
+                    <h5 class="text-light">e-Ning Tasiah</h5>
                 </div>
                 <div class="col-12 col-lg-auto text-center text-lg-right">
                     <h5 class="card-title text-light mb-3"><b>{{ $sekolah->nama }}</b></h5>

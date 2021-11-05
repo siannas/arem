@@ -17,7 +17,7 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Aplikasi Remaja | @yield('title')</title>
+    <title>e-Ning Tasiah | @yield('title')</title>
 
     <!-- Custom fonts for this template-->
     <link href=" {{ asset('public/plugins/fontawesome-free/css/all.min.css') }} " rel="stylesheet" type="text/css">
@@ -104,14 +104,14 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profil {!! session()->exists('no-profil') ? '<br><i class="text-danger">*Belum mengisi profil</i>' : '' !!}
                                 </a>
+                                <a class="dropdown-item" href="{{url('/imunisasi')}}">
+                                    <i class="fas fa-syringe fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Imunisasi
+                                </a>
                                 @endif
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ubahModal">
                                     <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Ubah Password
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -137,7 +137,7 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Aplikasi Remaja <?php echo date("Y");?></span>
+                        <span>&copy; e-Ning Tasiah <?php echo date("Y");?>&nbsp;&nbsp;|&nbsp;&nbsp;IT Dinas Kesehatan Surabaya</span>
                     </div>
                 </div>
             </footer>
