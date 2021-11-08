@@ -59,4 +59,14 @@ class User extends Authenticatable
             // ->withPivot('id_role');
     }
 
+    /**
+     * Get the profil associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function profil()
+    {
+        return $this->hasOne(Profile::class, 'id_user', 'id');
+    }
+
 }

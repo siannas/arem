@@ -16,6 +16,7 @@ class Rekap extends Model
     protected $fillable = [
         'id_formulir',
         'id_sekolah',
-        'json'
+        'json',
+        'csv'
     ];
 }

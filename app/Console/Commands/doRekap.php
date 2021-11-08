@@ -45,7 +45,18 @@ class doRekap extends Command
     {
         foreach (Jawaban::where('validasi', 1)->where('status_rekap', 0)->cursor() as $j) {
             $jawaban_id = $j->id;
-            $jawaban_raw = Jawaban::findOrFail($jawaban_id);
+
+            $jawaban_raw = Jawaban::where('id',$jawaban_id)
+                ->with([
+                    'getSekolah' => function($query) { $query->select('id','kelas');},
+                    'getUser' => function($query) { $query->select('id','kelas');},
+                    'getUser.profil'
+                ])->first();
+            
+            $kelas = $jawaban_raw->getUser->kelas;
+            $gender = $jawaban_raw->getUser->profil->gender;
+            $sklh_kelas = $jawaban_raw->getSekolah->kelas;
+
             $formulir = Formulir::findOrFail($jawaban_raw->id_formulir);
             $pertanyaan = Pertanyaan::where('id_formulir', $jawaban_raw->id_formulir)->get();
 
@@ -98,6 +109,87 @@ class doRekap extends Command
                 $allRes = json_decode($rekap->json, false);
             }
 
+            //SIMPULAN
+            $is_new = empty($rekap->csv);
+            
+            //inisialisasi csv berbentuk array
+            if($is_new){ 
+                $csv_arr = [];
+            }else{
+                $csv=explode('\n',$rekap->csv);
+                $csv_arr=explode(',',$csv[max($kelas-$sklh_kelas, 0) ]);
+            }
+
+            $add = $gender === 'P' ? 1 : 0;
+
+            $s_count = 0;
+            $pre_count = 0;
+            foreach ($pertanyaan as $k1 => $p) {
+                $pre_count = $s_count;
+                $simpulan = json_decode($p->json_simpulan, true);
+
+                //cek pada semua simpulan
+                foreach ($simpulan as $k2 => $s) {
+
+                    switch($s['tipe']){
+                        case 1:
+                            $id = $s['id'];
+                            if($is_new) array_push($csv_arr, 0, 0); //PUSH UNTUK LAKI, PEREMPUAN
+
+                            if (in_array($jawaban[$id], $s['opsi'])) {
+                                $csv_arr[$s_count+$add]+=1;
+                            }
+                            
+                            $s_count+=2;
+                            break;
+                        case 2:
+                            if($is_new) array_push($csv_arr, 0, 0); //PUSH UNTUK LAKI, PEREMPUAN
+                            //apabila jawab salah satu dari array ini
+                            for ($i=0; $i < count($s['on']); $i++) { 
+                                $item = $s['on'][$i];
+                                $id = $item[0];
+                                if($jawaban[$id] === $item[1]){
+                                    $csv_arr[$s_count+$add]+=1;
+                                    break;
+                                }
+                            }
+
+                            $s_count+=2;
+                            break;
+                        case 3:
+                            $range = count($s['range']);
+                            if($is_new){   //PUSH UNTUK LAKI, PEREMPUAN
+                                $f = array_fill(0,$range*2, 0);
+                                $csv_arr = array_merge($csv_arr, $f);
+                            }
+                            $at = 0;
+                            $field = $this->cekSimpulanTipeFormula($jawaban, $s, $at);
+                            if($field){
+                                //tambah 1 anak pada kolom dengan field ini
+                                $csv_arr[$s_count+$add+$at*2]+=1;
+                            }
+                            $s_count+=($range*2);
+                            break;
+                    }
+                }
+            }
+
+            //finalisasi array ke csv string
+            if($is_new){
+                $dummy = array_fill(0,count($csv_arr),0);
+                $dummy = implode(',',$dummy);
+
+                if($sklh_kelas===1){    
+                    $csv = array_fill(0,6,$dummy);
+                }else if($sklh_kelas===7 or $sklh_kelas===10){
+                    $csv = array_fill(0,3,[]);
+                }
+            }
+            $csv[max($kelas-$sklh_kelas, 0) ] = implode(',',$csv_arr);
+
+            $simpulan = implode('\n',$csv);
+            //END of SIMPULAN
+
             foreach( $allRes as $a){
                 foreach ($a->pertanyaan as $aa) {
                     switch ($aa->tipe) {
@@ -136,7 +228,7 @@ class doRekap extends Command
                 }
             }
 
-            $rekap->fill([ 'json'=>json_encode($allRes) ]);
+            $rekap->fill([ 'json'=>json_encode($allRes), 'csv'=>$simpulan ]);
             $jawaban_raw->fill(['status_rekap'=>1]);
             $jawaban_raw->save();
             $rekap->save();

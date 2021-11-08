@@ -20,6 +20,7 @@ class CreateRekapsTable extends Migration
             $table->json('json');
             $table->foreign('id_formulir')->references('id')->on('formulir');
             $table->timestamps();
+            $table->string('csv', 4096)->nullable();
         });
     }
 
