@@ -33,7 +33,7 @@ active
     <h1 class="h3 mb-2 text-gray-800">Tambah Form Skrining</h1>
     @include('form.alert')
     <div class="row">
-        <div class="col-md">
+        <div class="col-md-6">
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
@@ -72,15 +72,41 @@ active
                     <button  class="btn btn-info" id="previewButton" data-toggle="modal" data-target="#previewModal" ><i class="fas fa-fw fa-eye"></i> Pratinjau</button>
                 </div>
             </div>
+            
         </div>
 
-        <div class="col-md">
-            <form action="" id="mainform" method="post">
-                <div class="accordion shadow" id="accordionPertanyaan"> 
-                
+        <div class="col-md-6">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#question" role="tab" aria-controls="question" aria-selected="true">Pertanyaan</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="conclusion-tab" data-toggle="tab" href="#conclusion" role="tab" aria-controls="conclusion" aria-selected="false">Simpulan</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="question" role="tabpanel" aria-labelledby="question-tab">
+                    <form action="" id="mainform" method="post">
+                        <div class="accordion shadow" id="accordionPertanyaan"> 
+                        
+                        </div>
+                    </form>
                 </div>
-            </form>
+                <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
+                    <div class="card shadow mb-4 br-t-0">
+                        <div class="accordion" id="simpulan-content">
+                            
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <button class="w-100 btn btn-success"><i class="fas fa-plus"></i>&nbsp Tambah</button>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
         </div>
+        
     </div>
     <template>
         <div class="card">
@@ -621,3 +647,5 @@ myPertanyaan((@json($val->tipe)).toString(), @json($val->id), @json($val));
 });
 </script>
 @endsection
+
+@include('form.crudSimpulan')

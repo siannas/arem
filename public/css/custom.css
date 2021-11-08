@@ -65,3 +65,19 @@ input[type='radio'].invalid::before {
     background-repeat: repeat;
     background-size: unset;
 }
+
+.br-t-0{
+    border-top-left-radius: 0!important;
+    border-top-right-radius: 0!important;
+}
+
+.br-b-0{
+    border-bottom-left-radius: 0!important;
+    border-bottom-right-radius: 0!important;
+}
+
+.nav-link.active{
+    color: #ffffff!important;
+    background-color: #3960cf!important;
+    border-color: #dddfeb #dddfeb #3158c9!important;
+}
