@@ -123,8 +123,8 @@ Imunisasi
                         </tr>
                     </tfoot>
                     <tbody>
+                    @foreach($imunisasi as $unit)
                         <tr>
-                            @foreach($imunisasi as $unit)
                             <td>{{$unit->tanggal}}</td>
                             <td>Dosis {{$unit->dosis}} {{$unit->vaksin}} (Batch: {{$unit->nomor}})</td>
                             <td>{{$unit->nama}}</td>
@@ -137,8 +137,8 @@ Imunisasi
                                 @else
                                 @endif
                             </td>
-                            @endforeach
                         </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </div>

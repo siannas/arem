@@ -89,8 +89,8 @@ $role= Auth::user()->getRole->role;
         Data Imunisasi
     </div>
     <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('formStatus')">
-        <a class="nav-link" href="{{ url('/formulir')}}">
+    <li class="nav-item @yield('validasiImunStatus')">
+        <a class="nav-link" href="{{ url('/imunisasi')}}">
             <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>
