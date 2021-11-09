@@ -130,6 +130,7 @@ Route::delete('/profil/delete', 'ProfileController@deleteFoto')->name('profil.ha
 Route::get('/imunisasi', 'ImunisasiController@index');
 Route::post('/imunisasi', 'ImunisasiController@store')->name('imunisasi.simpan');
 
+
 use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/tis', function(){

@@ -1,4 +1,4 @@
-<div id="alert">
+<div id="alert" class="mt-3">
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fas fa-check"></i> Success:<small> {{ session('success') }}</small>

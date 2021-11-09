@@ -5,13 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Imunisasi;
+use App\User;
 
 class ImunisasiController extends Controller
 {
     public function index(){
-        $imunisasi = Imunisasi::where('id_user', Auth::user()->id)->get();
-        
-        return view('profil.imunisasi', ['imunisasi' => $imunisasi]);
+        $user = Auth::user();
+        if($user->id_role==1){
+            $imunisasi = Imunisasi::where('id_user', Auth::user()->id)->get();
+            
+            return view('profil.imunisasi', ['imunisasi' => $imunisasi]);
+        }
+        elseif($user->id_role==4){
+            
+            $imunisasi = Imunisasi::with(['getUser'=> function($query) { $query->select('id','nama');},
+                                        'getSekolah'=>function($query) {$query->select('nama');},])->get();
+            
+
+            return view('profil.validasi', ['imunisasi' => $imunisasi]);
+        }
     }
 
     public function store(Request $request){
