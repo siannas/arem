@@ -99,7 +99,7 @@ active
                         </div>
                         <div class="card-body">
                             <div>
-                                <button class="w-100 btn btn-success"><i class="fas fa-plus"></i>&nbsp Tambah</button>
+                                <button class="w-100 btn btn-success" id="tambah-simpulan"><i class="fas fa-plus"></i>&nbsp Tambah</button>
                             </div>
                         </div>                        
                     </div>
