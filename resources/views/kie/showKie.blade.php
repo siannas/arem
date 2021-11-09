@@ -40,7 +40,7 @@ KIE
                     | 
                 {{$kie->kategori}}
                     | 
-                {{$kie->created_at}}
+                {{date_format(date_create($kie->created_at), "d-m-Y")}}
             </small>
             <div class="mt-4"></div>
             {!!$kie->isi!!}

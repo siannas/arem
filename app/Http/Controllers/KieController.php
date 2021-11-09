@@ -9,7 +9,7 @@ use App\KIE;
 class KieController extends Controller
 {
     public function index(){
-        $kie = KIE::all();
+        $kie = KIE::select('id','jenjang', 'kategori', 'judul', 'ringkasan', 'foto')->get();
         return view('kie.index', ['kie' => $kie]);
     }
 

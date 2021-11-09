@@ -131,7 +131,7 @@ KIE
                             <a href="{{url('/kie',[$unit->id])}}"><h5 class="text-dark">{{$unit->judul}}</h5></a>
                             <small> @if($unit->jenjang == '1,2,3,4,5,6') SD/MI 
                                     @else SMP/MTS dan SMA/SMK/MA 
-                                    @endif | {{$unit->kategori}} | {{$unit->created_at}}</small>
+                                    @endif | {{$unit->kategori}} | {{date_format(date_create($unit->created_at), "d-m-Y")}}</small>
                             <p class="card-text mt-4">{{$unit->ringkasan}}...<a href="{{url('/kie',[$unit->id])}}">baca selengkapnya</a></p>
                         </div>
                     </div>
