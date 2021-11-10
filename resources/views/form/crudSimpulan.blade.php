@@ -3,14 +3,14 @@
 var simpulan = `<div class="card">
     <div class="d-flex">
         <div class="input-group-prepend" style="padding:5px;background: #f8f9fc;">
-            <select class="custom-select" style="height:unset;">
+            <select class="custom-select" style="height:unset;" id="types-selector">
                 <option value="1">Tipe 1</option>
                 <option value="2">Tipe 2</option>
                 <option value="3">Tipe 3</option>
             </select>
         </div>
-        <a class="card-header py-3 flex-grow-1 " href="#simpulan" data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
-            Simpulan 1
+        <a class="card-header py-3 flex-grow-1 " data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
+            Simpulan
         </a>
         <div class="input-group" style="width:unset!important;">
             <div class="input-group-append">
@@ -23,27 +23,12 @@ var simpulan = `<div class="card">
             
         </div>
     </div>
-</div>`
+</div>`;
 
-const tipe1 = `<div class="form-group">
-    <label>Pertanyaan</label>
-    <select name="id" id="pertanyaan">
-        <option disabled selected>Pilih Pertanyaan</option>
-        <option value="92438">Alergi?</option>
-        <option value="92438">Alergi?</option>
-        <option value="92438">Alergi?</option>
-    </select>
-</div>
+const tipe1 = `
 <div class="form-group">
     <label>Nama Kolom</label>
     <input type="text" class="form-control" placeholder="Nama Kolom Simpulan" name="field">
-</div>
-<div class="form-group">
-    <label>Pada Opsi</label>
-    <select name="opsi[]" id="opsi"  multiple="multiple">
-        <option value="92438">borderline</option>
-        <option value="92438">Tidak</option>
-    </select>
 </div>`;
 
 const tipe2 = `<div class="form-group">
@@ -52,8 +37,8 @@ const tipe2 = `<div class="form-group">
 </div>
 <div class="form-group">
     <label class="col-form-label">Daftar Pertanyaan, Opsi</label>
-    <button class="btn btn-sm btn-success float-right"><i class="fas fa-fw fa-plus"></i></button>
-    <table class="table mt-2">
+    <button class="btn btn-sm btn-success float-right" id="pertanyaan-opsi-button"><i class="fas fa-fw fa-plus"></i></button>
+    <table class="table mt-2" id="pertanyaan-opsi-tabel">
         <thead>
             <tr>
                 <th scope="col">Pertanyaan</th>
@@ -62,22 +47,14 @@ const tipe2 = `<div class="form-group">
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>
-                    <button class="btn btn-sm btn-warning"><i class="fas fa-fw fa-pen"></i></button>
-                    <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-times"></i></button>
-                </td>
-            </tr>
         </tbody>
     </table>
 </div>`;
 
 const tipe3 = `<div class="form-group">
     <label class="col-form-label">Daftar Variabel</label>
-    <button class="btn btn-sm btn-success float-right"><i class="fas fa-fw fa-plus"></i></button>
-    <table class="table mt-2">
+    <button class="btn btn-sm btn-success float-right" id="variabel-button"><i class="fas fa-fw fa-plus"></i></button>
+    <table class="table mt-2" id="variabel-tabel">
         <thead>
             <tr>
                 <th scope="col">Variabel</th>
@@ -86,14 +63,6 @@ const tipe3 = `<div class="form-group">
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>BB</td>
-                <td>Otto</td>
-                <td>
-                    <button class="btn btn-sm btn-warning"><i class="fas fa-fw fa-pen"></i></button>
-                    <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-times"></i></button>
-                </td>
-            </tr>
         </tbody>
     </table>
 </div>
@@ -103,8 +72,8 @@ const tipe3 = `<div class="form-group">
 </div>
 <div class="form-group">
     <label class="col-form-label">Daftar Rentang</label>
-    <button class="btn btn-sm btn-success float-right"><i class="fas fa-fw fa-plus"></i></button>                    
-    <table class="table mt-2">
+    <button class="btn btn-sm btn-success float-right" id="rentang-button"><i class="fas fa-fw fa-plus"></i></button>                    
+    <table class="table mt-2" id="rentang-tabel">
         <thead>
             <tr>
                 <th scope="col">Rentang</th>
@@ -113,31 +82,245 @@ const tipe3 = `<div class="form-group">
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
-                <td>
-                    <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-times"></i></button>
-                </td>
-            </tr>
-            <tr>
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
-                <td>
-                    <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-times"></i></button>
-                </td>
-            </tr>
         </tbody>
     </table>
 </div>`;
 
+const generatePertanyaanList = function(type=null){
+    var elem_str = '<div class="form-group"><label>Pertanyaan</label><select required name="pertanyaan"><option value="" disabled selected>Pilih Pertanyaan</option>';
+    Object.values(myQuestions).forEach(e => {
+        if(type){ //pertanyaan isian
+            if(type===e['tipe']){
+                elem_str+=`<option value="${e['id']+'_'+e['pertanyaan']}">${e['pertanyaan']}</option>`
+            }
+        }else{
+            elem_str+=`<option value="${e['id']+'_'+e['pertanyaan']}">${e['pertanyaan']}</option>`
+        }
+    });
+    elem_str +='</select></div>';
+    return $(elem_str);
+}
+
+const generateOpsiList = function(id_pertanyaan){
+    var elem_str = '<div class="form-group"><label>Pada Opsi</label><select required name="opsi"><option value="" disabled selected>Pilih Pertanyaan</option>';
+    myQuestions[id_pertanyaan]['opsi'].forEach(e => {
+        if(typeof e === 'object'){
+            elem_str+=`<option value="${e[0]}">${e[0]}</option>`
+        }else{
+            elem_str+=`<option value="${e}">${e}</option>`;
+        }
+    });
+    elem_str +='</select></div>';
+    return $(elem_str);
+}
+
+const openModalSimpulan = function(id, type, id_row=null){
+    var modalId;
+    simpanAtauPreviewAtauRefresh(isRefresh=true);
+    switch (type) {
+        case 'pertanyaan-opsi-tabel':
+            modalId = 'simpulanModal1';
+            $pertanyaan = generatePertanyaanList(3)
+            $('#simpulanModal1Body').empty().append($pertanyaan);
+            $pertanyaanSelector = $pertanyaan.find('select');
+            $pertanyaanSelector.select2({
+                width: '100%'
+            });
+            $pertanyaanSelector[0].onchange= function(){
+                $children = $('#simpulanModal1Body').children();
+                if($children.length > 1){
+                    $('#simpulanModal1Body').children(':last-child').remove();
+                }
+                var id_pertanyaan = this.value.substr(0, this.value.indexOf('_')); //ambil hanya id pertanyaan saja
+                $opsi = generateOpsiList(id_pertanyaan);
+                $('#simpulanModal1Body').append($opsi);
+                $opsiSelector = $opsi.find('select');
+                $opsiSelector.select2({
+                    width: '100%'
+                });
+            };
+            $("#form-simpulanModal1").removeAttr('onsubmit')
+            $("#form-simpulanModal1")[0].onsubmit = function(e){
+                e.preventDefault();
+                var obj = $(this);
+                var all= {};
+                $.each(obj, function(i, val) {
+                    Object.assign(all,getFormData($(val)));
+                });
+                if(id_row){
+                    onTableEdit(id_row, type, all);
+                }else{
+                    onTableAdd(id, $("#"+id+"_pertanyaan-opsi-tabel"), type, all);
+                }
+                $('#'+modalId).modal('hide');
+            }
+            break;
+        case 'variabel-tabel':
+            modalId = 'simpulanModal2';
+            $pertanyaan = generatePertanyaanList(2)
+            $children = $('#simpulanModal2Body').children();
+            if($children.length > 1){
+                $('#simpulanModal2Body').children(':last-child').remove();
+            }
+            $('#simpulanModal2Body').append($pertanyaan);
+            $pertanyaanSelector = $pertanyaan.find('select');
+            $pertanyaanSelector.select2({
+                width: '100%'
+            });
+            $("#form-simpulanModal2")[0].onsubmit = function(e){
+                e.preventDefault();
+                var obj = $(this);
+                var all= {};
+                $.each(obj, function(i, val) {
+                    Object.assign(all,getFormData($(val)));
+                });
+                if(id_row){
+                    onTableEdit(id_row, type, all);
+                }else{
+                    onTableAdd(id, $("#"+id+"_variabel-tabel"), type, all);
+                }
+                $('#'+modalId).modal('hide');
+            }
+            break;
+    }
+    $('#'+modalId).modal('show');
+}
+
+const onTableEdit = function(id_row, type, data){
+    var elem = $('#'+id_row);
+    switch (type) {
+        case 'pertanyaan-opsi-tabel':
+            elem.children()[0].innerText = data['pertanyaan'];
+            elem.children()[1].innerText = data['opsi'];
+            break;
+        case 'variabel-tabel':
+            elem.children()[0].innerText = data['variabel'];
+            elem.children()[1].innerText = data['pertanyaan'];
+            break;
+    }
+}
+
+const onTableAdd = function(id, $tabel, type, data=null){
+    var str;
+    const id2 = getRandomString(3);
+    var elem;
+    switch (type) {
+        case 'pertanyaan-opsi-tabel':
+            str = `<tr id="${id}-${id2}">
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>
+                    <button class="btn btn-sm btn-warning" onclick="openModalSimpulan('${id}','pertanyaan-opsi-tabel', '${id}-${id2}')"><i class="fas fa-fw fa-pen"></i></button>
+                    <button class="btn btn-sm btn-danger" onclick="onDeleteRow('${id}-${id2}')"><i class="fas fa-fw fa-times"></i></button>
+                </td>
+            </tr>`;
+            elem = $(str);
+            if(data){
+                elem.children()[0].innerText = data['pertanyaan'];
+                elem.children()[1].innerText = data['opsi'];
+            }            
+            break;
+        case 'variabel-tabel':
+            str=`<tr id="${id}-${id2}">
+                <td>BB</td>
+                <td>Otto</td>
+                <td>
+                    <button class="btn btn-sm btn-warning" onclick="openModalSimpulan('${id}','variabel-tabel', '${id}-${id2}')"><i class="fas fa-fw fa-pen"></i></button>
+                    <button class="btn btn-sm btn-danger" onclick="onDeleteRow('${id}-${id2}')"><i class="fas fa-fw fa-times"></i></button>
+                </td>
+            </tr>`;
+            elem = $(str);
+            if(data){
+                elem.children()[0].innerText = data['variabel'];
+                elem.children()[1].innerText = data['pertanyaan'];
+            }
+            break;
+        case 'rentang-tabel':
+            str=`<tr id="${id}-${id2}">
+                <td><input type="text" class="form-control" /></td>
+                <td><input type="text" class="form-control" /></td>
+                <td>
+                    <button class="btn btn-sm btn-danger" onclick="onDeleteRow('${id}-${id2}')"><i class="fas fa-fw fa-times"></i></button>
+                </td>
+            </tr>`;
+            elem = $(str);
+            break;
+    }
+    $tabel.find('tbody').append(elem);
+}
+
+const onDeleteRow = function(id){
+    var elem = $('#'+id);
+    elem.remove();
+}
+
+const onTypeChange = function(id, $konten, type){
+    type = (typeof type === 'string') ? parseInt(type) : type;
+    switch (type) {
+        case 1:
+            $konten.html(tipe1);
+            $pertanyaan = generatePertanyaanList(3)
+            $konten.append($pertanyaan);
+            $pertanyaanSelector = $pertanyaan.find('select');
+            $pertanyaanSelector.select2({
+                width: '100%'
+            });
+            $pertanyaanSelector[0].onchange= function(){
+                $children = $konten.children();
+                if($children.length > 2){
+                    $konten.children(':last-child').remove();
+                }
+                var id_pertanyaan = this.value.substr(0, this.value.indexOf('_')); //ambil hanya id pertanyaan saja
+                $opsi = generateOpsiList(id_pertanyaan);
+                $konten.append($opsi);
+                $opsiSelector = $opsi.find('select');
+                $opsiSelector.attr('multiple','multiple');
+                $opsiSelector.attr('name','opsi[]');
+                $opsiSelector.select2({
+                    width: '100%',
+                });
+                $opsiSelector.val([]).change(); //reset semua value opsi
+            };
+            break;
+        case 2:
+            $konten.html(tipe2);
+            var btn1=$konten.find('#pertanyaan-opsi-button');
+            btn1.prop('id', id+'_pertanyaan-opsi-button');
+            btn1.attr('onclick', `openModalSimpulan("${id}", "pertanyaan-opsi-tabel")`)
+            // btn1.attr('onclick', `onTableAdd("${id}", $("#${id}_pertanyaan-opsi-tabel"), "pertanyaan-opsi-tabel")`)
+
+            var tbl1=btn1.next();
+            tbl1.prop('id', id+'_pertanyaan-opsi-tabel');
+            break;
+        case 3:
+            $konten.html(tipe3);
+            var btn1=$konten.find('#variabel-button');
+            btn1.prop('id', id+'_variabel-button');
+            btn1.attr('onclick', `openModalSimpulan("${id}", "variabel-tabel")`)
+            // btn1.attr('onclick', `onTableAdd("${id}", $("#${id}_variabel-tabel"), "variabel-tabel")`)
+
+            var tbl1=btn1.next();
+            tbl1.prop('id', id+'_variabel-tabel');
+            
+            var btn2=$konten.find('#rentang-button');
+            btn2.prop('id', id+'_rentang-button');
+            btn2.attr('onclick', `onTableAdd("${id}", $("#${id}_rentang-tabel"), "rentang-tabel")`)
+
+            var tbl2=btn2.next();
+            tbl2.prop('id', id+'_rentang-tabel');
+            break;
+    }
+}
+
 const onTambah = function(){
+    simpanAtauPreviewAtauRefresh(isRefresh=true);
     var elem = $(simpulan);
     const id = getRandomString(3);
 
     var toggle = elem.find('#collapse-toggle');
     toggle.prop('id', id+'_collapse-toggle');
-    toggle.attr('href', '#'+id+'_simpulan');
+    // toggle.attr('href', '#'+id+'_simpulan');
+    toggle.attr('onclick', 'myToggleCard(this, "'+id+'_simpulan")');
     
     var simp = elem.find('#simpulan');
     simp.prop('id', id+'_simpulan');
@@ -145,7 +328,21 @@ const onTambah = function(){
     var konten = simp.children(":first-child");
     konten.prop('id', id+'_content');
 
-    konten.html(tipe1);
+    var typesSelector = elem.find('#types-selector');
+    typesSelector.prop('id', id+'_types-selector');
+    typesSelector.attr('onchange', `onTypeChange("${id}", $("#${id}_content"), this.value)`);
+
+    var del = elem.find('#delete');
+    del.prop('id', id+'_delete');
+    del.attr('onclick', `$('#${id}').remove()`);
+
+    elem.prop('id', id);
+
+    onTypeChange(id, konten, 1);
+
+    elem.find('#pertanyaan').select2({
+        width: '100%'
+    });
 
     $('#simpulan-content').append(elem);
 }

@@ -10,6 +10,53 @@ active
 
 @section('content')
 <!-- Modal -->
+<div class="modal fade" id="simpulanModal1" tabindex="-1" aria-labelledby="simpulanModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form id="form-simpulanModal1">
+        <div class="modal-header">
+            <h5 class="modal-title" id="simpulanModal1Label">Simpulan Modal</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="simpulanModal1Body">
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success" >OK</button>
+        </div>
+        </form>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="simpulanModal2" tabindex="-1" aria-labelledby="simpulanModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form id="form-simpulanModal2">
+        <div class="modal-header">
+            <h5 class="modal-title" id="simpulanModal2Label">Simpulan Modal</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="simpulanModal2Body">
+            <div class="form-group">
+                <label>Nama Variabel</label>
+                <input type="text" class="form-control" placeholder="Nama Variabel" name="variabel" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success" >OK</button>
+        </div>
+        </form>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModal" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -216,14 +263,13 @@ var myQuestions = {};
 var myUrutan = [];
 var jsonPertanyaan = @json($pertanyaan);
 
-const simpanAtauPreview = async function(isPreview=false){
+const simpanAtauPreviewAtauRefresh = async function(isPreview=false, isRefresh=false){
     $('#loading').modal('show');
     var obj = $("form");
     var all= {};
     $.each(obj, function(i, val) {
         Object.assign(all,getFormData($(val)));
     });
-    console.log(all);
     var json = []
     var deleted = []
     for (var i in myUrutan) {
@@ -284,6 +330,8 @@ const simpanAtauPreview = async function(isPreview=false){
         } catch(err) {
             myAlert('gagal, '+JSON.stringify(err['statusText']),'danger');
         }
+    }else if(isRefresh){
+
     }else{
         try {
             let data = {
@@ -304,11 +352,11 @@ const simpanAtauPreview = async function(isPreview=false){
 
 $('#mainform').submit(function(e){
     e.preventDefault();
-    simpanAtauPreview();
+    simpanAtauPreviewAtauRefresh();
 });
 
 $('#previewButton').on('click',function(e){
-    simpanAtauPreview(true);
+    simpanAtauPreviewAtauRefresh(true);
 });
 
 const myToggleInput = function(self, id_container){
