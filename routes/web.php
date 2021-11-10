@@ -129,7 +129,8 @@ Route::delete('/profil/delete', 'ProfileController@deleteFoto')->name('profil.ha
 
 Route::get('/imunisasi', 'ImunisasiController@index');
 Route::post('/imunisasi', 'ImunisasiController@store')->name('imunisasi.simpan');
-Route::put('/imunisasi/{id}', 'ImunisasiController@validasiImunisasi')->name('imunisasi.validasi');
+Route::get('/imunisasi/validasi', 'ImunisasiController@validasi');
+Route::put('/imunisasi/validasi/{id}', 'ImunisasiController@validasiImunisasi')->name('imunisasi.validasi');
 
 
 use Maatwebsite\Excel\Facades\Excel;

@@ -20,7 +20,7 @@ Imunisasi
 @section('content')
 <div class="container-fluid" style="min-height:75vh">
     <!-- Page Heading -->
-    
+    @if($role=='Siswa')
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link" href="{{url('/profil')}}">Profil</a>
@@ -29,6 +29,7 @@ Imunisasi
             <a class="nav-link active" href="{{url('/imunisasi')}}">Imunisasi</a>
         </li>
     </ul>
+    @endif
     <!-- <h1 class="h3 mb-2 text-gray-800">Profil</h1> -->
 
     @include('form.alert')

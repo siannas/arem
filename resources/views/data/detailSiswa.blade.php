@@ -9,6 +9,10 @@ Detail Siswa
 active
 @endsection
 
+@section('showMaster')
+show
+@endsection
+
 @section('header')
 Validasi
 @endsection

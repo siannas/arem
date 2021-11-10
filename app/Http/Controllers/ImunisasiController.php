@@ -15,22 +15,11 @@ class ImunisasiController extends Controller
         $user = Auth::user();
         if($user->id_role==1){
             $imunisasi = Imunisasi::where('id_user', Auth::user()->id)->get();
-            
-            return view('profil.imunisasi', ['imunisasi' => $imunisasi]);
         }
         else{
-            $siswa = $user->users()->select('users.id')->where('id_role', 1)->get();
-            $listSiswa = [];
-            foreach($siswa as $unit){
-                array_push($listSiswa, $unit->id);
-            }
-            
-            $imunisasi = Imunisasi::whereIn('id_user', $listSiswa)->with(['getUser'=> function($query) { $query->select('id','nama');},
-                                        'getSekolah'=>function($query) {$query->select('nama');},])->where('validasi', 0)->get();
-            
-            
-            return view('profil.validasi', ['imunisasi' => $imunisasi]);
+            $imunisasi = Imunisasi::all();
         }
+        return view('profil.imunisasi', ['imunisasi' => $imunisasi]);
     }
 
     public function store(Request $request){
@@ -74,12 +63,31 @@ class ImunisasiController extends Controller
         return redirect()->action('ImunisasiController@index')->with('success', 'Data Imunisasi Berhasil Ditambahkan, Silahkan Tunggu Verifikasi Dari Puskesmas');
     }
 
+    public function validasi(){
+        $user = Auth::user();
+        if($user->id_role==6){
+            $imunisasi = Imunisasi::with(['getUser'=> function($query) { $query->select('id','nama');},
+                                        'getSekolah'=>function($query) {$query->select('nama');},])->where('validasi', 0)->get();    
+        }
+        else{
+            $siswa = $user->users()->select('users.id')->where('id_role', 1)->get();
+            $listSiswa = [];
+            foreach($siswa as $unit){
+                array_push($listSiswa, $unit->id);
+            }
+            
+            $imunisasi = Imunisasi::whereIn('id_user', $listSiswa)->with(['getUser'=> function($query) { $query->select('id','nama');},
+                                        'getSekolah'=>function($query) {$query->select('nama');},])->where('validasi', 0)->get();
+        }
+        return view('profil.validasi', ['imunisasi' => $imunisasi]);
+    }
+
     public function validasiImunisasi($id){
         $imunisasi = Imunisasi::where('id_user',$id)->first();
         $imunisasi->validasi = 1;
         
         $imunisasi->save();
 
-        return redirect()->action('ImunisasiController@index')->with('success', 'Data Imunisasi Berhasil Divalidasi');
+        return redirect()->action('ImunisasiController@validasi')->with('success', 'Data Imunisasi Berhasil Divalidasi');
     }
 }

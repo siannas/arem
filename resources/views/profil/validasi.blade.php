@@ -32,8 +32,7 @@ Validasi Data Imunisasi
                 <div class="row">
                     <div class="col-md-6" style="max-height:65vh; overflow:hidden;">
                         <label><b>Bukti</b></label>
-                        <img id="bukti" name="bukti" alt="">
-                        
+                        <img id="bukti" name="bukti" style="width:100%;">
                     </div>
                     <div class="col-md-6">
                     <form>
@@ -118,10 +117,8 @@ Validasi Data Imunisasi
                             <td>{{ $unit->getSekolah[0]->nama }}</td>
                             <td>Dosis {{$unit->dosis}}: {{ $unit->vaksin }} (ID Batch: {{$unit->nomor}})</td>
                             <td><button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#lihat" 
-                            data-vaksin="Dosis {{$unit->dosis}}: {{ $unit->vaksin }} (ID Batch: {{$unit->nomor}})" 
-                            data-tanggal="{{$unit->tanggal}}" data-nama="{{$unit->nama}}" data-siswa="{{$unit->getUser->nama}}"
-                            data-sekolah="{{$unit->getSekolah[0]->nama}}" data-lokasi="{{$unit->lokasi}}"
-                            data-bukti="{{$unit->bukti}}" data-id="{{route('imunisasi.validasi', [$unit->id_user])}}">Lihat</button></td>
+                            data-siswa="{{$unit->getUser->nama}}" data-sekolah="{{$unit->getSekolah[0]->nama}}"
+                            data-id="{{route('imunisasi.validasi', [$unit->id_user])}}" data-semua="{{$unit}}"><i class="fas fa-fw fa-eye"></i></button></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -143,22 +140,18 @@ $('#lihat').on('show.bs.modal', function (event) {
     // Ekstrak data dari atribut data-
     var siswa = button.data('siswa')
     var sekolah = button.data('sekolah')
-    var vaksin = button.data('vaksin')
-    var tanggal = button.data('tanggal') 
-    var nama = button.data('nama')
-    var lokasi = button.data('lokasi')
-    var bukti = button.data('bukti')
     var id = button.data('id')
-    
+    var semua = button.data('semua')
+
     // Update isi modal
     var modal = $(this)
     modal.find('#namaSiswa').val(siswa)
     modal.find('#sekolah').val(sekolah)
-    modal.find('#vaksin').val(vaksin)
-    modal.find('#tanggal').val(tanggal)
-    modal.find('#nama').val(nama)
-    modal.find('#lokasi').val(lokasi)
-    $("#bukti").attr("src", bukti)
+    modal.find('#vaksin').val('Dosis '+semua.dosis+': '+semua.vaksin+' (ID Batch: '+semua.nomor+')')
+    modal.find('#tanggal').val(semua.tanggal)
+    modal.find('#nama').val(semua.nama)
+    modal.find('#lokasi').val(semua.lokasi)
+    $("#bukti").attr("src", semua.bukti)
     $("#id").attr("action", id)
     
 })
