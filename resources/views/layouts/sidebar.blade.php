@@ -89,6 +89,12 @@ $role= Auth::user()->getRole->role;
         Data Imunisasi
     </div>
     <!-- Nav Item - Tables -->
+    <li class="nav-item @yield('ImunisasiStatus')">
+        <a class="nav-link" href="{{ url('/imunisasi')}}">
+            <i class="fas fa-fw fa-book-medical"></i>
+            <span>Riwayat Imunisasi</span></a>
+    </li>
+    <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiImunStatus')">
         <a class="nav-link" href="{{ url('/imunisasi/validasi')}}">
             <i class="fas fa-fw fa-check-circle"></i>
@@ -100,7 +106,7 @@ $role= Auth::user()->getRole->role;
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Form Skrining
+        Data Skrining
     </div>
 
     @if($role==='Kota')
