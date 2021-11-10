@@ -14,25 +14,26 @@ class ValidasiController extends Controller
         $id_user= Auth::user();
         if($id_user->id==1){
             // Mencari data user yang sudah memberi jawaban
-            $dataValid = User::join('jawaban', 'users.id', '=', 'jawaban.id_user')
-            ->select('jawaban.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.updated_at')->get();
-            
-            $siswa = $dataValid->where('validasi', 0);
+            $dataValid = Jawaban::with(['getUser'=>function($query) {$query->select('id','nama', 'kelas');},
+                                'getSekolah'=>function($query) {$query->select('id','nama');},])->
+                                where('validasi', 0)->get();
         }
         else{
-            // Mencari data user yang sudah memberi jawaban
-            $dataValid = User::join('jawaban', 'users.id', '=', 'jawaban.id_user')
-            ->select('jawaban.id', 'jawaban.id_user', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.updated_at')->get();
-            
             // Get data siswa dibawahnya
             $dataSiswa = $id_user->users()->get();
             $idSiswa = [];
             foreach($dataSiswa as $unit){
                 array_push($idSiswa, $unit->id);
             }
+
+            // Mencari data user yang sudah memberi jawaban
+            $dataValid = Jawaban::with(['getUser'=> function($query) { $query->select('id','nama', 'kelas');},
+                                'getSekolah'=>function($query) {$query->select('id','nama');},])->
+                                where('validasi', 0)->whereIn('id_user', $idSiswa)->get();
+            
             $siswa = $dataValid->where('validasi', 0)->whereIn('id_user', $idSiswa);
         }
-        return view('validasi', ['siswa' => $siswa]);
+        return view('validasi', ['siswa' => $dataValid]);
     }
 
     public function validasiSiswa($id_jawaban){

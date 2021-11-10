@@ -16,14 +16,22 @@ class ImunisasiController extends Controller
         if($user->id_role==1){
             $imunisasi = Imunisasi::where('id_user', Auth::user()->id)->get();
         }
-        else{
+        elseif($user->id_role==6){
             $imunisasi = Imunisasi::with(['getUser'=> function($query) { $query->select('id','nama');},
                                     'getSekolah'=>function($query) {$query->select('nama');},])->get();
-            if($user->id_role==4){
-                $dataSiswa = $user->users()->where('id_role', 1)->get();
-                return view('profil.imunisasi', ['imunisasi' => $imunisasi, 'dataSiswa'=>$dataSiswa]);
-            }
         }
+        else{
+            $dataSiswa = $user->users()->where('id_role', 1)->get();
+            $idSiswa = [];
+            foreach($dataSiswa as $unit){
+                array_push($idSiswa, $unit->id);
+            }
+            $imunisasi = Imunisasi::with(['getUser'=> function($query) { $query->select('id','nama');},
+                                    'getSekolah'=>function($query) {$query->select('nama');},])->whereIn('id_user', $idSiswa)->get();
+
+            return view('profil.imunisasi', ['imunisasi' => $imunisasi, 'dataSiswa'=>$dataSiswa]);
+        }
+
         return view('profil.imunisasi', ['imunisasi' => $imunisasi]);
     }
 
