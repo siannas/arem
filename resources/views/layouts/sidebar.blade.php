@@ -46,9 +46,9 @@ $role= Auth::user()->getRole->role;
             <i class="fas fa-fw fa-table"></i>
             <span>Master Data</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse @yield('showMaster')" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Data:</h6>
+                <h6 class="collapse-header">Master Data:</h6>
                 <a class="collapse-item @yield('siswaStatus')" href="{{ url('/data-siswa')}}">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Data Siswa</span></a>
@@ -90,7 +90,7 @@ $role= Auth::user()->getRole->role;
     </div>
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('validasiImunStatus')">
-        <a class="nav-link" href="{{ url('/imunisasi')}}">
+        <a class="nav-link" href="{{ url('/imunisasi/validasi')}}">
             <i class="fas fa-fw fa-check-circle"></i>
             <span>Validasi</span></a>
     </li>

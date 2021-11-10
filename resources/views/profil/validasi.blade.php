@@ -1,6 +1,10 @@
 @extends('layouts.layout')
 @extends('layouts.sidebar')
 
+@php
+$user = Auth::user()->id_role;
+@endphp
+
 @section('title')
 Validasi Imunisasi
 @endsection
@@ -28,7 +32,7 @@ Validasi Data Imunisasi
                 <div class="row">
                     <div class="col-md-6" style="max-height:65vh; overflow:hidden;">
                         <label><b>Bukti</b></label>
-                        <img style="width:100%;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fm.psecn.photoshelter.com%2Fimg-get%2FI0000jS0oRYHLEQw%2Fs%2F1200%2FI0000jS0oRYHLEQw.jpg&f=1&nofb=1" alt="">
+                        <img id="bukti" name="bukti" style="width:100%;">
                     </div>
                     <div class="col-md-6">
                     <form>
@@ -69,7 +73,9 @@ Validasi Data Imunisasi
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary">Validasi</button>
+                @if($user == 4)
+                <form method="post" id="id" name="id">@csrf @method('PUT')<button type="submit" class="btn btn-primary">Validasi</button></form>
+                @endif
             </div>
             </div>
         </div>
@@ -111,9 +117,8 @@ Validasi Data Imunisasi
                             <td>{{ $unit->getSekolah[0]->nama }}</td>
                             <td>Dosis {{$unit->dosis}}: {{ $unit->vaksin }} (ID Batch: {{$unit->nomor}})</td>
                             <td><button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#lihat" 
-                            data-vaksin="Dosis {{$unit->dosis}}: {{ $unit->vaksin }} (ID Batch: {{$unit->nomor}})" 
-                            data-tanggal="{{$unit->tanggal}}" data-nama="{{$unit->nama}}" data-siswa="{{$unit->getUser->nama}}"
-                            data-sekolah="{{$unit->getSekolah[0]->nama}}" data-lokasi="{{$unit->lokasi}}">Lihat</button></td>
+                            data-siswa="{{$unit->getUser->nama}}" data-sekolah="{{$unit->getSekolah[0]->nama}}"
+                            data-id="{{route('imunisasi.validasi', [$unit->id_user])}}" data-semua="{{$unit}}"><i class="fas fa-fw fa-eye"></i></button></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -129,22 +134,26 @@ Validasi Data Imunisasi
 @section('script')
 <script>
 $('#lihat').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
+    // Button utk trigger kirim data ke modal
+    var button = $(event.relatedTarget)
+    
+    // Ekstrak data dari atribut data-
     var siswa = button.data('siswa')
     var sekolah = button.data('sekolah')
-    var vaksin = button.data('vaksin')
-    var tanggal = button.data('tanggal') 
-    var nama = button.data('nama')
-    var lokasi = button.data('lokasi') // Extract info from data-* attributes
-    
-    // Update the modal's content.
+    var id = button.data('id')
+    var semua = button.data('semua')
+
+    // Update isi modal
     var modal = $(this)
     modal.find('#namaSiswa').val(siswa)
     modal.find('#sekolah').val(sekolah)
-    modal.find('#vaksin').val(vaksin)
-    modal.find('#tanggal').val(tanggal)
-    modal.find('#nama').val(nama)
-    modal.find('#lokasi').val(lokasi)
+    modal.find('#vaksin').val('Dosis '+semua.dosis+': '+semua.vaksin+' (ID Batch: '+semua.nomor+')')
+    modal.find('#tanggal').val(semua.tanggal)
+    modal.find('#nama').val(semua.nama)
+    modal.find('#lokasi').val(semua.lokasi)
+    $("#bukti").attr("src", semua.bukti)
+    $("#id").attr("action", id)
+    
 })
 
 </script>

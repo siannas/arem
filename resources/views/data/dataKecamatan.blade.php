@@ -9,6 +9,10 @@ Data Kecamatan
 active
 @endsection
 
+@section('showMaster')
+show
+@endsection
+
 @section('header')
 Validasi
 @endsection
