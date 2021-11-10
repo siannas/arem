@@ -68,7 +68,7 @@ const tipe3 = `<div class="form-group">
 </div>
 <div class="form-group">
     <label>Formula</label>
-    <input type="text" class="form-control" placeholder="Formula Simpulan" name="field">
+    <input type="text" class="form-control" placeholder="Formula Simpulan" name="formula">
 </div>
 <div class="form-group">
     <label class="col-form-label">Daftar Rentang</label>
@@ -85,6 +85,17 @@ const tipe3 = `<div class="form-group">
         </tbody>
     </table>
 </div>`;
+
+var mySimpulan=[];
+
+const cobaCek= function(){
+    var obj = $('#simpulan-form');
+    var all= {};
+    $.each(obj, function(i, val) {
+        Object.assign(all,getFormData($(val)));
+    });
+    console.log(all);
+}
 
 const generatePertanyaanList = function(type=null){
     var elem_str = '<div class="form-group"><label>Pertanyaan</label><select required name="pertanyaan"><option value="" disabled selected>Pilih Pertanyaan</option>';
@@ -148,7 +159,7 @@ const openModalSimpulan = function(id, type, id_row=null){
                     Object.assign(all,getFormData($(val)));
                 });
                 if(id_row){
-                    onTableEdit(id_row, type, all);
+                    onTableEdit(id_row, type, all, id);
                 }else{
                     onTableAdd(id, $("#"+id+"_pertanyaan-opsi-tabel"), type, all);
                 }
@@ -175,7 +186,7 @@ const openModalSimpulan = function(id, type, id_row=null){
                     Object.assign(all,getFormData($(val)));
                 });
                 if(id_row){
-                    onTableEdit(id_row, type, all);
+                    onTableEdit(id_row, type, all, id);
                 }else{
                     onTableAdd(id, $("#"+id+"_variabel-tabel"), type, all);
                 }
@@ -186,16 +197,18 @@ const openModalSimpulan = function(id, type, id_row=null){
     $('#'+modalId).modal('show');
 }
 
-const onTableEdit = function(id_row, type, data){
+const onTableEdit = function(id_row, type, data, id){
     var elem = $('#'+id_row);
     switch (type) {
         case 'pertanyaan-opsi-tabel':
-            elem.children()[0].innerText = data['pertanyaan'];
-            elem.children()[1].innerText = data['opsi'];
+            var str = data['pertanyaan'].split('_');
+            elem.children()[0].innerHTML = str[1]+`<input type="hidden" name="${id}-on[]" value="${str[0]}">`;
+            elem.children()[1].innerHTML = data['opsi']+`<input type="hidden" name="${id}-opsi[]" value="${data['opsi']}">`;
             break;
         case 'variabel-tabel':
-            elem.children()[0].innerText = data['variabel'];
-            elem.children()[1].innerText = data['pertanyaan'];
+            var str = data['pertanyaan'].split('_');
+            elem.children()[0].innerHTML = data['variabel']+`<input type="hidden" name="${id}-var[]" value="${data['variabel']}">`;
+            elem.children()[1].innerHTML = str[1]+`<input type="hidden" name="${id}-on[]" value="${str[0]}">`;
             break;
     }
 }
@@ -216,8 +229,10 @@ const onTableAdd = function(id, $tabel, type, data=null){
             </tr>`;
             elem = $(str);
             if(data){
-                elem.children()[0].innerText = data['pertanyaan'];
-                elem.children()[1].innerText = data['opsi'];
+                var str = data['pertanyaan'].split('_');
+                elem.children()[0].innerHTML = str[1]+`<input type="hidden" name="${id}-on[]" value="${str[0]}">`;
+                elem.children()[1].innerHTML = data['opsi']+`<input type="hidden" name="${id}-opsi[]" value="${data['opsi']}">`;
+                break;
             }            
             break;
         case 'variabel-tabel':
@@ -231,14 +246,15 @@ const onTableAdd = function(id, $tabel, type, data=null){
             </tr>`;
             elem = $(str);
             if(data){
-                elem.children()[0].innerText = data['variabel'];
-                elem.children()[1].innerText = data['pertanyaan'];
+                var str = data['pertanyaan'].split('_');
+                elem.children()[0].innerHTML = data['variabel']+`<input type="hidden" name="${id}-var[]" value="${data['variabel']}">`;
+                elem.children()[1].innerHTML = str[1]+`<input type="hidden" name="${id}-on[]" value="${str[0]}">`;
             }
             break;
         case 'rentang-tabel':
             str=`<tr id="${id}-${id2}">
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
+                <td><input type="text" name="${id}-rentang[]" class="form-control" /></td>
+                <td><input type="text" name="${id}-field[]"class="form-control" /></td>
                 <td>
                     <button class="btn btn-sm btn-danger" onclick="onDeleteRow('${id}-${id2}')"><i class="fas fa-fw fa-times"></i></button>
                 </td>
@@ -259,15 +275,18 @@ const onTypeChange = function(id, $konten, type){
     switch (type) {
         case 1:
             $konten.html(tipe1);
+            $konten.prepend($(`<input type="hidden" name="${id}-tipe" value="1">`));
+            $konten.find("[name='field']").attr('name', id+'-field');
             $pertanyaan = generatePertanyaanList(3)
             $konten.append($pertanyaan);
             $pertanyaanSelector = $pertanyaan.find('select');
+            $pertanyaanSelector.attr('name', id+'-id');
             $pertanyaanSelector.select2({
                 width: '100%'
             });
             $pertanyaanSelector[0].onchange= function(){
                 $children = $konten.children();
-                if($children.length > 2){
+                if($children.length > 3){
                     $konten.children(':last-child').remove();
                 }
                 var id_pertanyaan = this.value.substr(0, this.value.indexOf('_')); //ambil hanya id pertanyaan saja
@@ -275,7 +294,7 @@ const onTypeChange = function(id, $konten, type){
                 $konten.append($opsi);
                 $opsiSelector = $opsi.find('select');
                 $opsiSelector.attr('multiple','multiple');
-                $opsiSelector.attr('name','opsi[]');
+                $opsiSelector.attr('name', id+'-opsi[]');
                 $opsiSelector.select2({
                     width: '100%',
                 });
@@ -284,6 +303,8 @@ const onTypeChange = function(id, $konten, type){
             break;
         case 2:
             $konten.html(tipe2);
+            $konten.prepend($(`<input type="hidden" name="${id}-tipe" value="2">`));
+            $konten.find("[name='field']").attr('name', id+'-field');
             var btn1=$konten.find('#pertanyaan-opsi-button');
             btn1.prop('id', id+'_pertanyaan-opsi-button');
             btn1.attr('onclick', `openModalSimpulan("${id}", "pertanyaan-opsi-tabel")`)
@@ -294,6 +315,8 @@ const onTypeChange = function(id, $konten, type){
             break;
         case 3:
             $konten.html(tipe3);
+            $konten.prepend($(`<input type="hidden" name="${id}-tipe" value="3">`));
+            $konten.find("[name='formula']").attr('name', id+'-formula');
             var btn1=$konten.find('#variabel-button');
             btn1.prop('id', id+'_variabel-button');
             btn1.attr('onclick', `openModalSimpulan("${id}", "variabel-tabel")`)
@@ -337,6 +360,7 @@ const onTambah = function(){
     del.attr('onclick', `$('#${id}').remove()`);
 
     elem.prop('id', id);
+    elem.prepend($(`<input type="hidden" name="id[]" value="${id}">`));
 
     onTypeChange(id, konten, 1);
 

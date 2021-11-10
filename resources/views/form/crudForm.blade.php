@@ -141,9 +141,11 @@ active
                 </div>
                 <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
                     <div class="card shadow mb-4 br-t-0">
+                        <form method="get" id="simpulan-form">
                         <div class="accordion" id="simpulan-content">
                             
                         </div>
+                        </form>
                         <div class="card-body">
                             <div>
                                 <button class="w-100 btn btn-success" id="tambah-simpulan"><i class="fas fa-plus"></i>&nbsp Tambah</button>
@@ -263,7 +265,7 @@ var myQuestions = {};
 var myUrutan = [];
 var jsonPertanyaan = @json($pertanyaan);
 
-const simpanAtauPreviewAtauRefresh = async function(isPreview=false, isRefresh=false){
+const simpanAtauPreviewAtauRefresh = async function(isPreview=false, isRefresh=false){    
     $('#loading').modal('show');
     var obj = $("form");
     var all= {};
