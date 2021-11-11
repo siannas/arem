@@ -43,7 +43,7 @@ class doRekap extends Command
      */
     public function handle()
     {
-        foreach (Jawaban::where('validasi', 1)->where('status_rekap', 0)->cursor() as $j) {
+        foreach (Jawaban::where('validasi_sekolah', 1)->where('status_rekap', 0)->cursor() as $j) {
             $jawaban_id = $j->id;
 
             $jawaban_raw = Jawaban::where('id',$jawaban_id)

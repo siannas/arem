@@ -37,7 +37,7 @@ class FormulirController extends Controller
                     array_push($id_form, $unit->id);
                 }
             }
-            $riwayatJawaban = Jawaban::where('id_user', $id_user->id)->where('validasi', 1)->get();
+            $riwayatJawaban = Jawaban::where('id_user', $id_user->id)->where('validasi_sekolah', 1)->get();
             $idRiwayat = [];
             foreach($riwayatJawaban as $unit){
                 array_push($idRiwayat, $unit->id_formulir);
@@ -204,7 +204,7 @@ class FormulirController extends Controller
         $jawaban->fill([
             'id_user_sekolah' => is_null($jawaban->id_user_sekolah) ?  $sekolah->id : $jawaban->id_user_sekolah,
             'json' => $req['json'],
-            'validasi' => is_null($jawaban->validasi) ? 0 : $jawaban->validasi,
+            'validasi_sekolah' => is_null($jawaban->validasi_sekolah) ? 0 : $jawaban->validasi_sekolah,
             'status_rekap' => is_null($jawaban->status_rekap) ? 0 : $jawaban->status_rekap
         ]);
 

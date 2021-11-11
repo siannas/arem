@@ -19,8 +19,10 @@ class CreateJawabanTable extends Migration
             $table->integer('id_user_sekolah')->unsigned();
             $table->integer('id_formulir')->unsigned();
             $table->json('json');
-            $table->tinyInteger('validasi');
+            $table->tinyInteger('validasi_sekolah');
             $table->tinyInteger('status_rekap');
+            $table->tinyInteger('validasi_puskesmas');
+            $table->string('keterangan');
             $table->foreign('id_user')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('id_user_sekolah')->references('id')->on('users');
             $table->foreign('id_formulir')->references('id')->on('formulir');

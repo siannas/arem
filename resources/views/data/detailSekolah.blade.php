@@ -62,9 +62,9 @@ Validasi
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
                             <td>
-                                @if($unit->validasi===1)
+                                @if($unit->validasi_sekolah===1)
                                 <div class="badge bg-success text-white rounded-pill">Tervalidasi</div>
-                                @elseif($unit->validasi===0)
+                                @elseif($unit->validasi_sekolah===0)
                                 <div class="badge bg-warning text-white rounded-pill">Belum Tervalidasi</div>
                                 @else
                                 <div class="badge bg-danger text-white rounded-pill">Belum Mengisi</div>
