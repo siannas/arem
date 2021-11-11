@@ -13,6 +13,10 @@ Detail Siswa
 active
 @endsection
 
+@section('showSkrining')
+show
+@endsection
+
 @section('header')
 Validasi
 @endsection
@@ -179,11 +183,47 @@ Validasi
             @if($role==='Sekolah')
                 <button class="btn btn-warning" type="submit"><i class="fas fa-fw fa-check"></i> Validasi</button>
             @endif
+            
             @if($role==='Puskesmas')
-                <button class="btn btn-danger" type="submit"><i class="fas fa-fw fa-check"></i> Rujuk</button>
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#validasi" @if($jawaban->validasi_sekolah==0) disabled @endif><i class="fas fa-fw fa-check"></i> Validasi</button>
             @endif
             <a href="{{url('/validasi')}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
             </form>
+        </div>
+    </div>
+    <div class="modal modal-danger fade" id="validasi" tabindex="-1" role="dialog" aria-labelledby="validasi" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Validasi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{route('validasi.edit', [$jawaban->id])}}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label><b>Kesimpulan</b></label>
+                        <select class="form-control" id="kesimpulan" name="kesimpulan">
+                            <option value="0" disabled selected>Pilih Kesimpulan</option>
+                            <option value="1">Tidak Perlu Dirujuk</option>
+                            <option value="-1">Perlu Dirujuk</option>
+                        </select>
+                        
+                    </div>
+                    <div class="form-group">
+                        <label><b>Keterangan</b></label>
+                        <textarea class="form-control" rows="3" placeholder="Masukkan Keterangan" name="keterangan" ></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

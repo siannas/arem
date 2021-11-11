@@ -17,6 +17,8 @@ class ValidasiController extends Controller
             $dataValid = Jawaban::with(['getUser'=>function($query) {$query->select('id','nama', 'kelas');},
                                 'getSekolah'=>function($query) {$query->select('id','nama');},])->
                                 where('validasi_sekolah', 0)->get();
+            
+            return view('validasi', ['siswa' => $dataValid]);
         }
         else{
             // Get data siswa dibawahnya
@@ -28,12 +30,19 @@ class ValidasiController extends Controller
 
             // Mencari data user yang sudah memberi jawaban
             $dataValid = Jawaban::with(['getUser'=> function($query) { $query->select('id','nama', 'kelas');},
-                                'getSekolah'=>function($query) {$query->select('id','nama');},])->
-                                where('validasi_sekolah', 0)->whereIn('id_user', $idSiswa)->get();
+                                'getSekolah'=>function($query) {$query->select('id','nama');},])->whereIn('id_user', $idSiswa)->get();
             
-            $siswa = $dataValid->where('validasi_sekolah', 0)->whereIn('id_user', $idSiswa);
+            if($id_user->id_role==4){
+                $siswa = $dataValid->where('validasi_sekolah', 1)->where('validasi_puskesmas', 0)->whereIn('id_user', $idSiswa);    
+            }
+            elseif($id_user->id_role==2){
+                $siswa = $dataValid->where('validasi_sekolah', 0)->whereIn('id_user', $idSiswa);
+            }
+            else{
+                $siswa = $dataValid->where('validasi_puskesmas', 0)->whereIn('id_user', $idSiswa);
+            }
+            return view('validasi', ['siswa' => $siswa]);
         }
-        return view('validasi', ['siswa' => $dataValid]);
     }
 
     public function validasiSiswa($id_jawaban){
@@ -50,6 +59,7 @@ class ValidasiController extends Controller
     }
 
     public function validasi($id_jawaban){
+        $user = Auth::user();
         $jawaban = Jawaban::findOrFail($id_jawaban);
         $listJawaban = json_decode($jawaban->json);
         $flag = 0;
@@ -59,8 +69,15 @@ class ValidasiController extends Controller
                 break;
             }
         }
-        if($flag==0){
+        if($flag==0 && $user->id_role==2){
             $jawaban->validasi_sekolah = 1;
+            $jawaban->save();
+    
+            return redirect('/validasi')->with('success', 'Data Skrining Berhasil Divalidasi');
+        }
+        elseif($user->id_role==4){
+            $jawaban->keterangan = request('keterangan');
+            $jawaban->validasi_puskesmas = request('kesimpulan');
             $jawaban->save();
     
             return redirect('/validasi')->with('success', 'Data Skrining Berhasil Divalidasi');

@@ -13,6 +13,10 @@ Detail Rekap
 active
 @endsection
 
+@section('showSkrining')
+show
+@endsection
+
 @section('header')
 Form Skrining
 @endsection

@@ -132,7 +132,7 @@ Validasi
                                     @csrf
                                         <button class="btn btn-sm btn-secondary"><i class="fas fa-fw fa-copy"></i></button>
                                     </form>
-                                    <button class="btn btn-sm btn-danger"><i class="fas fa-fw fa-trash-alt" data-toggle="modal" data-target="#delete{{ $unit->id }}"></i></button>
+                                    <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete{{ $unit->id }}"><i class="fas fa-fw fa-trash-alt"></i></button>
                                     <div class="modal modal-danger fade" id="delete{{ $unit->id }}" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">

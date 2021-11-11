@@ -109,6 +109,32 @@ $role= Auth::user()->getRole->role;
         Data Skrining
     </div>
 
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#skrining"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Data Skrining</span>
+        </a>
+        <div id="skrining" class="collapse @yield('showSkrining')" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Data Skrining:</h6>
+                
+                <a class="collapse-item @yield('rujukanStatus')" href="{{ url('/rujukan')}}">
+                    <i class="fas fa-fw fa-book-medical"></i>
+                    <span>Rujukan</span></a>
+                
+                <a class="collapse-item @yield('validasiStatus')" href="{{ url('/validasi')}}">
+                    <i class="fas fa-fw fa-check-circle"></i>
+                    <span>Validasi</span></a>
+
+                <a class="collapse-item @yield('rekapStatus')" href="{{ url('/rekap')}}">
+                    <i class="fas fa-fw fa-file"></i>
+                    <span>Rekap Skrining</span></a>
+
+            </div>
+        </div>
+    </li>
+
     @if($role==='Kota')
     <!-- Nav Item - Tables -->
     <li class="nav-item @yield('formStatus')">
@@ -117,19 +143,6 @@ $role= Auth::user()->getRole->role;
             <span>Form Skrining</span></a>
     </li>
     @endif
-
-    <!-- Nav Item - Tables -->
-    <li class="nav-item @yield('validasiStatus')">
-        <a class="nav-link" href="{{ url('/validasi')}}">
-            <i class="fas fa-fw fa-check-circle"></i>
-            <span>Validasi</span></a>
-    </li>
-
-    <li class="nav-item @yield('rekapStatus')">
-        <a class="nav-link" href="{{ url('/rekap')}}">
-            <i class="fas fa-fw fa-file"></i>
-            <span>Rekap Skrining</span></a>
-    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">
