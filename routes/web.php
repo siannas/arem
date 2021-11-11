@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/data-siswa', 'DataController@dataSiswa');
         Route::get('/validasi', 'ValidasiController@index');
         Route::get('/validasi/{id}', 'ValidasiController@validasiSiswa');
-        Route::put('/validasi/{id}', 'ValidasiController@validasi');
+        Route::put('/validasi/{id}', 'ValidasiController@validasi')->name('validasi.edit');
     });
 
     Route::middleware(['role:Kelurahan,Puskesmas,Kecamatan,Kota'])->group(function () {

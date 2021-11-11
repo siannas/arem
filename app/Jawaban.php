@@ -18,8 +18,10 @@ class Jawaban extends Model
         'id_user_sekolah',
         'id_formulir',
         'json',
-        'validasi',
+        'validasi_sekolah',
         'status_rekap',
+        'validasi_puskesmas',
+        'keterangan',
     ];
     public function getUser(){
         return $this->belongsTo(User::class, 'id_user');

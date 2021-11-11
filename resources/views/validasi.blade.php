@@ -9,6 +9,10 @@ Validasi Data
 active
 @endsection
 
+@section('showSkrining')
+show
+@endsection
+
 @section('header')
 Validasi
 @endsection

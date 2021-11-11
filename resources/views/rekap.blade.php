@@ -13,6 +13,10 @@ Rekap Skrining
 active
 @endsection
 
+@section('showSkrining')
+show
+@endsection
+
 @section('header')
 Rekap Skrining
 @endsection
