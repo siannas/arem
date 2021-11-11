@@ -403,7 +403,7 @@ const onTypeChange = function(id, $konten, type, data=null){
             if(data){ //kalau load data dari db
                 $formula.val(data['formula'])
                 var data_, id_pertanyaan;
-                Object.keys(data['vars']).foreach(key =>{
+                Object.keys(data['vars']).forEach(key =>{
                     id_pertanyaan = data['vars'][key];
                     data_ = {
                         variabel: key,

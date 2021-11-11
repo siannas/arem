@@ -14,6 +14,9 @@ Form Skrining
 @endsection
 
 @section('content')
+@php
+$role = Auth::user()->getRole->role
+@endphp
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -37,10 +40,14 @@ Form Skrining
                 </div>
                 <div class="card-body">
                     @foreach ($json->pertanyaan as $p)
+                        @php
+                        $is_diisi_petugas = ( array_key_exists('diisi-petugas', $p) and $p->{'diisi-petugas'});
+                        @endphp
                         @if ($p->tipe === 1)
                             <div class="row" style="padding-top:20px">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
+                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7" style="padding:0">
                                     <div class="row" style="margin:0px">
@@ -57,6 +64,7 @@ Form Skrining
                             <div class="row" style="padding-top:20px">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
+                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7">
                                     <div class="input-group">
@@ -73,6 +81,7 @@ Form Skrining
                             <div class="row" style="padding-top:30px" id="98s7dfy-container">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
+                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7" style="padding:0">
                                     <div class="row" style="margin:0px">
@@ -128,6 +137,7 @@ Form Skrining
                             <div class="row" style="padding-top:20px">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
+                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7">
                                     <div class="input-group">
@@ -218,6 +228,20 @@ Form Skrining
     @foreach ($json->pertanyaan as $p)
         myData[@json($p->id)] = @json($p);
         console.log(@json($p))
+
+        //diisi petugas? jangan biarkan siswa ngisi
+        @php
+        $is_diisi_petugas = ( array_key_exists('diisi-petugas', $p) and $p->{'diisi-petugas'});
+        @endphp
+        @if ($is_diisi_petugas and $role==='Siswa')
+            @if ($p->tipe === 1 or $p->tipe === 3)
+                $('input[name={{ $p->id }}]:radio').attr('disabled', true).removeClass('invalid').removeAttr('onfocusout');
+            @elseif ($p->tipe === 2)
+                $('input[name={{ $p->id }}]:text').attr('readonly', true).removeClass('invalid').removeAttr('onfocusout');
+            @endif
+        @endif
+
+
         @if ($p->tipe === 1)
             $('input[name={{ $p->id }}]:radio').change(function(){
                 myPertanyaanOnChange(@json($p->id), this.value);

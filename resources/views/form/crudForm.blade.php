@@ -282,6 +282,7 @@ const simpanAtauPreviewAtauRefresh = async function(isPreview=false, isRefresh=f
             continue
         }
         myQuestions[key]['pertanyaan'] = all[key+"_pertanyaan"];
+        myQuestions[key]['diisi-petugas'] = all[key+'-diisi-petugas']==='on' ? true : false;
 
         if (myQuestions[key]['tipe'] === 2) {
             myQuestions[key]['suffix'] = all[key+"_suffix"] || null;
@@ -435,7 +436,22 @@ const myButtonTambahOpsi = function(onclick_str){
     `
 }
 
+const str_diisi_petugas = `<div class="custom-control custom-control-right custom-switch" style="text-align: right;border-bottom: 1px solid #d2d2d2;padding: 12px 0;padding-right: 55px;">
+                    <input type="checkbox" class="custom-control-input" id="diisi-petugas" name="diisi-petugas">
+                    <label class="custom-control-label" for="diisi-petugas">diisi petugas</label>
+                </div>`
 const myPertanyaan = function(tipe, id, data={}){
+    $diisi_petugas = $(str_diisi_petugas);
+    $input_diisi_petugas = $diisi_petugas.find('#diisi-petugas');
+    $input_diisi_petugas.prop('id', id+"-diisi-petugas");
+    $input_diisi_petugas.prop('name', id+"-diisi-petugas");
+    $input_diisi_petugas.next().prop('for', id+"-diisi-petugas");
+    if('diisi-petugas' in data && data['diisi-petugas']){
+        $input_diisi_petugas.prop('checked', true);
+    }else{
+        $input_diisi_petugas.prop('checked', false);
+    }
+
     if (tipe === '1') {
 
     }else if(tipe === '3'){
@@ -464,6 +480,7 @@ const myPertanyaan = function(tipe, id, data={}){
 
         var collapse = elem.find('#collapse');
         collapse.prop('id', id+'_collapse');
+        collapse.prepend($diisi_petugas);
 
         var subPertanyaan = elem.find('#sub-pertanyaan');
 
@@ -508,6 +525,7 @@ const myPertanyaan = function(tipe, id, data={}){
 
         var collapse = elem.find('#collapse');
         collapse.prop('id', id+'_collapse');
+        collapse.prepend($diisi_petugas);
 
         var TanpaSuffix = elem.find('#TanpaSuffix');
         TanpaSuffix.prop('id', id+'_TanpaSuffix');
@@ -554,6 +572,7 @@ const myPertanyaan = function(tipe, id, data={}){
 
         var collapse = elem.find('#collapse');
         collapse.prop('id', id+'_collapse');
+        collapse.prepend($diisi_petugas);
 
         $("#accordionPertanyaan").append(container);
     }
