@@ -29,8 +29,8 @@ Validasi
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>NIK</th>
                             <th>Nama</th>
+                            <th>Sekolah</th>
                             <th>Kelas</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
@@ -38,8 +38,8 @@ Validasi
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>NIK</th>
                             <th>Nama</th>
+                            <th>Sekolah</th>
                             <th>Kelas</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
@@ -48,11 +48,11 @@ Validasi
                     <tbody>
                         @foreach($siswa as $unit)
                         <tr>
-                            <td>{{ $unit->username }}</td>
-                            <td>{{ $unit->nama }}</td>
-                            <td>{{ $unit->kelas }}</td>
+                            <td>{{ $unit->getUser->nama }}</td>
+                            <td>{{ $unit->getSekolah->nama }}</td>
+                            <td>{{ $unit->getUser->kelas }}</td>
                             <td>{{ $unit->updated_at }}</td>
-                            <td><form action="{{url('/validasi/'.$unit->id)}}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></td></form>
+                            <td><a href="{{url('/validasi/'.$unit->id)}}" class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i></button></td>
                         </tr>
                         @endforeach
                     </tbody>

@@ -49,7 +49,7 @@
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user {{ $errors->has('username') ? ' is-invalid' : '' }}"
                                         id="exampleInputEmail" aria-describedby="emailHelp"
-                                        placeholder="Username" name="username" value="{{ old('username') }}" required>
+                                        placeholder="Username" name="username" value="{{ old('username') }}" required autofocus>
                                     @if ($errors->has('username'))
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $errors->first('username') }}</strong>

@@ -22,7 +22,7 @@ class CreateImunisasisTable extends Migration
             $table->string('nomor',20)->nullable();
             $table->string('nama',50)->nullable();
             $table->string('lokasi')->nullable();
-            $table->string('bukti');
+            $table->string('bukti')->nullable();
             $table->tinyInteger('validasi');
             $table->foreign('id_user')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

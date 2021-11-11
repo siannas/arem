@@ -13,6 +13,10 @@ Imunisasi
 Imunisasi
 @endsection
 
+@section('ImunisasiStatus')
+active
+@endsection
+
 @section('description')
 Imunisasi
 @endsection
@@ -46,6 +50,19 @@ Imunisasi
             <form action="{{route('imunisasi.simpan')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
+                    @if($role=='Puskesmas')
+                    <div class="form-group">
+                        <label><b>Nama Siswa</b></label>
+                        <div class="form-group" id="siswaParent">
+                            <select id="id_user" name="id_user" class="form-control select2bs4">
+                                <option selected disabled>Pilih Siswa</option>
+                                @foreach($dataSiswa as $unit)
+                                <option value="{{$unit->id}}">{{$unit->nama}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @endif
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-6">
@@ -79,6 +96,7 @@ Imunisasi
                         <label><b>Lokasi Vaksin</b></label>
                         <input type="text" id="lokasi" name="lokasi" class="form-control" placeholder="Lokasi Vaksin">
                     </div>
+                    @if($role=='Siswa')
                     <div class="form-group">
                         <label><b>Upload Foto Bukti</b></label>
                         <div class="custom-file">
@@ -86,6 +104,7 @@ Imunisasi
                             <label class="custom-file-label" for="bukti">Pilih file</label>
                         </div>
                     </div>
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -99,7 +118,7 @@ Imunisasi
         <div class="card-header font-weight-bold text-primary">
             <div class="row">
                 <div class="col">Riwayat Imunisasi</div>
-                <div class="col text-right"><button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#tambah">Tambah</button></div>
+                @if($role=='Puskesmas'|$role=='Siswa')<div class="col text-right"><button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#tambah">Tambah</button></div>@endif
             </div>
         </div>
         <div class="card-body">
@@ -107,39 +126,54 @@ Imunisasi
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
+                            @if($role!='Siswa')
+                            <th>Nama</th>
+                            @endif
                             <th>Tanggal Pemberian</th>
                             <th>Vaksin</th>
+                            @if($role=='Siswa')
                             <th>Petugas</th>
                             <th>Lokasi</th>
+                            @endif
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
+                            @if($role!='Siswa')
+                            <th>Nama</th>
+                            @endif
                             <th>Tanggal Pemberian</th>
                             <th>Vaksin</th>
+                            @if($role=='Siswa')
                             <th>Petugas</th>
                             <th>Lokasi</th>
+                            @endif
                             <th>Status</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                    @foreach($imunisasi as $unit)
+                        @foreach($imunisasi as $unit)
                         <tr>
+                            @if($role!='Siswa')
+                            <td>{{$unit->getUser->nama}}</td>
+                            @endif
                             <td>{{$unit->tanggal}}</td>
                             <td>Dosis {{$unit->dosis}} {{$unit->vaksin}} (Batch: {{$unit->nomor}})</td>
+                            @if($role=='Siswa')
                             <td>{{$unit->nama}}</td>
                             <td>{{$unit->lokasi}}</td>
+                            @endif
                             <td>
-                                @if($unit->validasi==1)
+                                @if($unit->validasi_sekolah==1)
                                 <div class="badge bg-success text-white rounded-pill">Tervalidasi</div>
-                                @elseif($unit->validasi==0)
+                                @elseif($unit->validasi_sekolah==0)
                                 <div class="badge bg-warning text-white rounded-pill">Belum Tervalidasi</div>
                                 @else
                                 @endif
                             </td>
                         </tr>
-                    @endforeach
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -156,5 +190,13 @@ Imunisasi
 $(document).ready(function () {
     bsCustomFileInput.init()
 })
+</script>
+<script>
+$(document).ready(function() {
+    $('#id_user').select2({
+        width: '100%',
+        dropdownParent: $("#siswaParent")
+    });
+});
 </script>
 @endsection

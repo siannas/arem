@@ -21,6 +21,7 @@ Validasi
 <div class="container-fluid">
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Detail Data Siswa</h1>
+    @include('form.alert')
     <div class="card shadow">
         <div class="card-header bg-primary mb-3">
             <div class="row p-4 justify-content-between align-items-center">
@@ -177,6 +178,9 @@ Validasi
             @method('PUT')
             @if($role==='Sekolah')
                 <button class="btn btn-warning" type="submit"><i class="fas fa-fw fa-check"></i> Validasi</button>
+            @endif
+            @if($role==='Puskesmas')
+                <button class="btn btn-danger" type="submit"><i class="fas fa-fw fa-check"></i> Rujuk</button>
             @endif
             <a href="{{url('/validasi')}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
             </form>

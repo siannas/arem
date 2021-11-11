@@ -14,25 +14,26 @@ class ValidasiController extends Controller
         $id_user= Auth::user();
         if($id_user->id==1){
             // Mencari data user yang sudah memberi jawaban
-            $dataValid = User::join('jawaban', 'users.id', '=', 'jawaban.id_user')
-            ->select('jawaban.id', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.updated_at')->get();
-            
-            $siswa = $dataValid->where('validasi', 0);
+            $dataValid = Jawaban::with(['getUser'=>function($query) {$query->select('id','nama', 'kelas');},
+                                'getSekolah'=>function($query) {$query->select('id','nama');},])->
+                                where('validasi_sekolah', 0)->get();
         }
         else{
-            // Mencari data user yang sudah memberi jawaban
-            $dataValid = User::join('jawaban', 'users.id', '=', 'jawaban.id_user')
-            ->select('jawaban.id', 'jawaban.id_user', 'users.nama', 'users.username', 'users.kelas', 'jawaban.validasi', 'jawaban.updated_at')->get();
-            
             // Get data siswa dibawahnya
             $dataSiswa = $id_user->users()->get();
             $idSiswa = [];
             foreach($dataSiswa as $unit){
                 array_push($idSiswa, $unit->id);
             }
-            $siswa = $dataValid->where('validasi', 0)->whereIn('id_user', $idSiswa);
+
+            // Mencari data user yang sudah memberi jawaban
+            $dataValid = Jawaban::with(['getUser'=> function($query) { $query->select('id','nama', 'kelas');},
+                                'getSekolah'=>function($query) {$query->select('id','nama');},])->
+                                where('validasi_sekolah', 0)->whereIn('id_user', $idSiswa)->get();
+            
+            $siswa = $dataValid->where('validasi_sekolah', 0)->whereIn('id_user', $idSiswa);
         }
-        return view('validasi', ['siswa' => $siswa]);
+        return view('validasi', ['siswa' => $dataValid]);
     }
 
     public function validasiSiswa($id_jawaban){
@@ -50,9 +51,20 @@ class ValidasiController extends Controller
 
     public function validasi($id_jawaban){
         $jawaban = Jawaban::findOrFail($id_jawaban);
-        $jawaban->validasi = 1;
-        $jawaban->save();
-
-        return redirect('/validasi')->with('success', 'Data Berhasil Divalidasi');
+        $listJawaban = json_decode($jawaban->json);
+        $flag = 0;
+        foreach($listJawaban as $unit){
+            if(empty($unit)){
+                $flag = 1;
+                break;
+            }
+        }
+        if($flag==0){
+            $jawaban->validasi_sekolah = 1;
+            $jawaban->save();
+    
+            return redirect('/validasi')->with('success', 'Data Skrining Berhasil Divalidasi');
+        }
+        return back()->with('error', 'Data Skrining Masih Belum Lengkap');
     }
 }

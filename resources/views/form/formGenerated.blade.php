@@ -164,7 +164,7 @@ Form Skrining
     <form action="#" id="mainform" hidden>
         @csrf
     </form>
-    @if(is_null($jawaban) || $jawaban->validasi===0)
+    @if(is_null($jawaban) || $jawaban->validasi_sekolah===0)
     <button class="btn btn-primary float" onclick="$('#mainform').trigger('submit')"><i class="fas fa-fw fa-save"></i></button>
     @endif    
     
@@ -328,7 +328,7 @@ for(var id in jawabans){
 @endif
 })
 </script>
-@if(is_null($jawaban)==false && $jawaban->validasi===1)
+@if(is_null($jawaban)==false && $jawaban->validasi_sekolah===1)
 <script>
 $(document).ready(function () {
 $('input[type="text"]').attr('readonly', true);
