@@ -140,18 +140,18 @@ active
                     </form>
                 </div>
                 <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
+                    <form method="get" id="simpulan-form" >
                     <div class="card shadow mb-4 br-t-0">
-                        <form method="get" id="simpulan-form">
                         <div class="accordion" id="simpulan-content">
                             
                         </div>
-                        </form>
                         <div class="card-body">
                             <div>
                                 <button class="w-100 btn btn-success" id="tambah-simpulan"><i class="fas fa-plus"></i>&nbsp Tambah</button>
                             </div>
                         </div>                        
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -324,7 +324,7 @@ const simpanAtauPreviewAtauRefresh = async function(isPreview=false, isRefresh=f
         try {
             let data = {
                 'judul': all['judul'],
-                'json': JSON.stringify(jsonPertanyaan)
+                'json': JSON.stringify(jsonPertanyaan),
             };
             const res = await myRequest.post( '{{ route('pertanyaan.preview') }}' , data)
             $('#previewModalBody').html(res);
@@ -335,15 +335,19 @@ const simpanAtauPreviewAtauRefresh = async function(isPreview=false, isRefresh=f
     }else if(isRefresh){
 
     }else{
-        try {
-            let data = {
-                'judul': all['judul'],
-                'json': JSON.stringify(jsonPertanyaan)
-            };
-            const res = await myRequest.put( '{{ route('pertanyaan.update', ['pertanyaan'=> $id_pertanyaan]) }}' , data)
-            myAlert('Berhasil menyimpan');
-        } catch(err) {
-            myAlert('gagal, '+JSON.stringify(err['statusText']),'danger');
+        //cek apakah simpulan sudah terisi semua
+        if(cekSimpulan()){
+            try {
+                let data = {
+                    'judul': all['judul'],
+                    'json': JSON.stringify(jsonPertanyaan),
+                    'json_simpulan': JSON.stringify(mySimpulan),
+                };
+                const res = await myRequest.put( '{{ route('pertanyaan.update', ['pertanyaan'=> $id_pertanyaan]) }}' , data)
+                myAlert('Berhasil menyimpan');
+            } catch(err) {
+                myAlert('gagal, '+JSON.stringify(err['statusText']),'danger');
+            }
         }
     }
 

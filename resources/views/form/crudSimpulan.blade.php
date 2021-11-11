@@ -14,7 +14,7 @@ var simpulan = `<div class="card">
         </a>
         <div class="input-group" style="width:unset!important;">
             <div class="input-group-append">
-                <button class="btn btn-danger font-weight-bold" style="padding: 0 18px;border-radius:0;" type="button" id="delete"><i class="fas fa-trash"></i></button>
+                <button type="button" class="btn btn-danger font-weight-bold" style="padding: 0 18px;border-radius:0;" type="button" id="delete"><i class="fas fa-trash"></i></button>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@ const tipe2 = `<div class="form-group">
 </div>
 <div class="form-group">
     <label class="col-form-label">Daftar Pertanyaan, Opsi</label>
-    <button class="btn btn-sm btn-success float-right" id="pertanyaan-opsi-button"><i class="fas fa-fw fa-plus"></i></button>
+    <button type="button" class="btn btn-sm btn-success float-right" id="pertanyaan-opsi-button"><i class="fas fa-fw fa-plus"></i></button>
     <table class="table mt-2" id="pertanyaan-opsi-tabel">
         <thead>
             <tr>
@@ -53,7 +53,7 @@ const tipe2 = `<div class="form-group">
 
 const tipe3 = `<div class="form-group">
     <label class="col-form-label">Daftar Variabel</label>
-    <button class="btn btn-sm btn-success float-right" id="variabel-button"><i class="fas fa-fw fa-plus"></i></button>
+    <button type="button" class="btn btn-sm btn-success float-right" id="variabel-button"><i class="fas fa-fw fa-plus"></i></button>
     <table class="table mt-2" id="variabel-tabel">
         <thead>
             <tr>
@@ -72,7 +72,7 @@ const tipe3 = `<div class="form-group">
 </div>
 <div class="form-group">
     <label class="col-form-label">Daftar Rentang</label>
-    <button class="btn btn-sm btn-success float-right" id="rentang-button"><i class="fas fa-fw fa-plus"></i></button>                    
+    <button type="button" class="btn btn-sm btn-success float-right" id="rentang-button"><i class="fas fa-fw fa-plus"></i></button>                    
     <table class="table mt-2" id="rentang-tabel">
         <thead>
             <tr>
@@ -86,15 +86,50 @@ const tipe3 = `<div class="form-group">
     </table>
 </div>`;
 
-var mySimpulan=[];
+var mySimpulan;
 
-const cobaCek= function(){
+const cekSimpulan= function(){
+    mySimpulan=[];
     var obj = $('#simpulan-form');
+    if(obj[0].checkValidity() === false){
+        alert('Simpulan belum terisi sempurna, mohon dicek kembali');
+        return false;
+    }
     var all= {};
     $.each(obj, function(i, val) {
         Object.assign(all,getFormData($(val)));
     });
-    console.log(all);
+    all['id'].forEach(id=>{
+        var simp = {}
+        switch (all[id+'-tipe']) {
+            case "1":
+                var question_id = all[id+'-id']
+                simp = {
+                    tipe: 1,
+                    id: question_id.substr(0, question_id.indexOf('_')),
+                    field: all[id+'-field'],
+                    opsi: all[id+'-opsi']
+                }
+                break;
+            case "2":
+                simp = {
+                    tipe: 2,
+                    field: all[id+'-field'],
+                    on: all[id+"-on"].map((element, i) => [element, all[id+"-opsi"][i]])
+                }
+                break;
+            case "3":
+                simp = {
+                    tipe: 3,
+                    formula: all[id+'-formula'],
+                    range: all[id+"-rentang"].map((element, i) => [element, all[id+"-field"][i]]),
+                    vars: all[id+'-var'].reduce(function (arr, element, i) { arr[element]=all[id+'-on'][i]; return arr; }, {})
+                }
+                break;
+        }
+        mySimpulan.push(simp);
+    })
+    return true;
 }
 
 const generatePertanyaanList = function(type=null){
@@ -223,8 +258,8 @@ const onTableAdd = function(id, $tabel, type, data=null){
                 <td>Mark</td>
                 <td>Otto</td>
                 <td>
-                    <button class="btn btn-sm btn-warning" onclick="openModalSimpulan('${id}','pertanyaan-opsi-tabel', '${id}-${id2}')"><i class="fas fa-fw fa-pen"></i></button>
-                    <button class="btn btn-sm btn-danger" onclick="onDeleteRow('${id}-${id2}')"><i class="fas fa-fw fa-times"></i></button>
+                    <button type="button" class="btn btn-sm btn-warning" onclick="openModalSimpulan('${id}','pertanyaan-opsi-tabel', '${id}-${id2}')"><i class="fas fa-fw fa-pen"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="onDeleteRow('${id}-${id2}')"><i class="fas fa-fw fa-times"></i></button>
                 </td>
             </tr>`;
             elem = $(str);
@@ -240,8 +275,8 @@ const onTableAdd = function(id, $tabel, type, data=null){
                 <td>BB</td>
                 <td>Otto</td>
                 <td>
-                    <button class="btn btn-sm btn-warning" onclick="openModalSimpulan('${id}','variabel-tabel', '${id}-${id2}')"><i class="fas fa-fw fa-pen"></i></button>
-                    <button class="btn btn-sm btn-danger" onclick="onDeleteRow('${id}-${id2}')"><i class="fas fa-fw fa-times"></i></button>
+                    <button type="button" class="btn btn-sm btn-warning" onclick="openModalSimpulan('${id}','variabel-tabel', '${id}-${id2}')"><i class="fas fa-fw fa-pen"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="onDeleteRow('${id}-${id2}')"><i class="fas fa-fw fa-times"></i></button>
                 </td>
             </tr>`;
             elem = $(str);
@@ -256,10 +291,14 @@ const onTableAdd = function(id, $tabel, type, data=null){
                 <td><input type="text" name="${id}-rentang[]" class="form-control" /></td>
                 <td><input type="text" name="${id}-field[]"class="form-control" /></td>
                 <td>
-                    <button class="btn btn-sm btn-danger" onclick="onDeleteRow('${id}-${id2}')"><i class="fas fa-fw fa-times"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="onDeleteRow('${id}-${id2}')"><i class="fas fa-fw fa-times"></i></button>
                 </td>
             </tr>`;
             elem = $(str);
+            if(data){
+                elem.children()[0].childNodes[0].value = (data[0]);
+                elem.children()[1].childNodes[0].value = (data[1]);
+            }
             break;
     }
     $tabel.find('tbody').append(elem);
@@ -270,13 +309,14 @@ const onDeleteRow = function(id){
     elem.remove();
 }
 
-const onTypeChange = function(id, $konten, type){
+const onTypeChange = function(id, $konten, type, data=null){
     type = (typeof type === 'string') ? parseInt(type) : type;
     switch (type) {
         case 1:
             $konten.html(tipe1);
             $konten.prepend($(`<input type="hidden" name="${id}-tipe" value="1">`));
-            $konten.find("[name='field']").attr('name', id+'-field');
+            var $field = $konten.find("[name='field']");
+            $field.attr('name', id+'-field');
             $pertanyaan = generatePertanyaanList(3)
             $konten.append($pertanyaan);
             $pertanyaanSelector = $pertanyaan.find('select');
@@ -284,6 +324,20 @@ const onTypeChange = function(id, $konten, type){
             $pertanyaanSelector.select2({
                 width: '100%'
             });
+            if(data){ //kalau load data dari db
+                $field.val(data['field']);
+                $pertanyaanSelector.val(data['id']+'_'+myQuestions[data['id']].pertanyaan).change();
+                var id_pertanyaan = data['id']
+                $opsi = generateOpsiList(id_pertanyaan);
+                $konten.append($opsi);
+                $opsiSelector = $opsi.find('select');
+                $opsiSelector.attr('multiple','multiple');
+                $opsiSelector.attr('name', id+'-opsi[]');
+                $opsiSelector.select2({
+                    width: '100%',
+                });
+                $opsiSelector.val(data['opsi']).change(); //reset semua value opsi
+            }
             $pertanyaanSelector[0].onchange= function(){
                 $children = $konten.children();
                 if($children.length > 3){
@@ -304,7 +358,8 @@ const onTypeChange = function(id, $konten, type){
         case 2:
             $konten.html(tipe2);
             $konten.prepend($(`<input type="hidden" name="${id}-tipe" value="2">`));
-            $konten.find("[name='field']").attr('name', id+'-field');
+            var $field = $konten.find("[name='field']");
+            $field.attr('name', id+'-field');
             var btn1=$konten.find('#pertanyaan-opsi-button');
             btn1.prop('id', id+'_pertanyaan-opsi-button');
             btn1.attr('onclick', `openModalSimpulan("${id}", "pertanyaan-opsi-tabel")`)
@@ -312,11 +367,24 @@ const onTypeChange = function(id, $konten, type){
 
             var tbl1=btn1.next();
             tbl1.prop('id', id+'_pertanyaan-opsi-tabel');
+
+            if(data){ //kalau load data dari db
+                $field.val(data['field']);
+                var data_;
+                data.on.forEach(d => {
+                    data_ = {
+                        pertanyaan: d[0]+'_'+myQuestions[d[0]].pertanyaan,
+                        opsi: d[1]
+                    }
+                    onTableAdd(id, tbl1, "pertanyaan-opsi-tabel", data_) 
+                });
+            }
             break;
         case 3:
             $konten.html(tipe3);
             $konten.prepend($(`<input type="hidden" name="${id}-tipe" value="3">`));
-            $konten.find("[name='formula']").attr('name', id+'-formula');
+            $formula = $konten.find("[name='formula']");
+            $formula.attr('name', id+'-formula');
             var btn1=$konten.find('#variabel-button');
             btn1.prop('id', id+'_variabel-button');
             btn1.attr('onclick', `openModalSimpulan("${id}", "variabel-tabel")`)
@@ -331,18 +399,32 @@ const onTypeChange = function(id, $konten, type){
 
             var tbl2=btn2.next();
             tbl2.prop('id', id+'_rentang-tabel');
+
+            if(data){ //kalau load data dari db
+                $formula.val(data['formula'])
+                var data_, id_pertanyaan;
+                Object.keys(data['vars']).foreach(key =>{
+                    id_pertanyaan = data['vars'][key];
+                    data_ = {
+                        variabel: key,
+                        pertanyaan: id_pertanyaan+"_"+myQuestions[id_pertanyaan].pertanyaan
+                    }
+                    onTableAdd(id, tbl1, "variabel-tabel", data_) 
+                })
+                data.range.forEach(d => {
+                    onTableAdd(id, tbl2, "rentang-tabel", d) 
+                });
+            }
             break;
     }
 }
 
-const onTambah = function(){
-    simpanAtauPreviewAtauRefresh(isRefresh=true);
+const createSimpulanObj = function(data=null){
     var elem = $(simpulan);
     const id = getRandomString(3);
 
     var toggle = elem.find('#collapse-toggle');
     toggle.prop('id', id+'_collapse-toggle');
-    // toggle.attr('href', '#'+id+'_simpulan');
     toggle.attr('onclick', 'myToggleCard(this, "'+id+'_simpulan")');
     
     var simp = elem.find('#simpulan');
@@ -361,8 +443,21 @@ const onTambah = function(){
 
     elem.prop('id', id);
     elem.prepend($(`<input type="hidden" name="id[]" value="${id}">`));
+    
+    if(data){
+        typesSelector.val(data['tipe']).change();
+        onTypeChange(id, konten, data['tipe'], data);
+    }else{
+        onTypeChange(id, konten, 1);
+    }
 
-    onTypeChange(id, konten, 1);
+    return elem;
+}
+
+const onTambah = function(){
+    simpanAtauPreviewAtauRefresh(isRefresh=true);
+
+    var elem = createSimpulanObj();
 
     elem.find('#pertanyaan').select2({
         width: '100%'
@@ -373,6 +468,11 @@ const onTambah = function(){
 
 $(document).ready(function(){
     $('#tambah-simpulan').on('click', onTambah);
+    var elem;
+    @foreach ( $simpulan as $s )
+    elem = createSimpulanObj(@json($s));
+    $('#simpulan-content').append(elem);
+    @endforeach
 })
 </script>
 @endpush

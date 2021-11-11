@@ -46,9 +46,10 @@ class PertanyaanController extends Controller
         $pertanyaan = Pertanyaan::findOrFail($id);
         $judul = $pertanyaan->judul;
         $id_form = $pertanyaan->id_formulir;
+        $simpulan = empty($pertanyaan->json_simpulan) ? [] : json_decode($pertanyaan->json_simpulan);
         $pertanyaan = json_decode($pertanyaan->json);
         $deskripsi = property_exists($pertanyaan, 'deskripsi') ? $pertanyaan->deskripsi : '';        
-        return view('form.crudForm', ['id_pertanyaan'=>$id, 'judul' => $judul , 'pertanyaan' => $pertanyaan, 'id_form' => $id_form, 'deskripsi' => $deskripsi]);
+        return view('form.crudForm', ['id_pertanyaan'=>$id, 'judul' => $judul , 'pertanyaan' => $pertanyaan, 'id_form' => $id_form, 'deskripsi' => $deskripsi, 'simpulan'=>$simpulan ]);
     }
 
     /**
@@ -63,8 +64,9 @@ class PertanyaanController extends Controller
         $pertanyaan = Pertanyaan::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'judul' => 'required_without_all:json',
-            'json' => 'required_without_all:judul',
+            'judul' => 'required_without_all:json,json_simpulan',
+            'json' => 'required_without_all:judul,json_simpulan',
+            'json_simpulan' => 'required_without_all:judul,json',
         ]);
         
         if ($validator->fails()) {
