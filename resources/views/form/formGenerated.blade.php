@@ -15,12 +15,29 @@ Form Skrining
 
 @section('content')
 @php
-$role = Auth::user()->getRole->role
+$role = Auth::user()->getRole->role;
 @endphp
 <div class="container-fluid">
 
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Form Skrining</h1>
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Form Skrining</h1>
+@if($role==='Puskesmas')
+<div class="card shadow">
+    <div class="card-header bg-primary mb-3">
+        <div class="row p-4 justify-content-between align-items-center">
+            <div class="col-12 col-lg-auto mb-5 mb-lg-0 text-center text-lg-left">
+                <i class="fas fa-laugh-wink text-light mb-3" style="font-size:50px;"></i>
+                <h5 class="text-light">e-Ning Tasiah</h5>
+            </div>
+            <div class="col-12 col-lg-auto text-center text-lg-right">
+                <h5 class="card-title text-light mb-3"><b>{{ $siswa->nama }}</b></h5>
+                <h6 class="card-subtitle text-gray-300 mb-2">NIK {{ $siswa->username }}</h6>
+                <h6 class="card-subtitle text-gray-300">Tahun Ajaran {{ $siswa->tahun_ajaran }}</h6>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+@endif
     @include('form.alert')
     <div class="row">
         @foreach ($allPertanyaan as $key => $ap)
@@ -47,7 +64,7 @@ $role = Auth::user()->getRole->role
                             <div class="row" style="padding-top:20px">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
-                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
+                                    @if ( $is_diisi_petugas) <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7" style="padding:0">
                                     <div class="row" style="margin:0px">
@@ -64,7 +81,7 @@ $role = Auth::user()->getRole->role
                             <div class="row" style="padding-top:20px">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
-                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
+                                    @if ( $is_diisi_petugas) <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7">
                                     <div class="input-group">
@@ -81,7 +98,7 @@ $role = Auth::user()->getRole->role
                             <div class="row" style="padding-top:30px" id="98s7dfy-container">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
-                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
+                                    @if ( $is_diisi_petugas) <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7" style="padding:0">
                                     <div class="row" style="margin:0px">
@@ -137,7 +154,7 @@ $role = Auth::user()->getRole->role
                             <div class="row" style="padding-top:20px">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
-                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
+                                    @if ( $is_diisi_petugas) <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7">
                                     <div class="input-group">
@@ -171,6 +188,10 @@ $role = Auth::user()->getRole->role
         </form>
         @endforeach
     </div>
+@if($role==='Puskesmas')
+    </div>
+</div>
+@endif
     <form action="#" id="mainform" hidden>
         @csrf
     </form>
@@ -185,6 +206,7 @@ $role = Auth::user()->getRole->role
 <script>
     var myData = {}
     var myTempData = {}
+    var myDiisiPetugas = {}
 
     var myPertanyaanOnChange = function(id, value){
         myTempData['selected'+id] = value;
@@ -221,43 +243,6 @@ $role = Auth::user()->getRole->role
         }
     }
 
-    @foreach ($allPertanyaan as $key => $ap)
-    @php
-        $json = json_decode($ap->json);
-    @endphp
-    @foreach ($json->pertanyaan as $p)
-        myData[@json($p->id)] = @json($p);
-        console.log(@json($p))
-
-        //diisi petugas? jangan biarkan siswa ngisi
-        @php
-        $is_diisi_petugas = ( array_key_exists('diisi-petugas', $p) and $p->{'diisi-petugas'});
-        @endphp
-        @if ($is_diisi_petugas and $role==='Siswa')
-            @if ($p->tipe === 1 or $p->tipe === 3)
-                $('input[name={{ $p->id }}]:radio').attr('disabled', true).removeClass('invalid').removeAttr('onfocusout');
-            @elseif ($p->tipe === 2)
-                $('input[name={{ $p->id }}]:text').attr('readonly', true).removeClass('invalid').removeAttr('onfocusout');
-            @endif
-        @endif
-
-
-        @if ($p->tipe === 1)
-            $('input[name={{ $p->id }}]:radio').change(function(){
-                myPertanyaanOnChange(@json($p->id), this.value);
-            });
-        @elseif ($p->tipe === 3)
-            $('input[name={{ $p->id }}]:radio').change(function(){
-                myPertanyaanOnChange(@json($p->id), this.value);
-            });
-            @foreach ($p->opsi as $index => $o)
-            @if (is_object($o))
-                myData["{{ $p->id.$o->{'0'} }}"] = @json($o->{'if-selected'});
-            @endif
-            @endforeach
-        @endif
-    @endforeach
-    @endforeach
     const myUpload = async function(id_dummy, id){
         myToggleButtonUpload(id,'loading');
         var input = $('#'+id_dummy);
@@ -307,9 +292,8 @@ $(document).ready(function () {
         $.each(obj, function(i, val) {
             Object.assign(all,getFormData($(val)));
         });
-        
         try {
-            let data = {'json': JSON.stringify(all)};
+            let data = {'json': JSON.stringify(all), 'user': @json($user->id)};
             const res = await myRequest.put( '{{ route('jawaban.store.update', ['formulir'=> $formulir]) }}' , data)
             myAlert('Berhasil menyimpan');
         } catch(err) {
@@ -345,20 +329,88 @@ for(var id in jawabans){
             $jwb.removeClass('invalid')
             $jwb = $jwb.filter('[value="'+val+'"]')
             $jwb.prop("checked", true);       
+            console.log($jwb);
             myPertanyaanOnChange(id, val);    
             break;
     }
 }
 @endif
-})
-</script>
-@if(is_null($jawaban)==false && $jawaban->validasi_sekolah===1)
-<script>
-$(document).ready(function () {
-$('input[type="text"]').attr('readonly', true);
-$('input[type="file"]').attr('disabled', true);
-$('input[type="radio"]:not(:checked)').attr('disabled', true);
+
+@foreach ($allPertanyaan as $key => $ap)
+@php
+    $json = json_decode($ap->json);
+@endphp
+@foreach ($json->pertanyaan as $p)
+    myData[@json($p->id)] = @json($p);
+
+    //diisi petugas? jangan biarkan siswa ngisi
+    @php
+    $is_diisi_petugas = ( array_key_exists('diisi-petugas', $p) and $p->{'diisi-petugas'});
+    @endphp
+    @if ($role==='Siswa')
+        @if($is_diisi_petugas)
+            @if ($p->tipe === 1 or $p->tipe === 3)
+                $('input[name={{ $p->id }}]:radio').attr('disabled', true).removeClass('invalid').removeAttr('onfocusout');
+            @elseif ($p->tipe === 2)
+                $('input[name={{ $p->id }}]:text').attr('readonly', true).removeClass('invalid').removeAttr('onfocusout');
+            @elseif ($p->tipe === 4)
+                $('input[name={{ $p->id }}]:file').attr('disable', true).removeClass('invalid').removeAttr('onchange');
+            @endif
+        @elseif ($p->tipe === 1)
+            $('input[name={{ $p->id }}]:radio').change(function(){
+                myPertanyaanOnChange(@json($p->id), this.value);
+            });
+        @elseif ($p->tipe === 3)
+            $('input[name={{ $p->id }}]:radio').change(function(){
+                myPertanyaanOnChange(@json($p->id), this.value);
+            });
+            @foreach ($p->opsi as $index => $o)
+            @if (is_object($o))
+                myData["{{ $p->id.$o->{'0'} }}"] = @json($o->{'if-selected'});
+            @endif
+            @endforeach
+        @endif
+    @elseif($role==='Puskesmas')
+        @if($is_diisi_petugas)
+        myDiisiPetugas[@json($p->id)]=@json($p->tipe);
+        @if ($p->tipe === 1)
+            $('input[name={{ $p->id }}]:radio').change(function(){
+                myPertanyaanOnChange(@json($p->id), this.value);
+            });
+        @elseif ($p->tipe === 3)
+            $('input[name={{ $p->id }}]:radio').change(function(){
+                myPertanyaanOnChange(@json($p->id), this.value);
+            });
+            @foreach ($p->opsi as $index => $o)
+            @if (is_object($o))
+                myData["{{ $p->id.$o->{'0'} }}"] = @json($o->{'if-selected'});
+            @endif
+            @endforeach
+        @endif
+        @else
+        //kita disable inputan khusus siswa, jika user puskesmas
+        @if ($p->tipe === 1 or $p->tipe === 3)
+            $('input[name={{ $p->id }}]:radio:not(:checked)').attr('disabled', true).removeClass('invalid');
+        @elseif ($p->tipe === 2)
+            $('input[name={{ $p->id }}]:text').attr('readonly', true).removeClass('invalid').removeAttr('onfocusout');
+        @elseif ($p->tipe === 4)
+            $('input[name={{ $p->id }}-file-dummy]:file').attr('disabled', true).removeAttr('onchange')
+                .next().removeClass('invalid');
+        @endif
+        @endif
+    @endif
+
+@endforeach
+@endforeach
+
+    @if ($role==='Puskesmas')
+        //do nothing
+    @elseif(is_null($jawaban)==false && $jawaban->validasi_sekolah===1)
+    $('input[type="text"]').attr('readonly', true);
+    $('input[type="file"]').attr('disabled', true);
+    $('input[type="radio"]:not(:checked)').attr('disabled', true);
+    @endif
 });
 </script>
-@endif
+
 @endsection

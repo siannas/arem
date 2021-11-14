@@ -69,4 +69,8 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class, 'id_user', 'id');
     }
 
+    public function jawabans()
+    {
+        return $this->hasMany('App\Jawaban', 'id_user');
+    }
 }

@@ -261,4 +261,16 @@ class DataController extends Controller
 
         return view('data.detailKecamatan', ['kecamatan' => $detailKecamatan, 'puskesmas' => $puskesmas]);
     }
+
+    public function dataSiswaDanFormSkrining(){
+        $user= Auth::user();
+        $role=$user->getRole->role;
+        if($role!=='Puskesmas') return;
+        $cekForm = Formulir::select('id')->where('status', 1)->get();
+        $idForm = $cekForm[0]->id;
+        $siswa=$user->users()->where('id_role',1)
+            ->with(['jawabans'=> function($query) use ($idForm) { $query->where('id_formulir',$idForm)->select('id');}])
+            ->get();
+        return view('isiData', ['siswa' => $siswa, 'id_formulir'=>$idForm]);
+    }
 }

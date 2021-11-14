@@ -16,6 +16,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['role:Siswa'])->group(function () {
         Route::post('/pengajuan', 'DataController@pengajuan')->name('dashboard.pengajuan');
+    });
+
+    Route::middleware(['role:Siswa,Puskesmas'])->group(function () {
         Route::put('/jawaban/{formulir}', 'FormulirController@storeOrUpdateJawaban')->name('jawaban.store.update');        
     });
 
@@ -65,6 +68,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/tambah-form', function () {
             return view('form.crudForm');
         });
+    });
+
+    Route::middleware(['role:Puskesmas'])->group(function () {
+        Route::get('/isi-data', 'DataController@dataSiswaDanFormSkrining');
+        Route::get('/isi-data/{id_formulir}/{id_user}', 'FormulirController@generate_4_puskesmas');
     });
     
     Route::get('/data-siswa/{id}', 'DataController@detailSiswa');

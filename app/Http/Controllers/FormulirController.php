@@ -174,6 +174,21 @@ class FormulirController extends Controller
         return view('form.formGenerated', ['user'=>$user, 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan, 'jawaban' => $jawaban ]);
     }
 
+    public function generate_4_puskesmas($id_formulir,$id_user){
+        $jawaban = Jawaban::find([
+            'id_user' => $id_user,
+            'id_formulir' => $id_formulir,
+        ])->first();
+        try{
+            $siswa = \App\User::where('id', $id_user)->first();
+            $formulir = Formulir::where('id', $id_formulir)->first();
+            $pertanyaan = $formulir->pertanyaan;
+        }catch(QueryException $exception){
+            return back()->withError($exception->getMessage())->withInput();
+        }
+        return view('form.formGenerated', ['user'=>$siswa, 'siswa' => $siswa, 'formulir' => $formulir, 'allPertanyaan' => $pertanyaan, 'jawaban'=>$jawaban ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -182,18 +197,20 @@ class FormulirController extends Controller
      */
     public function storeOrUpdateJawaban(Request $request, $id)
     {
-        $formulir = Formulir::findOrFail($id);
-        $user = Auth::user();
-        $nama_tabel = $user->getTable();
-        $sekolah = $user->parents()->where(["id_role"=>2])->first([$nama_tabel.".id"]);
-        
         $validator = Validator::make($request->all(), [
-            'json' => 'required'
+            'json' => 'required',
+            'user' => 'required'
         ]);
         
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json($validator->errors(), 422));
         }
+
+        $user_id = $request->input('user');
+        $formulir = Formulir::findOrFail($id);
+        $user = \App\User::findOrFail($user_id);
+        $nama_tabel = $user->getTable();
+        $sekolah = $user->parents()->where(["id_role"=>2])->first([$nama_tabel.".id"]);
 
         $req = $request->all();
         $jawaban = \App\Jawaban::firstOrNew([
@@ -204,6 +221,7 @@ class FormulirController extends Controller
         $jawaban->fill([
             'id_user_sekolah' => is_null($jawaban->id_user_sekolah) ?  $sekolah->id : $jawaban->id_user_sekolah,
             'json' => $req['json'],
+            'validasi' => is_null($jawaban->validasi) ? 0 : $jawaban->validasi,
             'validasi_sekolah' => is_null($jawaban->validasi_sekolah) ? 0 : $jawaban->validasi_sekolah,
             'status_rekap' => is_null($jawaban->status_rekap) ? 0 : $jawaban->status_rekap
         ]);

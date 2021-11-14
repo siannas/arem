@@ -18,6 +18,7 @@ class Jawaban extends Model
         'id_user_sekolah',
         'id_formulir',
         'json',
+        'validasi',
         'validasi_sekolah',
         'status_rekap',
         'validasi_puskesmas',
