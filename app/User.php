@@ -73,4 +73,8 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Jawaban', 'id_user');
     }
+
+    public function getSekolah(){
+        return $this->belongsToMany('App\User', 'user_pivot', 'id_child', 'id_user', 'id')->where('id_role', 2);
+    }
 }

@@ -49,6 +49,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/validasi', 'ValidasiController@index');
         Route::get('/validasi/{id}', 'ValidasiController@validasiSiswa');
         Route::put('/validasi/{id}', 'ValidasiController@validasi')->name('validasi.edit');
+
+        Route::get('/rujukan', 'ValidasiController@rujukan');
+        Route::put('/rujukan/{id}', 'ValidasiController@validasiRujukan')->name('validasi.rujukan');
     });
 
     Route::middleware(['role:Kelurahan,Puskesmas,Kecamatan,Kota'])->group(function () {
@@ -139,7 +142,6 @@ Route::get('/imunisasi', 'ImunisasiController@index');
 Route::post('/imunisasi', 'ImunisasiController@store')->name('imunisasi.simpan');
 Route::get('/imunisasi/validasi', 'ImunisasiController@validasi');
 Route::put('/imunisasi/validasi/{id}', 'ImunisasiController@validasiImunisasi')->name('imunisasi.validasi');
-
 
 use Maatwebsite\Excel\Facades\Excel;
 

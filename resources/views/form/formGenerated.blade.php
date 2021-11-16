@@ -58,7 +58,7 @@ $role = Auth::user()->getRole->role;
                 <div class="card-body">
                     @foreach ($json->pertanyaan as $p)
                         @php
-                        $is_diisi_petugas = ( array_key_exists('diisi-petugas', $p) and $p->{'diisi-petugas'});
+                        $is_diisi_petugas = ( isset($p->{'diisi-petugas'}) and $p->{'diisi-petugas'});
                         @endphp
                         @if ($p->tipe === 1)
                             <div class="row" style="padding-top:20px">
@@ -345,7 +345,7 @@ for(var id in jawabans){
 
     //diisi petugas? jangan biarkan siswa ngisi
     @php
-    $is_diisi_petugas = ( array_key_exists('diisi-petugas', $p) and $p->{'diisi-petugas'});
+    $is_diisi_petugas = ( isset($p->{'diisi-petugas'}) and $p->{'diisi-petugas'});
     @endphp
     @if ($role==='Siswa')
         @if($is_diisi_petugas)

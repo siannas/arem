@@ -84,4 +84,23 @@ class ValidasiController extends Controller
         }
         return back()->with('error', 'Data Skrining Masih Belum Lengkap');
     }
+
+    public function rujukan(){
+        $user = Auth::user();
+        $rujukan = Jawaban::select('id', 'id_user', 'id_user_sekolah', 'validasi_puskesmas', 'keterangan', 'updated_at')->where('validasi_puskesmas', -1)->
+                    with(['getUser'=>function($query){$query->select('id','nama', 'kelas');},
+                    'getSekolah'=>function($query){$query->select('id', 'nama');}])->get();
+        // dd($rujukan);
+        return view('rujukan', ['rujukan'=>$rujukan]);
+    }
+
+    public function validasiRujukan($id){
+        $rujukan = Jawaban::findOrFail($id);
+        $rujukan->validasi_puskesmas = 2;
+        $rujukan->keterangan = $rujukan->keterangan.'&#13;&#10;===================================&#13;&#10;'.request('keterangan2');
+        
+        $rujukan->save();
+
+        return redirect('/rujukan')->with('success', 'Data Rujukan Berhasil Divalidasi');
+    }
 }

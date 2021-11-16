@@ -81,11 +81,7 @@ Validasi
                         <tr>
                             <th>NIK</th>
                             <th>Nama</th>
-                            @if($role==='Kelurahan'||$role==='Puskesmas'||$role==='Kecamatan'||$role==='Kota')
                             <th>Sekolah</th>
-                            @endif
-                            <th>Status</th>
-                            <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -93,11 +89,7 @@ Validasi
                         <tr>
                             <th>NIK</th>
                             <th>Nama</th>
-                            @if($role==='Kelurahan'||$role==='Puskesmas'||$role==='Kecamatan'||$role==='Kota')
                             <th>Sekolah</th>
-                            @endif
-                            <th>Status</th>
-                            <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
                     </tfoot>
@@ -107,23 +99,7 @@ Validasi
                         <tr>
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
-                            @if($role==='Kelurahan'||$role==='Puskesmas'||$role==='Kecamatan'||$role==='Kota')
-                                @if($unit->kelas===1)
-                                <td>SD/MI</td>
-                                @elseif($unit->kelas===7)
-                                <td>SMP/MTS dan SMA/SMK/MA</td>
-                                @endif
-                            @endif
-                            <td>
-                                @if($unit->validasi_sekolah===1)
-                                <div class="badge bg-success text-white rounded-pill">Tervalidasi</div>
-                                @elseif($unit->validasi_sekolah===0)
-                                <div class="badge bg-warning text-white rounded-pill">Belum Tervalidasi</div>
-                                @else
-                                <div class="badge bg-danger text-white rounded-pill">Belum Mengisi</div>
-                                @endif
-                            </td>
-                            <td>{{ $unit->updated_at }}</td>
+                            <td>{{ $unit->getSekolah[0]->nama }}</td>
                             <td><a href="{{url('/data-siswa/'.$unit->id)}}" class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i></a>
                                 @if($role==='Sekolah')
                                 <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#detail{{ $unit->id }}"  data-toggle="tooltip" data-placement="top" title="Detail Siswa"><i class="fas fa-fw fa-key" ></i></button>

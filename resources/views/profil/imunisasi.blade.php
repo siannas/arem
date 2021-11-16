@@ -165,9 +165,9 @@ Imunisasi
                             <td>{{$unit->lokasi}}</td>
                             @endif
                             <td>
-                                @if($unit->validasi_sekolah==1)
+                                @if($unit->validasi==1)
                                 <div class="badge bg-success text-white rounded-pill">Tervalidasi</div>
-                                @elseif($unit->validasi_sekolah==0)
+                                @elseif($unit->validasi==0)
                                 <div class="badge bg-warning text-white rounded-pill">Belum Tervalidasi</div>
                                 @else
                                 @endif

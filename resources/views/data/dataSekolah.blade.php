@@ -13,10 +13,6 @@ active
 show
 @endsection
 
-@section('header')
-Validasi
-@endsection
-
 @section('content')
 <div class="container-fluid">
 
@@ -35,7 +31,6 @@ Validasi
                         <tr>
                             <th>NPSN</th>
                             <th>Nama Sekolah</th>
-                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -43,7 +38,6 @@ Validasi
                         <tr>
                             <th>NPSN</th>
                             <th>Nama Sekolah</th>
-                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </tfoot>
@@ -52,7 +46,6 @@ Validasi
                         <tr>
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
-                            <td></td>
                             <td><form action="{{url('/data-sekolah/'.$unit->id)}}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form></td>
                         </tr>
                         @endforeach
