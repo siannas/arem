@@ -10,6 +10,8 @@ use App\Formulir;
 use App\Pengajuan;
 use Auth;
 use Hash;
+use Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class DataController extends Controller
 {
@@ -264,13 +266,36 @@ class DataController extends Controller
 
     public function dataSiswaDanFormSkrining(){
         $user= Auth::user();
-        $role=$user->getRole->role;
-        if($role!=='Puskesmas') return;
-        $cekForm = Formulir::select('id')->where('status', 1)->get();
-        $idForm = $cekForm[0]->id;
-        $siswa=$user->users()->where('id_role',1)
-            ->with(['jawabans'=> function($query) use ($idForm) { $query->where('id_formulir',$idForm)->select('id');}])
-            ->get();
-        return view('isiData', ['siswa' => $siswa, 'id_formulir'=>$idForm]);
+        $formulir=Formulir::where('status', 1)->get();
+        $sd=$user->users()->where([['id_role',2],['kelas',1]])->get();
+        $smpsma=$user->users()->where([['id_role',2],['kelas',7]])->get();
+        return view('isiData', ['formulir'=>$formulir, 'sd'=>$sd, 'smpsma'=>$smpsma]);
+    }
+
+    public function dataSiswaFiltered(Request $request){
+        $validator = Validator::make($request->all(), [
+            'formulir' => 'required',
+            'sekolah' => 'required',
+            'pertanyaan' => 'required',
+        ]);
+        
+        if ($validator->fails()) {
+            throw new HttpResponseException(response()->json($validator->errors(), 422));
+        }
+
+        $sekolah = explode('_',$request->input('sekolah'))[0];
+        $idForm = $request->input('formulir');
+
+        if($request->input('kelas') !== null and $request->input('kelas') !== 'all'){
+            $siswa= User::findOrFail($sekolah)->users()->where([['id_role',1],['kelas',$request->input('kelas')]])
+                ->with(['jawabans'=> function($query) use ($idForm) {$query->where('id_formulir',$idForm);}])
+                ->get();
+        }else{
+            $siswa= User::findOrFail($sekolah)->users()->where('id_role',1)
+                ->with(['jawabans'=> function($query) use ($idForm) {$query->where('id_formulir',$idForm);}])
+                ->get();
+        }
+        
+        return $siswa;
     }
 }

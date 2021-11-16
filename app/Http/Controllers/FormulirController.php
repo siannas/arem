@@ -175,10 +175,8 @@ class FormulirController extends Controller
     }
 
     public function generate_4_puskesmas($id_formulir,$id_user){
-        $jawaban = Jawaban::find([
-            'id_user' => $id_user,
-            'id_formulir' => $id_formulir,
-        ])->first();
+        $jawaban = Jawaban::where([['id_user', $id_user],['id_formulir',$id_formulir]])->first();
+
         try{
             $siswa = \App\User::where('id', $id_user)->first();
             $formulir = Formulir::where('id', $id_formulir)->first();
@@ -221,7 +219,7 @@ class FormulirController extends Controller
         $jawaban->fill([
             'id_user_sekolah' => is_null($jawaban->id_user_sekolah) ?  $sekolah->id : $jawaban->id_user_sekolah,
             'json' => $req['json'],
-            'validasi' => is_null($jawaban->validasi) ? 0 : $jawaban->validasi,
+            'validasi_puskesmas' => is_null($jawaban->validasi_puskesmas) ? 0 : $jawaban->validasi_puskesmas,
             'validasi_sekolah' => is_null($jawaban->validasi_sekolah) ? 0 : $jawaban->validasi_sekolah,
             'status_rekap' => is_null($jawaban->status_rekap) ? 0 : $jawaban->status_rekap
         ]);
@@ -229,5 +227,14 @@ class FormulirController extends Controller
         $jawaban->save();
 
         return $jawaban;
+    }
+
+    public function pertanyaanFormulir($id){
+        try{
+            $formulir = Formulir::findOrFail($id);
+        }catch(\Exception $exception){
+            return abort(404);
+        }
+        return $formulir->pertanyaan;
     }
 }

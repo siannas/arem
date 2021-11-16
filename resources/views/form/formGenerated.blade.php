@@ -190,12 +190,15 @@ $role = Auth::user()->getRole->role;
     </div>
 @if($role==='Puskesmas')
     </div>
+    <div class="card-footer text-right">
+        <a href="{{ url()->previous() }}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
+    </div>
 </div>
 @endif
     <form action="#" id="mainform" hidden>
         @csrf
     </form>
-    @if(is_null($jawaban) || $jawaban->validasi_sekolah===0)
+    @if(is_null($jawaban) or ($role==='Siswa' and $jawaban->validasi_sekolah===0) or ($role==='Puskesmas' and $jawaban->validasi_puskesmas===0))
     <button class="btn btn-primary float" onclick="$('#mainform').trigger('submit')"><i class="fas fa-fw fa-save"></i></button>
     @endif    
     

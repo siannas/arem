@@ -58,13 +58,14 @@ class ValidasiController extends Controller
         return view('validasiSiswa', ['siswa' => $siswa, 'formulir' => $formulir, 'allPertanyaan' => $pertanyaan, 'jawaban'=>$jawaban ]);
     }
 
-    public function validasi($id_jawaban){
+    public function validasi(Request $request, $id_jawaban){
         $user = Auth::user();
         $jawaban = Jawaban::findOrFail($id_jawaban);
         $listJawaban = json_decode($jawaban->json);
         $flag = 0;
+        $diisiPetugas = $request->input('keterangan');
         foreach($listJawaban as $unit){
-            if(empty($unit)){
+            if(empty($unit) and array_key_exists($key, $diisiPetugas)===false){
                 $flag = 1;
                 break;
             }

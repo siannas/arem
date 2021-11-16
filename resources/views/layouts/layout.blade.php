@@ -24,7 +24,9 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
+    
+    <!-- bootstrap multiselect -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.14/css/bootstrap-multiselect.css" integrity="sha512-EvvoSMXERW4Pe9LjDN9XDzHd66p8Z49gcrB7LCUplh0GcEHiV816gXGwIhir6PJiwl0ew8GFM2QaIg2TW02B9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Custom styles for this template-->
     <link href="{{ asset('public/css/sb-admin-2.min.css?v=kjhkawhd') }}" rel="stylesheet">
     <!-- Custom styles for validasi -->
@@ -33,6 +35,7 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
     <link href="{{ asset('public/css/custom.css') }}" rel="stylesheet">
     <!-- Select2 custom styles -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     @yield('style')
 
 
@@ -248,6 +251,8 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
     <!-- Select2 custom scripts -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+    <!-- bootstrap multiselect -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.14/js/bootstrap-multiselect.min.js" integrity="sha512-ByDbyutg5bTK+6f4Ke7Fgcg2I2fMUnOdzwC+F/ECFpgde2o2QHRVTFa//oeAHrJuAGX61DPNeKA80KA6V+ca7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @yield('script')
     @stack('scripts')
     

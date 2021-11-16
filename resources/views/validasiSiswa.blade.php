@@ -22,6 +22,9 @@ Validasi
 @endsection
 
 @section('content')
+@php
+$role = Auth::user()->getRole->role
+@endphp
 <div class="container-fluid">
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Detail Data Siswa</h1>
@@ -58,10 +61,14 @@ Validasi
                 </div>
                 <div class="card-body">
                     @foreach ($json->pertanyaan as $p)
+                        @php
+                        $is_diisi_petugas = ( array_key_exists('diisi-petugas', $p) and $p->{'diisi-petugas'});
+                        @endphp
                         @if ($p->tipe === 1)
                             <div class="row" style="padding-top:20px">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
+                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7" style="padding:0">
                                     <div class="row" style="margin:0px">
@@ -78,6 +85,7 @@ Validasi
                             <div class="row" style="padding-top:20px">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
+                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7">
                                     <div class="input-group">
@@ -94,6 +102,7 @@ Validasi
                             <div class="row" style="padding-top:30px" id="98s7dfy-container">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
+                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7" style="padding:0">
                                     <div class="row" style="margin:0px">
@@ -148,6 +157,7 @@ Validasi
                             <div class="row" style="padding-top:20px">
                                 <div class="col-12 col-md-5" style="margin-bottom:5px">
                                     {{ $p->pertanyaan }}
+                                    @if ( $is_diisi_petugas and $role==='Siswa') <span class="text-danger"><i>*diisi petugas</i></span> @endif
                                 </div>
                                 <div class="col-12 col-md-7">
                                     <div class="input-group">
@@ -180,6 +190,7 @@ Validasi
             <form action="{{url('/validasi/'.$jawaban->id)}}" method="post">
             @csrf
             @method('PUT')
+            <input type="hidden" name="diisi-petugas" id="diisi-petugas" /> 
             @if($role==='Sekolah')
                 <button class="btn btn-warning" type="submit"><i class="fas fa-fw fa-check"></i> Validasi</button>
             @endif
@@ -234,6 +245,7 @@ Validasi
 <script>
 var myData = {}
 var myTempData = {}
+var myDiisiPetugas = {}
 
 var myPertanyaanOnChange = function(id, value){
     myTempData['selected'+id] = value;
@@ -263,6 +275,12 @@ var myPertanyaanOnChange = function(id, value){
 @endphp
 @foreach ($json->pertanyaan as $p)
 myData[@json($p->id)] = @json($p);
+@php
+$is_diisi_petugas = ( array_key_exists('diisi-petugas', $p) and $p->{'diisi-petugas'});
+@endphp
+@if ($is_diisi_petugas)
+myDiisiPetugas[@json($p->id)]=true;
+@endif
 @if ($p->tipe === 3)
     $('input[name={{ $p->id }}]:radio').change(function(){
         myPertanyaanOnChange(@json($p->id), this.value);
@@ -319,6 +337,9 @@ for(var id in jawabans){
     }
 }
 @endif
+
+//memasukkan pertanyaan yg hanya boleh diisi petugas ke validasi untuk pengecekan validasi
+$('#diisi-petugas').val(JSON.stringify(myDiisiPetugas));
 
 //menjadikan inputan siswa tidak bisa diubah-ubah admin
 $('input[type="text"]').attr('readonly', true);

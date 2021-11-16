@@ -80,6 +80,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/data-kelurahan/{id}', 'DataController@detailKelurahan');
     Route::get('/data-puskesmas/{id}', 'DataController@detailPuskesmas');
     Route::get('/data-kecamatan/{id}', 'DataController@detailKecamatan');
+
+    Route::get('/pertanyaan-formulir/{id}', 'FormulirController@pertanyaanFormulir')->name('formulir.pertanyaan');
+    Route::post('/pertanyaan-formulir/filtered', 'DataController@dataSiswaFiltered')->name('formulir.pertanyaan.filtered');
 });
 
 // Authentication Routes...
