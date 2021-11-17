@@ -42,8 +42,7 @@ Validasi
                         <tr>
                             <th>NIK</th>
                             <th>Nama</th>
-                            <th>Status</th>
-                            <th>Tanggal</th>
+                            <th>Kelas</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -51,8 +50,7 @@ Validasi
                         <tr>
                             <th>NIK</th>
                             <th>Nama</th>
-                            <th>Status</th>
-                            <th>Tanggal</th>
+                            <th>Kelas</th>
                             <th>Aksi</th>
                         </tr>
                     </tfoot>
@@ -61,16 +59,7 @@ Validasi
                         <tr>
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
-                            <td>
-                                @if($unit->validasi_sekolah===1)
-                                <div class="badge bg-success text-white rounded-pill">Tervalidasi</div>
-                                @elseif($unit->validasi_sekolah===0)
-                                <div class="badge bg-warning text-white rounded-pill">Belum Tervalidasi</div>
-                                @else
-                                <div class="badge bg-danger text-white rounded-pill">Belum Mengisi</div>
-                                @endif
-                            </td>
-                            <td>{{ $unit->created_at }}</td>
+                            <td>{{ $unit->kelas }}</td>
                             <td><form action="{{url('/data-siswa/'.$unit->id)}}" method="GET"><button class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</button></form></td>
                         </tr>
                         @endforeach
