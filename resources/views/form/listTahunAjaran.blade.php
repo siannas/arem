@@ -65,9 +65,8 @@ Validasi
   </div>
 </div>
 
+@if($role==='Kota')
 <div class="container-fluid">
-
-    @if($role==='Kota')
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Daftar Form Skrining</h1>
     @include('form.alert')
@@ -224,9 +223,11 @@ Validasi
             </div>
         </div>
     </div>
-    @endif
+</div>
+@endif
 
-    @if($role==='Siswa')
+@if($role==='Siswa')
+<div class="container-fluid" style="max-width:60rem;">
     <div class="row">
         <div class="col-xxl-4 col-xl-12 mb-4">
             <div class="card shadow h-100">
@@ -325,8 +326,9 @@ Validasi
             </div>
         </div>
     </div>
-    @endif
 </div>
+@endif
+
 @endsection
 
 @section('script')

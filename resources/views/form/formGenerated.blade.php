@@ -17,10 +17,13 @@ Form Skrining
 @php
 $role = Auth::user()->getRole->role;
 @endphp
-<div class="container-fluid">
+<div class="container-fluid" style="max-width:60rem;">
 
 <!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">Form Skrining</h1>
+<div class="card shadow bg-primary">
+    <h1 class="h3 text-white p-4 mt-2 text-center">Form Skrining</h1>
+</div>
+
 @if($role==='Puskesmas')
 <div class="card shadow">
     <div class="card-header bg-primary mb-3">

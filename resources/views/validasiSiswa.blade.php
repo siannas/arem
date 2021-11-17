@@ -62,7 +62,7 @@ $role = Auth::user()->getRole->role
                 <div class="card-body">
                     @foreach ($json->pertanyaan as $p)
                         @php
-                        $is_diisi_petugas = ( array_key_exists('diisi-petugas', $p) and $p->{'diisi-petugas'});
+                        $is_diisi_petugas = ( isset($p->{'diisi-petugas'}) and $p->{'diisi-petugas'});
                         @endphp
                         @if ($p->tipe === 1)
                             <div class="row" style="padding-top:20px">
@@ -276,7 +276,7 @@ var myPertanyaanOnChange = function(id, value){
 @foreach ($json->pertanyaan as $p)
 myData[@json($p->id)] = @json($p);
 @php
-$is_diisi_petugas = ( array_key_exists('diisi-petugas', $p) and $p->{'diisi-petugas'});
+$is_diisi_petugas = ( isset($p->{'diisi-petugas'}) and $p->{'diisi-petugas'});
 @endphp
 @if ($is_diisi_petugas)
 myDiisiPetugas[@json($p->id)]=true;

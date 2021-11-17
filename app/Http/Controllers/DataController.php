@@ -127,13 +127,25 @@ class DataController extends Controller
         
         return view('data.detailSiswa', ['siswa' => $detailSiswa, 'allJawaban'=>$allJawaban, 'sekolah'=>$sekolah]);
     }
+
+    public function editSiswa($id, Request $request){
+        $detailSiswa = User::findOrFail($id);
+        $detailSiswa->username = request('editUsername');
+        $detailSiswa->nama = request('editNama');
+        $detailSiswa->kelas = request('editKelas');
+        $detailSiswa->save();
+        
+        return redirect()->action('DataController@dataSiswa')->with('success', 'Data Siswa Berhasil Diubah');
+    }
+
     public function pindahSiswa($id){
+
         try{
             UserPivot::where('id_child', $id)->delete();
         }catch(QueryException $exception){
             return back()->withError($exception->getMessage())->withInput();
         }
-        return redirect()->action('DataController@dataSiswa')->with('success', 'Data Siswa Berhasil Dikeluarkan Dari Sekolah');
+        return redirect()->action('DataController@dataSiswa')->with('success', 'Siswa Berhasil Dikeluarkan Dari Sekolah');
     }
 
     public function resetPasswordSiswa($id){
