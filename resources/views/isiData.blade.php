@@ -71,9 +71,9 @@ Validasi
             </div>
         </div>
         <div class="card-body">
-            <form action="#" class="mb-4" id="filter-form">
+            <form action="#" id="filter-form">
                 <div class="row">
-                    <div class="col-sm-4 col-md-3 my-1">
+                    <div class="col-sm-4 col-md-3">
                         <select class="form-control" required name="formulir" required onchange="filterFormulirOnChange(this)">
                             <option value="" disabled selected>Formulir</option>
                             @foreach($formulir as $f)
@@ -85,17 +85,17 @@ Validasi
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-sm-4 col-md-3 my-1">
+                    <div class="col-sm-4 col-md-3">
                         <select class="form-control" required name="sekolah" onchange="setState('sekolah',this.value,true)" required>
                             <option value="" disabled selected>Sekolah</option>
                         </select>
                     </div>
-                    <div class="col-sm-4 col-md-2 my-1">
+                    <div class="col-sm-4 col-md-3">
                         <select class="form-control" name="kelas" onchange="setState('kelas',this.value,true)">
                             <option value="" disabled selected>Kelas</option>
                         </select>
                     </div>
-                    <div class="col-sm-4 col-md-2 my-1" id="pertanyaan-container">
+                    <div class="col-sm-4 col-md-3" id="pertanyaan-container">
                         <select class="form-control" required name="pertanyaan" id="multiple-checkboxes" multiple="multiple">
                         </select>
                     </div>
@@ -104,6 +104,11 @@ Validasi
                     Filter
                 </button>
             </form>
+            
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="filteredTable" width="100%" cellspacing="0">
                     <thead>
@@ -215,6 +220,7 @@ const filterFormulirOnChange = async function(e){
 function pertanyaanMultipleSelect(str_html=null){
     if(str_html) $('#multiple-checkboxes').html(str_html);
     $('#multiple-checkboxes').multiselect('destroy').multiselect({
+        width: '100%',
         buttonClass: 'btn btn-outline-secondary',
         enableResetButton: true,
         enableFiltering: true,

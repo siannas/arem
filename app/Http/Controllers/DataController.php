@@ -61,7 +61,7 @@ class DataController extends Controller
     }
 
     public function verifikasiSiswa($id){
-        $pengajuan = Pengajuan::where('id_user',$id)->first();
+        $pengajuan = Pengajuan::where('id_user',$id)->where('verifikasi', 0)->first();
         $pengajuan->verifikasi=1;
         
         // Get semua id parents
@@ -88,7 +88,7 @@ class DataController extends Controller
     public function tolakSiswa($id)
     {
         try {
-            $pengajuan = Pengajuan::where('id_user' ,$id);
+            $pengajuan = Pengajuan::where('id_user' ,$id)->where('verifikasi', 0);
             $pengajuan->delete();
         }catch (QueryException $exception) {
             return back()->withError($exception->getMessage())->withInput();
@@ -135,6 +135,16 @@ class DataController extends Controller
         $detailSiswa->kelas = request('editKelas');
         $detailSiswa->save();
         
+        return redirect()->action('DataController@dataSiswa')->with('success', 'Data Siswa Berhasil Diubah');
+    }
+
+    public function naikKelas($id){
+        
+        $detailSiswa = User::findOrFail($id);
+        $detailSiswa->kelas = $detailSiswa->kelas+1;
+        
+        $detailSiswa->save();
+
         return redirect()->action('DataController@dataSiswa')->with('success', 'Data Siswa Berhasil Diubah');
     }
 

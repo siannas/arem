@@ -36,22 +36,25 @@ class ImporSiswaController extends Controller
         foreach ($collection as $row) {
             $username = trim($row['nik']);
             $nama = trim($row['nama']);
+            $kelas = trim($row['kelas']);
             $row['nik'] = empty($username)? null : $username;
             $row['nama'] = empty($nama) ? null : $nama;
+            $row['kelas'] = empty($kelas) ? null : $kelas;
 
-            if(!empty($username) or !empty($nama)){
+            if(!empty($username) or !empty($nama) or !empty($kelas)){
                 $jumlah += 1;
 
                 //jika ada kesalahan 1, maka tidak boleh impor
-                if(empty($username) or empty($nama)) $boleh_import = false;
-
+                if(empty($username) or empty($nama) or empty($kelas)) $boleh_import = false;
+                
+                // Temp adl array of NIK yg diisi tiap proses loop, shg jika sdh ada NIK di temp == data dobel
                 if(!empty($username) and array_key_exists($username, $temp)){
                     $row['double'] = true;
                     $boleh_import = false;
                 }else{
                     $temp[$username] = true;
                     $row['double'] = false;
-                }  
+                }
                 array_push($new_collection, $row);
             }
         }
@@ -85,7 +88,7 @@ class ImporSiswaController extends Controller
                     'username' => $d['nik'],
                     'nama' => $d['nama'],
                     'id_role' => 1,
-                    'kelas' => $user->kelas,
+                    'kelas' => $d['kelas'],
                     'tahun_ajaran' => $user->tahun_ajaran,
                     'password' => Hash::make($d['nik']),
                 ]);
@@ -101,7 +104,6 @@ class ImporSiswaController extends Controller
         }
         DB::commit();   
         
-
         return redirect()->back()->with( ['success' => 'Siswa Berhasil Disimpan'] );
     }
 
@@ -110,9 +112,8 @@ class ImporSiswaController extends Controller
         // Simpan data siswa baru
         $siswa_baru = new User($request->all());
         $siswa_baru->id_role = 1;
-        $siswa_baru->kelas = Auth::user()->kelas;
         $siswa_baru->password = Hash::make($siswa_baru->username);
-        $siswa_baru->tahun_ajaran = '2021-2022';
+        $siswa_baru->tahun_ajaran = Auth::user()->tahun_ajaran;
         
         $siswa_baru->save();
 

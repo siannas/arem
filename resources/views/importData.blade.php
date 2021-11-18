@@ -30,9 +30,9 @@ Import Data Siswa
             <div class="card mb-4 mb-xl-0">
                 <div class="card-header font-weight-bold text-primary">Import Data Siswa</div>
                 <div class="card-body">
-                    <div class="card text-white bg-primary mb-3">
+                    <div class="card text-white bg-gradient-primary mb-3">
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-info"></i> Note:</h5>
+                            <h5 class="card-title"><i class="fas fa-info"></i> Catatan:</h5>
                             <p class="card-text">Silahkan import data dari excel, menggunakan format yang sudah disediakan <a href="{{url('/tis')}}" class="btn btn-sm btn-light">Download Format</a></p>
                             
                         </div>
@@ -58,6 +58,7 @@ Import Data Siswa
                                     <th>#</th>
                                     <th style="width:45%">Username(NIK)</th>
                                     <th>Nama</th>
+                                    <th>Kelas</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,6 +72,7 @@ Import Data Siswa
                                     <td>{{$cnt}}</td>
                                     <td>{{$s['nik']}}</td>
                                     <td>{{$s['nama']}}</td>
+                                    <td>{{$s['kelas']}}</td>
                                 </tr>
                                 @else
                                 <tr>
@@ -85,6 +87,11 @@ Import Data Siswa
                                     @else
                                     <td class="bg-danger text-white">kosong</td>
                                     @endif
+                                    @if ($s['kelas'] )
+                                    <td>{{$s['kelas']}}</td>
+                                    @else
+                                    <td class="bg-danger text-white">kosong</td>
+                                    @endif
                                 </tr>
                                 @endif
                                 @php
@@ -93,7 +100,7 @@ Import Data Siswa
                             @endforeach
                             @else
                             <tr>
-                                <td class="text-center" colspan="3">no data</td>
+                                <td class="text-center" colspan="4">Tidak Ada Data</td>
                             </tr>
                             @endif
                             </tbody>

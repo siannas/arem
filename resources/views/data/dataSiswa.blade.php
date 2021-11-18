@@ -51,6 +51,10 @@ Validasi
                         <label><b>Nama</b></label>
                         <input type="text" id="nama" name="nama" class="form-control" placeholder="Nama" required>
                     </div>
+                    <div class="form-group">
+                        <label><b>Kelas</b></label>
+                        <input type="text" id="kelas" name="kelas" class="form-control" placeholder="Kelas" required>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -108,16 +112,36 @@ Validasi
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h5 class="text-center" id="peringatan"></h5>
+                    <h5 class="text-center" id="peringatanKeluar"></h5>
                 </div>
-                <form id="formKeluar" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
-                        <button type="submit" class="btn btn-danger" onclick="$('#formKeluar').trigger('submit')">Ya</button>
-                    </div>
-                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
+                    <button type="submit" class="btn btn-danger" onclick="$('#formKeluar').trigger('submit')">Ya</button>
+                </div>
+                <form id="formKeluar" method="POST"></form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Naik Kelas Siswa -->
+    <div class="modal modal-danger fade" id="naik" tabindex="-1" role="dialog" aria-labelledby="Naik" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Naik Kelas Siswa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="text-center" id="peringatanNaik"></h5>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
+                    <button type="submit" class="btn btn-danger" onclick="$('#formNaik').trigger('submit')">Ya</button>
+                </div>
+                <form id="formNaik" method="POST"></form>
             </div>
         </div>
     </div>
@@ -148,7 +172,7 @@ Validasi
         </div>
     </div>
     
-    <!-- DataTales Example -->
+    <!-- DataTales -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <div class="row">
@@ -162,6 +186,7 @@ Validasi
                     </button>
                     <a href="{{route('data-siswa.import')}}" type="button" class="btn btn-sm btn-success">Import</a>
                     <button class="btn btn-sm btn-danger keluar" data-toggle="modal" data-target="#keluar"><i class="fas fa-fw fa-sign-out-alt" ></i> Keluarkan</button>
+                    <button class="btn btn-sm btn-info naik" data-toggle="modal" data-target="#naik"><i class="fas fa-fw fa-sign-out-alt" ></i> Naik Kelas</button>
                 </div>
                 @endif
             </div>
@@ -173,7 +198,9 @@ Validasi
                         <tr>
                             <th>NIK</th>
                             <th>Nama</th>
+                            @if($role!='Sekolah')
                             <th>Sekolah</th>
+                            @endif
                             <th>Kelas</th>
                             <th>Aksi</th>
                             @if($role=='Sekolah')
@@ -185,7 +212,9 @@ Validasi
                         <tr>
                             <th>NIK</th>
                             <th>Nama</th>
+                            @if($role!='Sekolah')
                             <th>Sekolah</th>
+                            @endif
                             <th>Kelas</th>
                             <th>Aksi</th>
                             @if($role=='Sekolah')
@@ -199,7 +228,9 @@ Validasi
                         <tr>
                             <td>{{ $unit->username }}</td>
                             <td>{{ $unit->nama }}</td>
+                            @if($role!='Sekolah')
                             <td>{{ $unit->getSekolah->isEmpty()?'-':$unit->getSekolah[0]->nama }}</td>
+                            @endif
                             <td>{{ $unit->kelas }}</td>
                             <td><a href="{{url('/data-siswa/'.$unit->id)}}" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Lihat Detail Siswa"><i class="fas fa-fw fa-eye"></i></a>
                                 @if($role==='Sekolah')
@@ -228,7 +259,7 @@ Validasi
 @section('script')
 <script type="text/javascript">
     $(document).ready(function () {
-
+        // Lakukan cek pada tiap row
         $('.master').on('click', function(e) {
          
          if($(this).is(':checked',true)){
@@ -241,15 +272,21 @@ Validasi
          }
         });
         var allVals = [];
+
+        // Jika user mengklik tombol keluarkan
         $('.keluar').on('click', function(e) {
 
             allVals = [];
+            // Get id semua siswa di checked
             $(".sub_chk:checked").each(function() {
                 allVals.push($(this).attr('data-id'));
             });
+
+            // Jumlah siswa di checked
             var sum_siswa = allVals.length;
-            var mainContainer = document.getElementById("peringatan");
+            var mainContainer = document.getElementById("peringatanKeluar");
             
+            // Jika blm ada data siswa di checked
             if(allVals.length <=0){
                 mainContainer.innerHTML = 'Pilih Siswa Terlebih Dahulu';
             }
@@ -259,8 +296,8 @@ Validasi
                 $('#jumlah').attr("value", sum_siswa);
                 mainContainer.innerHTML = 'Yakin ingin mengeluarkan '+ sum_siswa + ' siswa ini dari Sekolah?';
             }
-            
         });
+        // Jika terjadi submit keluarkan
         $('#formKeluar').submit(async function(e){
             e.preventDefault();
             $('#keluar').modal('hide');
@@ -270,16 +307,53 @@ Validasi
                 console.log(allVals);
                 allVals.forEach(async unit =>{
                     const res = await myRequest.delete( '{{ route('siswa.keluar', ['id'=> '']) }}/'+unit)
-                    console.log(unit);
                 });
-                location.reload(true);
+                myAlert('Siswa Berhasil Dikeluarkan Dari Sekolah','success');
             } catch(err) {
                 myAlert(JSON.stringify(err['statusText']),'danger');
             }
-
+            
             setTimeout(() => {
                 $('#loading').modal('hide');
+                location.reload(true);
             }, 1000);
+        });
+
+        $('.naik').on('click', function(e) {
+
+            allVals = [];
+            $(".sub_chk:checked").each(function() {
+                allVals.push($(this).attr('data-id'));
+            });
+            var sum_siswa = allVals.length;
+            var mainContainer = document.getElementById("peringatanNaik");
+
+            if(allVals.length <=0){
+                mainContainer.innerHTML = 'Pilih Siswa Terlebih Dahulu';
+            }
+            else{
+                $('#jumlah').attr("value", sum_siswa);
+                mainContainer.innerHTML = 'Yakin ingin membuat '+ sum_siswa + ' siswa ini naik kelas?';
+            }
+        });
+        $('#formNaik').submit(async function(e){
+            e.preventDefault();
+            $('#naik').modal('hide');
+            $('#loading').modal('show');
+
+            try {
+                console.log(allVals);
+                allVals.forEach(async unit =>{
+                    const res = await myRequest.post( '{{ route('siswa.naik', ['id'=> '']) }}/'+unit,{_method:'PUT'});
+                });
+            } catch(err) {
+                myAlert(JSON.stringify(err['statusText']),'danger');
+            }
+            
+            setTimeout(() => {
+                $('#loading').modal('hide');
+                location.reload(true);
+            }, 1000);    
         });
     });
 </script>

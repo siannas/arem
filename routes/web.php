@@ -26,6 +26,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/verifikasi', 'DataController@verifikasi');
         Route::put('/verifikasi/{id}', 'DataController@verifikasiSiswa');
         Route::delete('/verifikasi/tolak/{id}', 'DataController@tolakSiswa');
+        
+        Route::put('/data-siswa/edit/{id}', 'DataController@editSiswa')->name('siswa.edit');
+        Route::put('/naik/{id}', 'DataController@naikKelas')->name('siswa.naik');
+        Route::delete('/keluar/{id}', 'DataController@pindahSiswa')->name('siswa.keluar');
     });
 
     Route::middleware(['role:Siswa,Kota'])->group(function () {
@@ -44,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/resetpassword/{id}', 'DataController@resetPasswordSiswa')->name('admin.resetpassword');
     });
 
-    Route::put('/data-siswa/edit/{id}', 'DataController@editSiswa')->name('siswa.edit');
+    
     
     Route::middleware(['role:Sekolah,Kelurahan,Puskesmas,Kecamatan,Kota'])->group(function () {
         Route::get('/data-siswa', 'DataController@dataSiswa');
@@ -137,7 +141,6 @@ Route::get('/coba/dong', function(){
 Route::post('/upload/{id_user}/{id_form}/{id_pertanyaan}', 'FileController@upload')->name('file.upload');
 
 Route::put('/ubah-password', 'ubahPassController@update');
-Route::delete('/keluar/{id}', 'DataController@pindahSiswa')->name('siswa.keluar');
 
 Route::put('/profil/update', 'ProfileController@update')->middleware('auth')->name('profil.update');
 

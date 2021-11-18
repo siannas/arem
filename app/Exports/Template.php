@@ -25,13 +25,14 @@ class Template implements FromCollection, WithHeadings, WithEvents
         return [
             'nik',
             'nama',
+            'kelas',
         ];
     }
 
     public static function afterSheet(AfterSheet $event)
     {
         $event->sheet->styleCells(
-            'A1:B1',
+            'A1:C1',
             [
                 'font'    => array(
                     'name'      => 'Arial',
@@ -50,5 +51,6 @@ class Template implements FromCollection, WithHeadings, WithEvents
 
         $event->sheet->styleColumnDimension('A',35);
         $event->sheet->styleColumnDimension('B',35);
+        $event->sheet->styleColumnDimension('C',15);
     }
 }

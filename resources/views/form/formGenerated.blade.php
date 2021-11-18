@@ -20,9 +20,11 @@ $role = Auth::user()->getRole->role;
 <div class="container-fluid" style="max-width:60rem;">
 
 <!-- Page Heading -->
+@if($role=='Siswa')
 <div class="card shadow bg-primary">
     <h1 class="h3 text-white p-4 mt-2 text-center">Form Skrining</h1>
 </div>
+@endif
 
 @if($role==='Puskesmas')
 <div class="card shadow">
