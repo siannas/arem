@@ -18,6 +18,33 @@ Validasi
 @endsection
 
 @section('content')
+<!-- Modal -->
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form id="form-import-input" action="{{route('formulir.pertanyaan.import')}}" enctype="multipart/form-data" method="POST">
+        @csrf
+        <div class="modal-header">
+            <h5 class="modal-title" id="importModalLabel">Import Input Data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="importModalBody">
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file" name="file" class="custom-file-input" id="inputGroupFile" onchange="document.getElementById('form-import-input').submit()">
+                    <label class="custom-file-label" for="inputGroupFile">Pilih file</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </form>
+        </div>
+    </div>
+</div>
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -31,12 +58,15 @@ Validasi
                     <h6 class="m-0 font-weight-bold text-primary">Data Skrining Siswa</h6>        
                 </div>
                 <div class="col text-right">
-                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#tambahSiswa">
+                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#importModal">
                     Import
                     </button>
-                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#tambahSiswa">
-                    Download
-                    </button>
+                    <form class="d-inline-block" method="POST" action='{{ route("formulir.pertanyaan.download") }}'  onsubmit="return downloadFiltered(event,this)">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-primary" >
+                        Download
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -78,18 +108,27 @@ Validasi
                 <table class="table table-bordered" id="filteredTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Nama</th>
-                            <!-- <th>Sekolah</th> -->
-                            <th>Kelas</th>
-                            <th>Tanggal</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
+                            <th >NIK</th>
+                            <th >Nama</th>
+                            <th >Kelas</th>
+                            <th >Tanggal</th>
+                            <th width="200px">
+                                <select class="form-control" name="status" multiple onchange="statusFilterChanged(this)">
+                                    <option value="Belum Mengisi" >Belum Mengisi</option>
+                                    <option value="Tervalidasi Puskesmas" >Tervalidasi Puskesmas</option>
+                                    <option value="Dirujuk" >Dirujuk</option>
+                                    <option value="Sudah Dirujuk" >Sudah Dirujuk</option>
+                                    <option value="Tervalidasi Sekolah" >Tervalidasi Sekolah</option>
+                                    <option value="Belum Tervalidasi Sekolah" >Belum Tervalidasi Sekolah</option>
+                                </select>
+                            </th>
+                            <th width="0" >Aksi</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
+                            <th >NIK</th>
                             <th>Nama</th>
-                            <!-- <th>Sekolah</th> -->
                             <th>Kelas</th>
                             <th>Tanggal</th>
                             <th>Status</th>
@@ -149,7 +188,7 @@ const filterFormulirOnChange = async function(e){
             j=JSON.parse(e.json).pertanyaan;
             j.forEach(e2 => {
                 if('diisi-petugas' in e2 && e2.tipe===2){
-                    str3+=`<option value="${e2.id}">${e2.pertanyaan}</option>`;
+                    str3+=`<option value="${e2.id}_${e2.pertanyaan}">${e2.pertanyaan}</option>`;
                 }
             })
         });
@@ -192,13 +231,144 @@ function pertanyaanMultipleSelect(str_html=null){
     });
 }
 
+var table;
+
+const statusFilterChanged=function(self){
+    $self=$(self);
+    searchStr=$self.val().join('|')
+    table.column(4).search( searchStr , true, false).draw();
+}
+
+const onImportData = async function(e,self){
+    var $this = $(self);
+
+}
+
+const downloadFiltered= async function(e, self){
+    // e.preventDefault();
+    const $form = $(self);
+    $('#loading').modal('show');
+
+    if($form[0].checkValidity() === false){
+        myAlert('Form Filter belum terisi sempurna, mohon dicek kembali','danger');
+        
+        setTimeout(() => {
+            $('#loading').modal('hide');
+        }, 1000);
+
+        e.preventDefault();
+        return false;
+    }
+
+    var col = table.columns([0,1],{search:'applied'}).data();
+
+    if(col[0].length===0){
+        myAlert('Daftar Siswa Kosong','danger');
+        
+        setTimeout(() => {
+            $('#loading').modal('hide');
+        }, 1000);
+
+        e.preventDefault();
+        return false;
+    }
+
+    var data = [col[0],col[1]]
+    data = Object.assign({data:data}, state);
+    
+    for (const key in data) {
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = JSON.stringify(data[key]);
+        $form.append(input);
+    }
+
+    // var coba={};
+    // var cos=0;
+    // for ( var key in data ) {
+    //     var cur,k,stack=[],sKey=[];
+    //     cur=data[key];
+    //     k=0;
+    //     do {
+    //         if(typeof cur === 'text' && stack.length===0){
+    //             // var input = document.createElement("input");
+    //             // input.type = "hidden";
+    //             // input.name = key;
+    //             // input.value = cur;
+    //             // $form.appendChild(input);
+    //             cur[key]=cur;
+    //         }else if(typeof cur === 'object'){
+    //             stack.push(cur)
+    //             console.log('cur sdsd',cur);
+    //             console.log('stack aye',stack,stack[stack.length-1]);
+    //             console.log('nooo',stack[stack.length-1],stack.length);
+    //             cur=stack[stack.length-1][k]; //ambil indeks pertama
+    //             console.log('cur aye',cur);
+    //             sKey.push(k);
+    //             k=0;
+    //             // if(sKey.length>1) sKey[sKey.length-2]+=1;
+    //         }else{
+    //             // var input = document.createElement("input");
+    //             // input.type = "hidden";
+    //             // input.name = key;
+    //             // input.value = cur[key];
+    //             // $form.appendChild(input);
+    //             var pathKey= sKey.length>1? key+'['+sKey.slice(1).join('][')+']['+k+']': key+'['+k+']';
+    //             console.log('skey2',sKey);
+    //             console.log('stack2',stack);
+    //             // return false;
+    //             coba[pathKey]=cur;
+    //             k+=1;
+    //             if(k < stack[stack.length-1].length){
+    //                 cur=stack[stack.length-1][k];
+    //             }else{
+    //                 k=sKey.pop()+1;
+    //                 console.log('mau kosong',stack.length,Math.min(2, stack.length));
+                    
+    //                 for (let j = 0; j < Math.min(2, stack.length); j++) {
+    //                     console.log('cnt',j);
+    //                     cur=stack.pop();
+    //                     console.log('cur new new',stack,k,cur);
+    //                 }
+
+    //                 console.log('kosong',cur);
+    //                 console.log('coba',coba);
+                    
+
+    //                 cos++;
+    //                 if(cos===2) return false;
+    //             }
+    //             console.log('coba',coba);
+    //             console.log('cur new',cur);
+                
+    //         } 
+    //     } while (stack.length);
+        
+    // }
+
+    
+
+    setTimeout(() => {
+        $('#loading').modal('hide');
+    }, 2000);
+}
+
 $(document).ready(function() {  
 
     //regenerate tabelnya
     var data=sessionStorage.getItem('filtered');
-    var table = $('#filteredTable').DataTable({
+    table = $('#filteredTable').DataTable({
         stateSave: true,
-        data: data?JSON.parse(data):[]
+        data: data?JSON.parse(data):[],
+        "columns": [
+            {"visible": false},
+            null,
+            null,
+            null,
+            { "orderable": false },
+            { "searchable": false }
+        ]
     });
 
     //masukin inputan form sebelumnya
@@ -210,6 +380,11 @@ $(document).ready(function() {
         $('select[name=sekolah]').val(state['sekolah']);
         if('kelas' in state) $('select[name=kelas]').val(state['kelas']);
     }
+    $('select[name=status]').select2({
+        width: '100%',
+        placeholder: "Status",
+    });
+    table.column(4).search( '' , true, false).draw();
     pertanyaanMultipleSelect();
 
     //saat tombol filter ditekan
@@ -245,6 +420,7 @@ $(document).ready(function() {
                 }
 
                 new_res.push([
+                    e.username,
                     e.nama,
                     e.kelas,
                     e.jawabans.length === 0 ? '-' : e.jawabans[0].updated_at ,

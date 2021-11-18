@@ -76,6 +76,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:Puskesmas'])->group(function () {
         Route::get('/isi-data', 'DataController@dataSiswaDanFormSkrining');
         Route::get('/isi-data/{id_formulir}/{id_user}', 'FormulirController@generate_4_puskesmas');
+        
+        Route::post('/pertanyaan-formulir/import', 'FormulirController@importIsiDataSkrining')->name('formulir.pertanyaan.import');
     });
     
     Route::get('/data-siswa/{id}', 'DataController@detailSiswa');
@@ -86,6 +88,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/pertanyaan-formulir/{id}', 'FormulirController@pertanyaanFormulir')->name('formulir.pertanyaan');
     Route::post('/pertanyaan-formulir/filtered', 'DataController@dataSiswaFiltered')->name('formulir.pertanyaan.filtered');
+
+    Route::post('/pertanyaan-formulir/filtered/download', 'FormulirController@downloadTemplateIsiDataSkrining')->name('formulir.pertanyaan.download');
 });
 
 // Authentication Routes...

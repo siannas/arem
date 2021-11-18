@@ -122,7 +122,7 @@ $role= Auth::user()->getRole->role;
                 @if($role==='Puskesmas')
                 <a class="collapse-item @yield('isiDataStatus')" href="{{ url('/isi-data')}}">
                     <i class="fas fa-fw fa-pen"></i>
-                    <span>Isi Data</span></a>
+                    <span>Data Skrining</span></a>
                 @endif
 
                 <a class="collapse-item @yield('rujukanStatus')" href="{{ url('/rujukan')}}">
