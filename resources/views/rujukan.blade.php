@@ -52,7 +52,7 @@ Data Rujukan
                         <form method="post" id="id" name="id">@csrf @method('PUT')
                         <div class="form-group">
                             <label><b>Keterangan Rujukan</b></label>
-                            <textarea class="form-control" name="keterangan2" id="keterangan2" rows="4"></textarea>
+                            <textarea class="form-control" name="keterangan2" id="keterangan2" rows="4" @if($user!=4) readonly @endif></textarea>
                         </div>
                     </div>
                 </div>

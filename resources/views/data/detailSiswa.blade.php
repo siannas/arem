@@ -41,7 +41,19 @@ Validasi
                 <!-- Card Header - Accordion -->
                 <a href="#collapse-card-{{$key}}" class="d-block card-header py-3" data-toggle="collapse"
                     role="button" aria-expanded="false" aria-controls="collapse-card-{{$key}}">
-                    <h6 class="m-0 font-weight-bold text-primary">Tahun Ajaran {{ $siswa->tahun_ajaran }}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Tahun Ajaran {{ $siswa->tahun_ajaran }} 
+                    @if($jawaban->validasi_puskesmas===1)
+                    <div class="badge bg-success text-white rounded-pill">Tervalidasi Puskesmas</div>
+                    @elseif($jawaban->validasi_puskesmas===-1)
+                    <div class="badge bg-info text-white rounded-pill">Dirujuk</div>
+                    @elseif($jawaban->validasi_puskesmas===2)
+                    <div class="badge bg-success text-white rounded-pill">Sudah Dirujuk</div>
+                    @elseif($jawaban->validasi_sekolah===1)
+                    <div class="badge bg-success text-white rounded-pill">Tervalidasi Sekolah</div>
+                    @elseif($jawaban->validasi_sekolah===0)
+                    <div class="badge bg-warning text-white rounded-pill">Belum Tervalidasi Sekolah</div>
+                    @endif
+                    </h6>
                 </a>
                 @php
                     $formulir = $jawaban->getFormulir;

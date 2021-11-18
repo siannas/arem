@@ -43,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:Sekolah'])->group(function () {
         Route::post('/resetpassword/{id}', 'DataController@resetPasswordSiswa')->name('admin.resetpassword');
     });
+
+    Route::put('/data-siswa/edit/{id}', 'DataController@editSiswa')->name('siswa.edit');
     
     Route::middleware(['role:Sekolah,Kelurahan,Puskesmas,Kecamatan,Kota'])->group(function () {
         Route::get('/data-siswa', 'DataController@dataSiswa');

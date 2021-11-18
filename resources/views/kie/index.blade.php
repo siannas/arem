@@ -22,9 +22,8 @@ KIE
 @endsection
 
 @section('content')
+@if($role==='Kota')
 <div class="container-fluid" style="min-height:75vh">
-
-    @if($role==='Kota')
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Daftar KIE</h1>
     @include('form.alert')
@@ -112,11 +111,10 @@ KIE
             </div>
         </div>
     </div>
-
-    @else
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Daftar KIE</h1>
-
+</div>
+@else
+<div class="container-fluid" style="min-height:75vh; max-width:60rem;">
+    
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         @if(count($kie)>0)
@@ -142,8 +140,8 @@ KIE
         <h3>INI ELSE</h3>
         @endif
     </div>
-    @endif
 </div>
+@endif
 
 @endsection
 

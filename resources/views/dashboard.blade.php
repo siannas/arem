@@ -26,7 +26,7 @@ Dashboard
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <p class="d-none d-sm-inline-block shadow-sm bg-primary p-2 text-white rounded">
+        <p class="d-none d-sm-inline-block shadow-sm bg-primary p-2 mb-0 text-white rounded">
             <i class="fas fa-calendar-day fa-sm text-white"></i>
             @php
             $mytime = Carbon\Carbon::now()->setTimeZone('Asia/Jakarta')->format('d-m-Y');
