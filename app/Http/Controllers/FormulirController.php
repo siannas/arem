@@ -307,6 +307,8 @@ class FormulirController extends Controller
 
         $ac->getColumnDimension('A')->setWidth(25);
         $ac->getColumnDimension('B')->setWidth(25);
+
+        //kita hide row satu yg berisikan data id formulir, banyak "siswa_pertanyaan" , dan id-id pertanyaan
         $ac->getRowDimension('1')->setVisible(false);
         $ac->getRowDimension('2')->setRowHeight(30);
 

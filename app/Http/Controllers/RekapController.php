@@ -18,7 +18,58 @@ class RekapController extends Controller
         return view('rekap', [ 'rekap' => $rekap ]);
     }
 
-    public function show(Request $request, $id){
+    public function show(Request $request, $id){ //id formulir
+        $formulir = Formulir::findOrFail($id);
+        $rekaps = [];
+        $tulisan = [];
+        $berdasar = null;
+
+        $user= \Auth::user();
+
+        $filter = \DB::table('user_pivot AS a')
+        ->join('users AS u', 'u.id', '=', 'a.id_child')
+        ->select('u.id','u.nama')
+        ->where('u.id_role','>','1')
+        ->where('a.id_user',$user->id)
+        ->get();
+
+        $filter->push($user);
+
+        $for = $request->input('for'); //id user sekolah/kelurahan/puskesmas/kecamatan/dinas
+
+        if(isset($for)){
+            //dapatin 1 user sekaligus data rekapnya
+            $user = User::where('id', $for)->select('nama')->with(['rekap' => function ($query) use ($id) {
+                $query->where('id_formulir', $id);
+            }])->first();
+            $berdasar=$user;
+
+            if(!$user or $user->id_role === 1){
+                return back();
+            }elseif ($user->id_role > 2) {
+
+                $rekaps= \App\UserPivot::rightJoin('users AS u', 'u.id', '=', 'id_child')
+                    ->rightJoin('rekap', 'u.id', '=', 'id_sekolah')
+                    ->select('u.id','rekap.*')
+                    ->where('u.id_role','=','2')
+                    ->where('id_user',$user->id)
+                    ->where('id_formulir',$id)
+                    ->get();
+
+            }else{
+                $rekaps=$user->rekap;
+            }
+
+            if($rekaps->isEmpty()){
+                return redirect()->back()->with( ['error' => 'Belum ada data rekap yang masuk pada '.$berdasar->nama] );
+            }
+        }
+
+        $pertanyaan = Pertanyaan::where('id_formulir', $id)->get();
+        return view('detailRekap', ['pertanyaan' => $pertanyaan, 'formulir'=>$formulir, 'filter'=>$filter]);
+    }
+
+    public function show2(Request $request, $id){
         $formulir = Formulir::findOrFail($id);
         $for = $request->input('for'); //id user sekolah/kelurahan/puskesmas/kecamatan/dinas
         $sekolahs = [];

@@ -32,7 +32,7 @@ Dashboard
 <div class="container-fluid">
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Rekap Skrining</h1>
-
+    @include('form.alert')
     <div class="card shadow">
         <div class="card-header bg-primary mb-3">
             <div class="row p-4 justify-content-between align-items-center">
@@ -40,6 +40,7 @@ Dashboard
                     <i class="fas fa-laugh-wink text-light mb-3" style="font-size:50px;"></i>
                     <h5 class="text-light">e-Ning Tasiah</h5>
                 </div>
+                @if(isset($berdasar))
                 <div class="col-12 col-lg-auto text-center text-lg-right text-light">
                     <h5 class="card-title text-light mb-3">
                         <b>{{ $berdasar->nama }}</b>
@@ -50,9 +51,28 @@ Dashboard
                     </h6>
                     <h6 class="card-subtitle text-gray-300 mb-2">Tahun Ajaran {{ $formulir->tahun_ajaran }}</h6>
                 </div>
+                @endif
             </div>
         </div>
         <div class="card-body row">
+            <form action="#" class="mb-4 col" id="filter-form">
+                <div class="row">
+                    <div class="col-sm-6 col-md-5 my-1">
+                        <select class="form-control" id="filter" name="for" required>
+                            <option value="" disabled selected>Rekap Berdasar</option>
+                            @foreach($filter as $f)
+                            <option value="{{$f->id}}">{{$f->nama}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-sm-4 col-md-3 my-1">
+                        <button type="submit" class="btn btn-sm btn-success my-1">
+                            Filter
+                        </button>
+                    </div>
+                </div>
+            </form>
+        @if (isset($rekap))
         @foreach ($rekap as $key => $json)
         <div class="col-lg-12">
 
@@ -163,7 +183,8 @@ Dashboard
                 </div>
             </div>
         </div>
-        @endforeach
+        @endforeach 
+        @endif
         
     </div>
         <div class="card-footer text-right">
@@ -214,5 +235,11 @@ const myPieChart2 = function(id, labels, datas) {
 for(var key in myData){
     myPieChart2(key, myData[key]['label'], myData[key]['value']);
 }
+
+$(document).ready(function() {  
+    $("#filter").select2({
+        width: '100%'
+    });
+});
 </script>
 @endsection
