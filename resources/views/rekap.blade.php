@@ -75,7 +75,7 @@ Dashboard
                             @endif
                             <td>
                                 <div class="row m-1">
-                                    <a href="{{url('/rekap/'.$unit->id.'?for='.Auth::user()->id)}}" class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</a>
+                                    <a href="{{url('/rekap/'.$unit->id)}}" class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i> Lihat</a>
                                 </div>
                             </td>
                         </tr>
