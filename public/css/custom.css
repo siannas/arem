@@ -96,3 +96,20 @@ div.custom-control-right .custom-control-label::before {
     right: -2.35rem;
     left: auto;
 }
+
+
+.scene{
+    position: relative;
+    height: 100vh;
+    background: linear-gradient(#b0d1eb, #f1d5c8, #fff);
+}
+.bg-city{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 280px;
+    background: url('/public/img/bg.png');
+    background-size: 1500px;
+    background-repeat: repeat-x;
+    z-index: 5;
+}
