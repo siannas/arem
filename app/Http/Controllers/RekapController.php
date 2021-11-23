@@ -23,14 +23,24 @@ class RekapController extends Controller
         $rekaps = [];
         $tulisan = [];
         $berdasar = null;
+        $simpulans=null;
+        $csv_gabungan=null;
+        $hasil_gabungan=null;
 
         $user= \Auth::user();
+
+        //cek apakah formulir khusus anak SD
+        $isSD= ($formulir->kelas === '1,2,3,4,5,6'? TRUE: FALSE);
 
         $filter = \DB::table('user_pivot AS a')
         ->join('users AS u', 'u.id', '=', 'a.id_child')
         ->select('u.id','u.nama')
         ->where('u.id_role','>','1')
         ->where('a.id_user',$user->id)
+        ->where(function($q) use($isSD) {
+            $q->where('u.kelas',($isSD?'=':'>'),'1')
+              ->orWhere('u.kelas', NULL);
+        })
         ->get();
 
         $filter->push($user);
@@ -39,18 +49,22 @@ class RekapController extends Controller
 
         if(isset($for)){
             //dapatin 1 user sekaligus data rekapnya
-            $user = User::where('id', $for)->select('nama')->with(['rekap' => function ($query) use ($id) {
+            $user = User::where('id', $for)->select('id','nama','id_role')->with(['rekap' => function ($query) use ($id) {
                 $query->where('id_formulir', $id);
             }])->first();
+
+            //list json simpulan yg ada
+            $simpulans = $formulir->pertanyaan()->select('json_simpulan')->get();
+            
             $berdasar=$user;
 
             if(!$user or $user->id_role === 1){
                 return back();
             }elseif ($user->id_role > 2) {
 
-                $rekaps= \App\UserPivot::rightJoin('users AS u', 'u.id', '=', 'id_child')
+                $rekaps= \App\UserPivot::join('users AS u', 'u.id', '=', 'id_child')
                     ->rightJoin('rekap', 'u.id', '=', 'id_sekolah')
-                    ->select('u.id','rekap.*')
+                    ->select('u.id','u.nama','rekap.*')
                     ->where('u.id_role','=','2')
                     ->where('id_user',$user->id)
                     ->where('id_formulir',$id)
@@ -63,10 +77,22 @@ class RekapController extends Controller
             if($rekaps->isEmpty()){
                 return redirect()->back()->with( ['error' => 'Belum ada data rekap yang masuk pada '.$berdasar->nama] );
             }
+            
+            foreach ($rekaps as $k => $r) {
+                $csv_gabungan[]=explode(',',$r->csv_gabungan);
+                $hasil_gabungan[]=json_decode($r->json);
+            }
         }
 
         $pertanyaan = Pertanyaan::where('id_formulir', $id)->get();
-        return view('detailRekap', ['pertanyaan' => $pertanyaan, 'formulir'=>$formulir, 'filter'=>$filter]);
+        return view('detailRekap', [
+            'pertanyaan' => $pertanyaan, 
+            'formulir'=>$formulir, 
+            'filter'=>$filter, 
+            'simpulans'=>$simpulans, 
+            'csv_gabungan'=>$csv_gabungan,
+            'hasil_gabungan'=>$hasil_gabungan,
+        ]);
     }
 
     public function show2(Request $request, $id){

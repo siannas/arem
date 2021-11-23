@@ -222,7 +222,8 @@ class FormulirController extends Controller
             'json' => $req['json'],
             'validasi_puskesmas' => is_null($jawaban->validasi_puskesmas) ? 0 : $jawaban->validasi_puskesmas,
             'validasi_sekolah' => is_null($jawaban->validasi_sekolah) ? 0 : $jawaban->validasi_sekolah,
-            'status_rekap' => is_null($jawaban->status_rekap) ? 0 : $jawaban->status_rekap
+            'status_rekap' => is_null($jawaban->status_rekap) ? 0 : $jawaban->status_rekap,
+            'keterangan' => is_null($jawaban->keterangan) ? '' : $jawaban->keterangan,
         ]);
 
         $jawaban->save();

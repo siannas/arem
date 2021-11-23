@@ -17,6 +17,7 @@ class Rekap extends Model
         'id_formulir',
         'id_sekolah',
         'json',
-        'csv'
+        'csv',
+        'csv_gabungan',
     ];
 }

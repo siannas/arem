@@ -96,10 +96,10 @@ const cekSimpulan= function(){
         return false;
     }
     var all= {};
-    if(Object.keys(all).length === 0) return true;
     $.each(obj, function(i, val) {
         Object.assign(all,getFormData($(val)));
     });
+    if(Object.keys(all).length === 0) return true;
     all['id'].forEach(id=>{
         var simp = {}
         switch (all[id+'-tipe']) {

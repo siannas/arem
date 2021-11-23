@@ -185,7 +185,7 @@ Dashboard
         </div>
         @endforeach 
         @endif
-        
+        <div class="col-lg-12" id="simpulan-container"></div>
     </div>
         <div class="card-footer text-right">
             <a href="{{url('/rekap')}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
@@ -235,6 +235,81 @@ const myPieChart2 = function(id, labels, datas) {
 for(var key in myData){
     myPieChart2(key, myData[key]['label'], myData[key]['value']);
 }
+
+@if (isset($simpulans) and isset($csv_gabungan))
+const cardTemplate=`<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary" id="title-pertanyaan"></h6>
+    </div>
+    <div class="card-body" id="body-pertanyaan">
+    </div>
+</div>`
+const template=`<div class="row" style="padding-top:30px" >
+    <div class="col-12" style="margin-bottom:5px">
+        <h5 id="-title"></h5>
+        <div class="chart-pie pt-4 pb-2">
+            <canvas id="-canvas"></canvas>
+        </div>
+        <div class="mt-4 text-center small" id="-legend">
+        </div>
+    </div>
+</div>`;
+const myCSV=@json($csv_gabungan);
+const mySimpulan=@json($simpulans);
+const myPertanyaan=@json($pertanyaan);
+const myHasil=@json($hasil_gabungan);
+var myData= myCSV.reduce(function (r, a) {
+        a.forEach(function (b, i) {
+            r[i] = (r[i] || 0) + parseInt(b);
+        });
+        return r;
+    }, []);
+var myDataJSON= myHasil.reduce(function (r, data) {
+        Object.keys(data).forEach(function (b, i) {
+            r[b] = r[b] || {};
+            Object.keys(data[b]).forEach(function (opsi, i) { // data[b] adalah tiap opsi
+                r[b][opsi] = r[b][opsi] || [0,0];
+                r[b][opsi][0]+=data[b][opsi][0];
+                r[b][opsi][1]+=data[b][opsi][1];
+                // ().forEach(function (c,x) {
+                //     console.log(a[b]);
+                //     r[b][x]=a[b][x]+c;
+                //     // r[b] =  + a[b];
+                // });
+            });
+            
+        });
+        return r;
+    }, {});
+$(document).ready(function() {  
+    const $simpulanContainer=$('#simpulan-container');
+    var cnt=0;
+    for (const key in mySimpulan) {
+        var e = JSON.parse(mySimpulan[key]['json_simpulan']);
+        if(e.length>0){
+            $card=$(cardTemplate);
+            $card.find('#title-pertanyaan').text(myPertanyaan[key]['judul']).removeAttr('id');
+            e.forEach(e2 => {
+                var newchart = $(template);
+                switch (e2.tipe) {
+                    case 1:
+                        
+                        break;
+                    case 2:
+                        
+                        break;
+                    case 3:
+                        
+                        break;
+                }
+            });
+            $simpulanContainer.append($card);
+        }
+        cnt++;
+    }
+});
+
+@endif
 
 $(document).ready(function() {  
     $("#filter").select2({

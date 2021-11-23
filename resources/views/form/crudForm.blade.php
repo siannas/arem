@@ -490,7 +490,7 @@ const myPertanyaan = function(tipe, id, data={}){
                 html = html + myOptions(id, data.opsi[key], key>1);
             }
         }else{
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 2; i++) {
                 html = html + myOptions(id, "", i>1);
             }
         }
