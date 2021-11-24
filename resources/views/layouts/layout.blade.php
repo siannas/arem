@@ -19,6 +19,13 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
 
     <title>e-Ning Tasiah | @yield('title')</title>
 
+    <style>
+        :root{
+            --bg-url:url({{asset('/public/img/bg.svg')}});
+        }
+    </style>
+    @yield('style')
+
     <!-- Custom fonts for this template-->
     <link href=" {{ asset('public/plugins/fontawesome-free/css/all.min.css') }} " rel="stylesheet" type="text/css">
     <link
@@ -37,7 +44,6 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <!-- <link href="{{ asset('public/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}" rel="stylesheet"> -->
-    @yield('style')
 
 
 </head>
@@ -54,9 +60,17 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
+            @if($role=='Siswa')
+            <div class="bg">
+                <img class="anak" id="anak1" style="height:200px;" src="{{asset('/public/img/anak1.svg')}}" alt="">
+                <img class="anak" id="anak2" style="height:150px;" src="{{asset('/public/img/anak2.svg')}}" alt="">
+                <img class="anak" id="anak3" style="height:300px;" src="{{asset('/public/img/anak3.svg')}}" alt="">
+            </div>
+            @endif
+
             <!-- Main Content -->
             <div id="content">
-
+            
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -133,12 +147,12 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
                 <!-- Begin Page Content -->
                 @yield('content')
                 <!-- /.container-fluid -->
-
+            
             </div>
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            <footer class="sticky-footer bg-white" style="z-index:10;">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>&copy; e-Ning Tasiah <?php echo date("Y");?>&nbsp;&nbsp;|&nbsp;&nbsp;IT Dinas Kesehatan Surabaya</span>

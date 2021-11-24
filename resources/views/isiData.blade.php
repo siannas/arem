@@ -85,24 +85,24 @@ Validasi
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-sm-4 col-md-3">
+                    <div class="col-sm-4 col-md-4">
                         <select class="form-control" required name="sekolah" onchange="setState('sekolah',this.value,true)" required>
                             <option value="" disabled selected>Sekolah</option>
                         </select>
                     </div>
-                    <div class="col-sm-4 col-md-3">
+                    <div class="col-sm-4 col-md-2">
                         <select class="form-control" name="kelas" onchange="setState('kelas',this.value,true)">
                             <option value="" disabled selected>Kelas</option>
                         </select>
                     </div>
-                    <div class="col-sm-4 col-md-3" id="pertanyaan-container">
+                    <div class="col-sm-4 col-md-2" id="pertanyaan-container">
                         <select class="form-control" required name="pertanyaan" id="multiple-checkboxes" multiple="multiple">
                         </select>
                     </div>
+                    <div class="col-sm-4 col-md-1">
+                        <button type="submit" class="btn btn-success">Filter</button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-sm btn-success my-1">
-                    Filter
-                </button>
             </form>
             
         </div>
@@ -118,7 +118,7 @@ Validasi
                             <th >Kelas</th>
                             <th >Tanggal</th>
                             <th width="200px">
-                                <select class="form-control" name="status" multiple onchange="statusFilterChanged(this)">
+                                <select class="" name="status" multiple onchange="statusFilterChanged(this)">
                                     <option value="Belum Mengisi" >Belum Mengisi</option>
                                     <option value="Tervalidasi Puskesmas" >Tervalidasi Puskesmas</option>
                                     <option value="Dirujuk" >Dirujuk</option>
@@ -127,7 +127,9 @@ Validasi
                                     <option value="Belum Tervalidasi Sekolah" >Belum Tervalidasi Sekolah</option>
                                 </select>
                             </th>
+                            @if(Auth::user()->id_role!='Puskesmas')
                             <th width="0" >Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tfoot>
@@ -137,7 +139,9 @@ Validasi
                             <th>Kelas</th>
                             <th>Tanggal</th>
                             <th>Status</th>
+                            @if(Auth::user()->id_role!='Puskesmas')
                             <th>Aksi</th>
+                            @endif
                         </tr>
                     </tfoot>
                     <tbody>
@@ -220,10 +224,10 @@ const filterFormulirOnChange = async function(e){
 function pertanyaanMultipleSelect(str_html=null){
     if(str_html) $('#multiple-checkboxes').html(str_html);
     $('#multiple-checkboxes').multiselect('destroy').multiselect({
-        width: '100%',
-        buttonClass: 'btn btn-outline-secondary',
-        enableResetButton: true,
-        enableFiltering: true,
+        buttonClass: 'form-control',
+        buttonWidth: '100%',
+        enableResetButton: false,
+        enableFiltering: false,
         includeSelectAllOption: true,
         buttonText: function(options, select) {
             setState('pertanyaan',select.val(),true);

@@ -80,11 +80,12 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:Puskesmas'])->group(function () {
-        Route::get('/isi-data', 'DataController@dataSiswaDanFormSkrining');
-        Route::get('/isi-data/{id_formulir}/{id_user}', 'FormulirController@generate_4_puskesmas');
+        Route::get('/data-skrining/{id_formulir}/{id_user}', 'FormulirController@generate_4_puskesmas');
         
         Route::post('/pertanyaan-formulir/import', 'FormulirController@importIsiDataSkrining')->name('formulir.pertanyaan.import');
     });
+
+    Route::get('/data-skrining', 'DataController@dataSiswaDanFormSkrining');
     
     Route::get('/data-siswa/{id}', 'DataController@detailSiswa');
     Route::get('/data-sekolah/{id}', 'DataController@detailSekolah');

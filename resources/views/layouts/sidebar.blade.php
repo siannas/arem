@@ -119,8 +119,8 @@ $role= Auth::user()->getRole->role;
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Data Skrining:</h6>
                 
-                @if($role==='Puskesmas')
-                <a class="collapse-item @yield('isiDataStatus')" href="{{ url('/isi-data')}}">
+                @if($role!='Siswa')
+                <a class="collapse-item @yield('isiDataStatus')" href="{{ url('/data-skrining')}}">
                     <i class="fas fa-fw fa-pen"></i>
                     <span>Data Skrining</span></a>
                 @endif

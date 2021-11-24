@@ -241,8 +241,15 @@ class DataController extends Controller
     public function dataSiswaDanFormSkrining(){
         $user= Auth::user();
         $formulir=Formulir::where('status', 1)->get();
-        $sd=$user->users()->where([['id_role',2],['kelas',1]])->get();
-        $smpsma=$user->users()->where([['id_role',2],['kelas',7]])->get();
+        if($user->id_role==6){
+            $sd=User::where([['id_role',2],['kelas',1]])->get();
+            $smpsma=User::where([['id_role',2],['kelas',7]])->get();
+        }
+        else{
+            $sd=$user->users()->where([['id_role',2],['kelas',1]])->get();
+            $smpsma=$user->users()->where([['id_role',2],['kelas',7]])->get();
+        }
+        
         return view('isiData', ['formulir'=>$formulir, 'sd'=>$sd, 'smpsma'=>$smpsma]);
     }
 

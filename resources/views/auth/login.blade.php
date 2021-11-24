@@ -11,6 +11,12 @@
 
     <title>e-Ning Tasiah</title>
 
+    <style>
+        :root{
+            --bg-url:url({{asset('/public/img/bg.svg')}});
+        }
+    </style>
+
     <!-- Custom fonts for this template-->
     <link href="{{asset('public/plugins/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
@@ -23,8 +29,13 @@
 
 </head>
 
-<body class="bg-gradient-primary">
-    <div class="bg-pattern">
+<body style="height:100vh; overflow:hidden;">
+    <div class="bg">
+        <img class="anak" id="anak1" style="height:200px;" src="{{asset('/public/img/anak1.svg')}}" alt="">
+        <img class="anak" id="anak2" style="height:150px;" src="{{asset('/public/img/anak2.svg')}}" alt="">
+        <img class="anak" id="anak3" style="height:300px;" src="{{asset('/public/img/anak3.svg')}}" alt="">
+    </div>
+    <!-- <div class="bg-pattern"> -->
     <div class="container">
 
         <!-- Outer Row -->
@@ -80,7 +91,7 @@
         </div>
 
     </div>
-    </div>
+    <!-- </div> -->
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('public/js/sb-admin-2.min.js')}}"></script>
 

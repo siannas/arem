@@ -21,7 +21,7 @@ Profil
 <div class="container-fluid">
     <!-- Page Heading -->
     
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs" style="position:relative; z-index:10;">
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{url('/profil')}}">Profil</a>
         </li>

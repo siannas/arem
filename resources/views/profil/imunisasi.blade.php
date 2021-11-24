@@ -25,7 +25,7 @@ Imunisasi
 <div class="container-fluid" style="min-height:75vh">
     <!-- Page Heading -->
     @if($role=='Siswa')
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs" style="position:relative; z-index:10;">
         <li class="nav-item">
             <a class="nav-link" href="{{url('/profil')}}">Profil</a>
         </li>
