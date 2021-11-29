@@ -141,3 +141,12 @@ div.custom-control-right .custom-control-label::before {
     bottom: 10px;
     right:5%;
 }
+
+.fade:not(.active){
+    height: 0;
+    overflow: hidden;
+}
+
+.float-end{
+    float: right;
+}

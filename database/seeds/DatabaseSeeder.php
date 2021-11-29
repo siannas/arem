@@ -18,8 +18,5 @@ class DatabaseSeeder extends Seeder
             PertanyaanTableSeeder::class,
         ]);
         
-        DB::table('metadata')->insert([
-            ['key' => 'tahun-ajaran', 'data' => '2021-2022'],
-        ]);
     }
 }
