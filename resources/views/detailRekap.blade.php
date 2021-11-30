@@ -192,7 +192,7 @@ Dashboard
         @endforeach 
         @endif
         @if (isset($simpulans) and isset($csv_gabungan))
-        <div class="col-lg-12">
+        <div class="col-lg-12 tab-content">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" data-toggle="tab" href="#rekap-container" role="tab" aria-controls="rekap-container" aria-selected="true">Jawaban</a>
@@ -201,8 +201,8 @@ Dashboard
                     <a class="nav-link" data-toggle="tab" href="#simpulan-container" role="tab" aria-controls="simpulan-container" aria-selected="false">Simpulan</a>
                 </li>
             </ul>
-            <div id="rekap-container" class="tab-pane fade show active" role="tabpanel" aria-labelledby="rekap-container"></div>
-            <div id="simpulan-container" class="tab-pane fade" role="tabpanel" aria-labelledby="simpulan-container"></div>
+            <div id="rekap-container" class="custom-tab-css tab-pane fade show active" role="tabpanel" aria-labelledby="rekap-container"></div>
+            <div id="simpulan-container" class="custom-tab-css tab-pane fade" role="tabpanel" aria-labelledby="simpulan-container"></div>
         </div>
         @endif
     </div>
