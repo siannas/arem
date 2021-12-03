@@ -81,7 +81,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['role:Puskesmas'])->group(function () {
         Route::get('/data-skrining/{id_formulir}/{id_user}', 'FormulirController@generate_4_puskesmas');
-        
         Route::post('/pertanyaan-formulir/import', 'FormulirController@importIsiDataSkrining')->name('formulir.pertanyaan.import');
     });
 

@@ -411,8 +411,10 @@ for(var id in jawabans){
 @endforeach
 @endforeach
 
-    @if ($role==='Puskesmas')
-        //do nothing
+    @if ($role==='Puskesmas' and $jawaban->validasi_puskesmas!==0)
+    $('input[type="text"]').attr('readonly', true);
+    $('input[type="file"]').attr('disabled', true);
+    $('input[type="radio"]:not(:checked)').attr('disabled', true);
     @elseif(is_null($jawaban)==false && $jawaban->validasi_sekolah===1)
     $('input[type="text"]').attr('readonly', true);
     $('input[type="file"]').attr('disabled', true);

@@ -435,7 +435,7 @@ $(document).ready(function() {
                     e.kelas,
                     e.jawabans.length === 0 ? '-' : e.jawabans[0].updated_at ,
                     badge,
-                    `<a href="{{url('/isi-data')}}/${id_formulir}/${e.id}" class="btn btn-sm btn-warning"><i class="fas fa-fw fa-pen"></i></button></td>`
+                    `<a href="{{url('/data-skrining')}}/${id_formulir}/${e.id}" class="btn btn-sm btn-warning"><i class="fas fa-fw fa-pen"></i></button></td>`
                 ]);
             });
             table.clear();
