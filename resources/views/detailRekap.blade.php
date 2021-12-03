@@ -343,10 +343,13 @@ $(document).ready(function() {
         $card=$(cardTemplate);
         $card.find('#title-pertanyaan').text(judul).removeAttr('id');
         var $body = $card.find('#body-pertanyaan').removeAttr('id');
+
+        var counter=0;
         for (const x in pertanyaan) {
             const p = pertanyaan[x];
             //hanya pertanyaan pilihan ganda yg ditampilkan pada grafik
             if(p.tipe===3 || p.tipe===1){
+                counter++;
                 var opsis = myDataJSON[p.id];
                 var $newchart = $(template);
                 var $canvas=$newchart.find('canvas');
@@ -375,7 +378,11 @@ $(document).ready(function() {
             }
 
         }
-        $rekapContainer.append($card);
+
+        //pastikan ada pertanyaan tipe pilihan ganda nya baru bisa append
+        if(counter>0){
+            $rekapContainer.append($card);
+        }
 
         //ini simpulannya
         $cardSimpulan=$(cardTemplate);

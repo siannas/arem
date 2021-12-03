@@ -32,18 +32,24 @@ class RekapController extends Controller
         //cek apakah formulir khusus anak SD
         $isSD= ($formulir->kelas === '1,2,3,4,5,6'? TRUE: FALSE);
 
-        $filter = \DB::table('user_pivot AS a')
-        ->join('users AS u', 'u.id', '=', 'a.id_child')
-        ->select('u.id','u.nama')
-        ->where('u.id_role','>','1')
-        ->where('a.id_user',$user->id)
-        ->where(function($q) use($isSD) {
-            $q->where('u.kelas',($isSD?'=':'>'),'1')
-              ->orWhere('u.kelas', NULL);
-        })
-        ->get();
-
-        $filter->push($user);
+        // jika akun dinkes tampikkan semua untuk filter
+        if($user->id_role===6){
+            $filter = User::where('id_role','>','1')
+                ->select('id','nama')
+                ->get();
+        }else{
+            $filter = \DB::table('user_pivot AS a')
+                ->join('users AS u', 'u.id', '=', 'a.id_child')
+                ->select('u.id','u.nama')
+                ->where('u.id_role','>','1')
+                ->where('a.id_user',$user->id)
+                ->where(function($q) use($isSD) {
+                    $q->where('u.kelas',($isSD?'=':'>'),'1')
+                    ->orWhere('u.kelas', NULL);
+                })
+                ->get();
+            $filter->push($user);
+        }
 
         $for = $request->input('for'); //id user sekolah/kelurahan/puskesmas/kecamatan/dinas
 
@@ -62,13 +68,23 @@ class RekapController extends Controller
                 return back();
             }elseif ($user->id_role > 2) {
 
-                $rekaps= \App\UserPivot::join('users AS u', 'u.id', '=', 'id_child')
-                    ->rightJoin('rekap', 'u.id', '=', 'id_sekolah')
-                    ->select('u.id','u.nama','rekap.*')
-                    ->where('u.id_role','=','2')
-                    ->where('id_user',$user->id)
-                    ->where('id_formulir',$id)
-                    ->get();
+                // jika akun dinkes ambil semua data rekap tanpa terkecuali
+                if($user->id_role===6){
+                    $rekaps= \App\UserPivot::join('users AS u', 'u.id', '=', 'id_child')
+                        ->rightJoin('rekap', 'u.id', '=', 'id_sekolah')
+                        ->select('u.id', 'u.nama', 'rekap.*')
+                        ->where('u.id_role', '=', '2')
+                        ->where('id_formulir', $id)
+                        ->get();
+                }else{
+                    $rekaps= \App\UserPivot::join('users AS u', 'u.id', '=', 'id_child')
+                        ->rightJoin('rekap', 'u.id', '=', 'id_sekolah')
+                        ->select('u.id', 'u.nama', 'rekap.*')
+                        ->where('u.id_role', '=', '2')
+                        ->where('id_user', $user->id)
+                        ->where('id_formulir', $id)
+                        ->get();
+                }
 
             }else{
                 $rekaps=$user->rekap;
@@ -92,6 +108,7 @@ class RekapController extends Controller
             'simpulans'=>$simpulans, 
             'csv_gabungan'=>$csv_gabungan,
             'hasil_gabungan'=>$hasil_gabungan,
+            'berdasar'=>$berdasar,
         ]);
     }
 
