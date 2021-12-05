@@ -126,9 +126,7 @@ class RekapController extends Controller
         $isSD= ($formulir->kelas === '1,2,3,4,5,6'? TRUE: FALSE);
 
         //dapatin user dari 'for' sekaligus data rekapnya
-        $user = User::where('id', $data['for'])->select('id','nama','id_role')->with(['rekap' => function ($query) use ($id) {
-            $query->where('id_formulir', $id);
-        }])->first();
+        $user = User::where('id', $data['for'])->select('id','nama','id_role')->first();
 
         // Cari Data Rekap
         if(!$user or $user->id_role === 1){     //jika for siswa maka skip
@@ -153,7 +151,12 @@ class RekapController extends Controller
                     ->get();
             }
         }else{
-            $rekaps=$user->rekap;
+            //jika berdasar sekolah
+            $rekaps= \App\User::rightJoin('rekap', 'users.id', '=', 'id_sekolah')
+                ->select('users.id', 'users.nama','users.kelas', 'rekap.*')
+                ->where('id_sekolah', $user->id)
+                ->where('id_formulir', $id)
+                ->get();
         }
 
         if($rekaps->isEmpty()){
@@ -165,6 +168,7 @@ class RekapController extends Controller
         $ex = $this->initExcelSimpulan($formulir, $simpulans, $user, 6, $isSD ? 1 : 7 ); // 6 kelas per jenis formulir (SD dan SMP/SMA)
         
         $jumlahSekolah=count($rekaps);
+        $maxIdx=0;
         // SECTION - Generate Excel Rekap
         foreach ($rekaps as $k => $r) {
             $kelas=intval($r->kelas);
@@ -225,7 +229,10 @@ class RekapController extends Controller
         }
         // END of SECTION - Generate Excel Rekap
 
-        $fileName="tes.xlsx";
+        //styling excel
+        $this->stylingExcelSimpulan($ex,$jumlahSekolah,$maxIdx);
+
+        $fileName="Rekap {$formulir->tahun_ajaran} {$user->nama}.xlsx";
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
         header('Cache-Control: max-age=0');
@@ -339,6 +346,49 @@ class RekapController extends Controller
         }
 
         return $ex;
+    }
+
+    private function stylingExcelSimpulan(&$ex, $rowCnt, $colCnt){
+        $titleStyle = [
+            'font' => [
+                'bold' => true,
+                'size' => 10,
+            ],
+        ];
+
+        $headerStyle = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'wrapText' => true,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $bodyStyle = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $ac = $ex->getSheet(0);
+        $col = $ac->getCellByColumnAndRow($colCnt-1+11, 1)->getColumn();
+
+        $sheetCount = $ex->getSheetCount();
+        for ($i = 0; $i < $sheetCount; $i++) {
+            $ac = $ex->getSheet($i);
+            $ac->getColumnDimension('B')->setWidth(25);
+            $ac->getStyle('A1:H5')->applyFromArray($titleStyle);
+            $ac->getStyle('A6:'.$col.'9')->applyFromArray($headerStyle);
+            $ac->getStyle('A9:'.$col.'9')->getFont()->setSize(8);
+            $ac->getStyle("A10:{$col}".strval($rowCnt+9))->applyFromArray($bodyStyle);
+        }
     }
 
     private function cekSimpulanTipeFormula(&$j, &$s, &$at){
