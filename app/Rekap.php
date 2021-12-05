@@ -19,5 +19,7 @@ class Rekap extends Model
         'json',
         'csv',
         'csv_gabungan',
+        'L',
+        'P',
     ];
 }

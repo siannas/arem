@@ -100,7 +100,9 @@ class doRekap extends Command
                 $rekap = new Rekap([
                     'id_formulir' => $jawaban_raw->id_formulir,
                     'id_sekolah' => $jawaban_raw->id_user_sekolah,
-                    'json' => null
+                    'json' => null,
+                    'L'=>0,
+                    'P'=>0,
                 ]);
             }
 
@@ -126,7 +128,14 @@ class doRekap extends Command
                 $csv_arr=$csv[max($kelas-$sklh_kelas, 0) ];
             }
 
-            $add = ($gender === 'P') ? 1 : 0;
+            if($gender === 'P'){
+                $add = 1 ;
+                $rekap->P+=1;
+            }else{
+                $add = 0 ;
+                $rekap->L+=1;
+            }
+            
 
             $s_count = 0;
             $pre_count = 0;

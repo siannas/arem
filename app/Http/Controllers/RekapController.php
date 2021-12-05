@@ -164,21 +164,54 @@ class RekapController extends Controller
         $simpulans = $formulir->pertanyaan()->select('json_simpulan','judul')->get();
         $ex = $this->initExcelSimpulan($formulir, $simpulans, $user, 6, $isSD ? 1 : 7 ); // 6 kelas per jenis formulir (SD dan SMP/SMA)
         
+        $jumlahSekolah=count($rekaps);
         // SECTION - Generate Excel Rekap
         foreach ($rekaps as $k => $r) {
             $kelas=intval($r->kelas);
             $csv_gabungan[]=explode(',',$r->csv_gabungan);
-            
+
+            //dapatkan jumlah siswa total sekolah
+            $stats= \App\UserPivot::rightJoin('users AS u', 'u.id', '=', 'id_child')
+                ->leftJoin('profil AS p','p.id_user','=','u.id')
+                ->selectRaw('COUNT(u.id) AS jumlah, p.gender, u.kelas, CONCAT("L", u.kelas) as kunci')
+                // ->selectRaw('COUNT(u.id) AS jumlah, p.gender, u.kelas, CONCAT(p.gender, u.kelas) as key')  //pakai ini haruse
+                ->where('user_pivot.id_user', $r->id_sekolah)
+                ->groupBy('p.gender','u.kelas')
+                ->get()->keyBy('kunci');
+
             $csv=explode('\n', $r->csv);
             foreach ($csv as $i=>$c) {
 
                 $s_count=0;
                 $csv[$i]=explode(',', $c);
-                $ac =$ex->getSheetByName('Kelas '.strval($kelas+$i));
+                $curKelas=strval($kelas+$i);
+                $ac =$ex->getSheetByName('Kelas '.$curKelas);
 
                 // fill nomor dan nama sekolah
                 $ac->getCellByColumnAndRow(1, $k+10)->setValue($k+1);
                 $ac->getCellByColumnAndRow(2, $k+10)->setValue($r['nama']);
+                
+                //fill jumlah sekolah
+                $ac->getCellByColumnAndRow(3, $k+10)->setValue($jumlahSekolah);
+                $ac->getCellByColumnAndRow(4, $k+10)->setValue($jumlahSekolah);
+
+                // fill jumlah siswa di sekolah
+                $L=0;
+                $P=0;
+                if($stats->has('L'.$curKelas)){
+                    $L=$stats['L'.$curKelas]->jumlah;
+                    $ac->getCellByColumnAndRow(5, $k+10)->setValue($L);
+                }
+                if($stats->has('P'.$curKelas)){
+                    $L=$stats['P'.$curKelas]->jumlah;
+                    $ac->getCellByColumnAndRow(6, $k+10)->setValue($P);
+                }
+                $ac->getCellByColumnAndRow(7, $k+10)->setValue($L+$P);
+
+                // fill jumlah siswa yg terekap formulir
+                $ac->getCellByColumnAndRow(8, $k+10)->setValue($r->L);
+                $ac->getCellByColumnAndRow(9, $k+10)->setValue($r->P);
+                $ac->getCellByColumnAndRow(10, $k+10)->setValue($r->L+$r->P);
                 
                 //fill csv ke excel
                 $maxIdx=count($csv[$i])/2;  // dibagi 2 karena csv nya Laki,perempuan

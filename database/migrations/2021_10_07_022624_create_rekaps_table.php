@@ -21,6 +21,8 @@ class CreateRekapsTable extends Migration
             $table->foreign('id_formulir')->references('id')->on('formulir');
             $table->timestamps();
             $table->string('csv', 4096)->nullable();
+            $table->integer('L')->unsigned();
+            $table->integer('P')->unsigned();
         });
     }
 
