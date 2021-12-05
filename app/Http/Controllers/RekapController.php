@@ -10,6 +10,7 @@ use App\Rekap;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Facades\Validator;
 
 class RekapController extends Controller
 {
@@ -109,216 +110,202 @@ class RekapController extends Controller
             'csv_gabungan'=>$csv_gabungan,
             'hasil_gabungan'=>$hasil_gabungan,
             'berdasar'=>$berdasar,
+            'for'=>$for,
+            'id_formulir'=>$id,
         ]);
     }
 
-    public function show2(Request $request, $id){
+    public function download(Request $request, $id){
+        $validator = Validator::make($request->all(), [
+            'for' => 'required|exists:users,id'    // id sekolah
+        ]);
+        $data = $validator->validated();
         $formulir = Formulir::findOrFail($id);
-        $for = $request->input('for'); //id user sekolah/kelurahan/puskesmas/kecamatan/dinas
-        $sekolahs = [];
-        $berdasar = null;
-        $tulisan = [];
-        if($for){
-            //dapatin 1 user sekaligus data rekapnya
-            $user = User::where('id', $for)->with(['rekap' => function ($query) use ($id) {
-                $query->where('id_formulir', $id);
-            }])->first();
-            $berdasar=$user;
 
-            if(!$user or $user->id_role === 1){
-                return back();
-            }elseif ($user->id_role > 2) {
-                //dapatin semua user sekolah sekaligus data rekapnya
-                $sekolahs = $user->users()->where('id_role', 2)->with(['rekap' => function ($query) use ($id) {
-                    $query->where('id_formulir', $id);
-                }])->whereHas('rekap', function ($query) use ($id) {
-                    $query->where('id_formulir', $id);
-                })->get();
+        //cek apakah formulir khusus anak SD
+        $isSD= ($formulir->kelas === '1,2,3,4,5,6'? TRUE: FALSE);
+
+        //dapatin user dari 'for' sekaligus data rekapnya
+        $user = User::where('id', $data['for'])->select('id','nama','id_role')->with(['rekap' => function ($query) use ($id) {
+            $query->where('id_formulir', $id);
+        }])->first();
+
+        // Cari Data Rekap
+        if(!$user or $user->id_role === 1){     //jika for siswa maka skip
+            return back();
+        }elseif ($user->id_role > 2) {
+
+            // jika akun dinkes ambil semua data rekap tanpa terkecuali
+            if($user->id_role===6){
+                $rekaps= \App\UserPivot::join('users AS u', 'u.id', '=', 'id_child')
+                    ->rightJoin('rekap', 'u.id', '=', 'id_sekolah')
+                    ->select('u.id', 'u.nama', 'u.kelas', 'rekap.*')
+                    ->where('u.id_role', '=', '2')
+                    ->where('id_formulir', $id)
+                    ->get();
             }else{
-                $sekolahs = [$user];
-            }
-        }
-
-        if($sekolahs->isEmpty() or $sekolahs[0]->rekap->isEmpty()){
-            return redirect()->back()->with( ['error' => 'Belum ada data rekap yang masuk.'] );
-        }
-
-        $rekap = json_decode($sekolahs[0]->rekap[0]->json);
-
-        $jml = count($sekolahs);
-
-        if($jml === 1){
-            foreach ($rekap as $key => $r) {
-                foreach ($r->pertanyaan as $key2 => $aa) {
-                    switch ($aa->tipe) {
-                        case 3:
-                            foreach ($aa->tambahan as $tkey => $t) {
-                                $t->jawaban = [$t->jawaban];
-                                $tulisan[$t->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$t->jawaban[0]);
-                            }
-                            break;
-                        case 2:
-                            $aa->jawaban = [$aa->jawaban];
-                            $tulisan[$aa->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$aa->jawaban[0]);
-                            break;
-                        case 4:
-                            $aa->jawaban = [$aa->jawaban];
-                            $tulisan[$aa->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$aa->jawaban[0]);
-                            break;
-                    }
-                }
-            }            
-        }
-
-        for ($i=1; $i < $jml ; $i++) { 
-            $curr = json_decode($sekolahs[$i]->rekap[0]->json);
-            $sekolah_id = $sekolahs[$i]->id;
-            foreach ($rekap as $key => $r) {
-                foreach ($r->pertanyaan as $key2 => $aa) {
-                    switch ($aa->tipe) {
-                        case 1:
-                            foreach ($aa->opsi as $key3 => $opsi) {
-                                $rekap[$key]->pertanyaan[$key2]->opsi->{$key3} += $curr[$key]->pertanyaan[$key2]->opsi->{$key3};
-                            }
-                        case 3:
-                            foreach ($aa->opsi as $key3 => $opsi) {
-                                $rekap[$key]->pertanyaan[$key2]->opsi->{$key3} += $curr[$key]->pertanyaan[$key2]->opsi->{$key3};
-                            }
-                            foreach ($aa->tambahan as $tkey => $t) {
-                                if(is_array($t->jawaban) === false){
-                                    $t->jawaban = [$t->jawaban];
-                                    $tulisan[$t->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$t->jawaban[0]);
-                                }
-                                $jawaban_baru = $curr[$key]->pertanyaan[$key2]->tambahan->{$tkey}->jawaban;
-                                // array_push($t->jawaban, $jawaban_baru);
-                                $tulisan[$t->jawaban[0]] .= Storage::get('sekolah/'.$sekolah_id.'/'.$jawaban_baru);
-                            }
-                            break;
-                        case 2:
-                            if(is_array($aa->jawaban) === false){
-                                $aa->jawaban = [$aa->jawaban];
-                                $tulisan[$aa->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$aa->jawaban[0]);
-                            }  
-                            $jawaban_baru = $curr[$key]->pertanyaan[$key2]->jawaban;
-                            // array_push($t->jawaban, $jawaban_baru);                            
-                            $tulisan[$aa->jawaban[0]] .= Storage::get('sekolah/'.$sekolah_id.'/'.$jawaban_baru);
-                            break;
-                        case 4:
-                            if(is_array($aa->jawaban) === false){
-                                $aa->jawaban = [$aa->jawaban];
-                                $tulisan[$aa->jawaban[0]] = Storage::get('sekolah/'.$sekolahs[0]->id.'/'.$aa->jawaban[0]);
-                            }  
-                            $jawaban_baru = $curr[$key]->pertanyaan[$key2]->jawaban;
-                            // array_push($t->jawaban, $jawaban_baru);                            
-                            $tulisan[$aa->jawaban[0]] .= Storage::get('sekolah/'.$sekolah_id.'/'.$jawaban_baru);
-                            break;
-                    }
-                }
-            }
-        }
-
-        $pertanyaan = Pertanyaan::where('id_formulir', $id)->get();
-        return view('detailRekap', ['rekap' => $rekap, 'pertanyaan' => $pertanyaan, 'formulir'=>$formulir, 'berdasar'=> $berdasar, 'tulisan'=>$tulisan]);
-    }
-
-    /**
-     * Store a jawaban to rekap sekolah.
-     *
-     */
-    public function tes($jawaban_id){
-        $jawaban_raw = Jawaban::findOrFail($jawaban_id);
-        $formulir = Formulir::findOrFail($jawaban_raw->id_formulir);
-        $pertanyaan = Pertanyaan::where('id_formulir', $jawaban_raw->id_formulir)->get();
-
-        $jawaban = json_decode($jawaban_raw->json, true);
-
-        $rekap = Rekap::where('id_formulir', $jawaban_raw->id_formulir)->where('id_sekolah', $jawaban_raw->id_user_sekolah)->first();
-
-        if(!$rekap){
-            $rekap = new Rekap([
-                'id_formulir' => $jawaban_raw->id_formulir,
-                'id_sekolah' => $jawaban_raw->id_user_sekolah,
-                'json' => null
-            ]);
- 
-            //inisialisasi json rekap jika belum ada
-            $allRes = [];
-            foreach( $pertanyaan as $p){
-                $res = (object) [];
-                $json = json_decode($p->json);
-                $res->judul = $p->judul;
-                $res->pertanyaan = $json->pertanyaan;
-                foreach ($json->pertanyaan as $pp) {
-                    if($pp->tipe === 3){    //pertanyaan pilgan dengan tambahan jawaban
-                        $opsi = [];
-                        $tambahan = [];
-                        foreach ($pp->opsi as $o) {
-                            if(is_object($o)){
-                                $opsi[$o->{'0'}] = 0;
-                                $tambahan[$o->{'0'}] = $o->{'if-selected'};
-                                $tambahan[$o->{'0'}]->jawaban = null;
-                            }else{
-                                $opsi[$o] = 0;
-                            }
-                        }
-                        $pp->opsi = (object) $opsi;
-                        $pp->tambahan = $tambahan;
-                    }else if($pp->tipe === 1){ //pertanyaan tipe 1 jaga-jaga
-                        $opsi = [];
-                        foreach ($pp->opsi as $o) {
-                            $opsi[$o] = 0;
-                        }
-                        $pp->opsi = (object) $opsi;
-                    }else if($pp->tipe === 2 || $pp->tipe === 4){ //pertanyaan isian atau upload gambar
-                        $pp->jawaban = null;
-                    }
-                }
-                $allRes[] = $res;
+                $rekaps= \App\UserPivot::join('users AS u', 'u.id', '=', 'id_child')
+                    ->rightJoin('rekap', 'u.id', '=', 'id_sekolah')
+                    ->select('u.id', 'u.nama','u.kelas', 'rekap.*')
+                    ->where('u.id_role', '=', '2')
+                    ->where('id_user', $user->id)
+                    ->where('id_formulir', $id)
+                    ->get();
             }
         }else{
-            $allRes = json_decode($rekap->json, false);
+            $rekaps=$user->rekap;
         }
 
-        foreach( $allRes as $a){
-            foreach ($a->pertanyaan as $aa) {
-                switch ($aa->tipe) {
-                    case 3:
-                        $key = $jawaban[$aa->id];
-                        $aa->opsi->{$key}+=1;
-                        $aa->tambahan = (object) $aa->tambahan;
-                        try {
-                            if($aa->tambahan->{$key}){
-                                $id_ = $aa->tambahan->{$key}->id;
-                                //append to file
-                                $namafile = "sekolah/".$jawaban_raw->id_user_sekolah."/".$formulir->id."_".$id_.".html";
-                                Storage::append($namafile, '<div class="form-group"><input type="text" class="form-control" value="'.$jawaban[$id_].'" disabled></div>');
-                                $aa->tambahan->{$key}->jawaban = $formulir->id."_".$id_.".html";
-                            }
-                        } catch (\Throwable $th) {
-                            //throw $th;
-                        }
-                        break;
-                    case 1:
-                        $key = $jawaban[$aa->id];
-                        $aa->opsi->{$key}+=1;
-                    case 2:
-                        $namafile = "sekolah/".$jawaban_raw->id_user_sekolah."/".$formulir->id."_".$aa->id.".html";
-                        Storage::append($namafile, '<div class="form-group"><input type="text" class="form-control" value="'.$jawaban[$aa->id].'" disabled></div>');
-                        $aa->jawaban = $formulir->id."_".$aa->id.".html";
-                        break;
-                    case 4:
-                        $namafile = "sekolah/".$jawaban_raw->id_user_sekolah."/".$formulir->id."_".$aa->id.".html";
-                        preg_match('/[^\/]+$/', $jawaban[$aa->id], $matches);
-                        $judulGambar = $matches[0];
-                        Storage::append($namafile, '<div class="form-group"><a href="'.$jawaban[$aa->id].'" target="_blank" ><input type="text" class="form-control" value="Link: '.$judulGambar.'" readonly style="cursor: pointer;"></a></div>');
-                        $aa->jawaban = $formulir->id."_".$aa->id.".html";
-                        break;
+        if($rekaps->isEmpty()){
+            return redirect()->back()->with( ['error' => 'Belum ada data rekap yang masuk pada '.$berdasar->nama] );
+        }
+
+        //list json simpulan yg ada
+        $simpulans = $formulir->pertanyaan()->select('json_simpulan','judul')->get();
+        $ex = $this->initExcelSimpulan($formulir, $simpulans, $user, 6, $isSD ? 1 : 7 ); // 6 kelas per jenis formulir (SD dan SMP/SMA)
+        
+        // SECTION - Generate Excel Rekap
+        foreach ($rekaps as $k => $r) {
+            $kelas=intval($r->kelas);
+            $csv_gabungan[]=explode(',',$r->csv_gabungan);
+            
+            $csv=explode('\n', $r->csv);
+            foreach ($csv as $i=>$c) {
+
+                $s_count=0;
+                $csv[$i]=explode(',', $c);
+                $ac =$ex->getSheetByName('Kelas '.strval($kelas+$i));
+
+                // fill nomor dan nama sekolah
+                $ac->getCellByColumnAndRow(1, $k+10)->setValue($k+1);
+                $ac->getCellByColumnAndRow(2, $k+10)->setValue($r['nama']);
+                
+                //fill csv ke excel
+                $maxIdx=count($csv[$i])/2;  // dibagi 2 karena csv nya Laki,perempuan
+                for ($j=0; $j < $maxIdx; $j++) { 
+                    $val=$csv[$i][$j*2]+$csv[$i][$j*2+1];
+                    $cell = $ac->getCellByColumnAndRow($s_count+11, $k+10); //start dari row 10
+                    $cell->setValue($val);
+                    $s_count++;
                 }
             }
         }
+        // END of SECTION - Generate Excel Rekap
 
-        $rekap->fill([ 'json'=>json_encode($allRes) ]);
-        $rekap->save();
+        $fileName="tes.xlsx";
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
+        header('Cache-Control: max-age=0');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($ex, 'Xlsx');
+        $writer->save('php://output');
+        exit;
+    }
+
+    private function initExcelSimpulan(&$formulir, &$simpulans, &$user, $sheet_cnt, $start_from){
+        $ex = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $ac = $ex->getActiveSheet()->setTitle("Kelas {$start_from}");
+        $ac->getCell('A1')->setValue("LAPORAN KEGIATAN KESEHATAN ANAK USIA SEKOLAH DAN REMAJA DISEKOLAH");
+        $ac->getCell('A4')->setValue("TAHUN");
+        // $ac->getCell('A5')->setValue("TRIBULAN");
+
+        // $ac->getCell('B5')->setValue(": I (Juli-September 2021)");
+
+        // informasi rekap berdasar
+        switch ($user->id_role) {
+            case 2:
+                $ac->getCell('A3')->setValue("SEKOLAH");
+                break;
+            case 3:
+                $ac->getCell('A3')->setValue("KELURAHAN");
+                break;
+            case 4:
+                $ac->getCell('A3')->setValue("PUSKESMAS");
+                break;
+            case 5:
+                $ac->getCell('A3')->setValue("KECAMATAN");
+                break;
+            case 6:
+                $ac->getCell('A3')->setValue("DINAS");
+                break;
+        }
+
+        $ac->getCell('B3')->setValue(": ".$user->nama);
+        $ac->getCell('B4')->setValue(": {$formulir->tahun_ajaran} (Th 2022)");
+
+        $ac->getCell('G3')->setValue("KOTA");
+        $ac->getCell('G4')->setValue("PROVINSI");
+        $ac->getCell('G5')->setValue("TAHUN AJARAN");
+
+        $ac->getCell('H3')->setValue(": SURABAYA");
+        $ac->getCell('H4')->setValue(": JAWA TIMUR");
+        $ac->getCell('H5')->setValue(": ".$formulir->tahun_ajaran );
+
+        $ac->mergeCells('A6:A8');
+        $ac->getCell('A6')->setValue("No");
+        $ac->mergeCells('B6:B8');
+        $ac->getCell('B6')->setValue("NAMA SEKOLAH");
+        $ac->mergeCells('C6:C8');
+        $ac->getCell('C6')->setValue("Jumlah Sekolah SMA/SMK/MA/SMALB");
+        $ac->mergeCells('D6:D8');
+        $ac->getCell('D6')->setValue("Jumlah Sekolah SMA/SMK/MA/SMULB yg dijaring");
+        $ac->mergeCells('E6:F7');
+        $ac->getCell('E6')->setValue("Jumlah sasaran Peserta Didik");
+        $ac->getCell('E8')->setValue("L");
+        $ac->getCell('F8')->setValue("P");
+        $ac->mergeCells('G6:G8');
+        $ac->getCell('G6')->setValue("JML");
+        $ac->mergeCells('H6:I7');
+        $ac->getCell('H6')->setValue("Jumlah Peserta Didik yang di jaring");
+        $ac->getCell('H8')->setValue("L");
+        $ac->getCell('I8')->setValue("P");
+        $ac->mergeCells('J6:J8');
+        $ac->getCell('J6')->setValue("JML");
+
+        // make heading
+        $s_count=0;
+        $pre_count = 0;
+        foreach ($simpulans as $s) {
+            $pre_count = $s_count;
+            $judul=$s['judul'];
+            $s = json_decode($s['json_simpulan'], true);
+            if (empty($s)===false) {
+                foreach ($s as $ss) {
+                    $this->makeHeadingSimpulan($ss, $ac, $s_count+11);
+                    switch ($ss['tipe']) {
+                        case 1:
+                            $s_count+=1;
+                            break;
+                        case 2:
+                            $s_count+=1;
+                            break;
+                        case 3:
+                            $s_count+=count($ss['range']);
+                            break;
+                    }
+                }
+                $r=6; // baris/row
+                //create sub-heading dari simpulan di atas
+                $cell = $ac->getCellByColumnAndRow($pre_count+11, $r);
+                $cell->setValue($judul);
+                $col = $cell->getColumn();
+                $col2 = $ac->getCellByColumnAndRow($s_count-1+11, $r)->getColumn();
+                $ac->mergeCells($col.$r.':'.$col2.$r);
+            }
+        }
+
+        // heading nomor yg urut
+        for ($i=1; $i < $s_count+11; $i++) { 
+            $ac->getCellByColumnAndRow($i, 9)->setValue($i);
+        }
+
+        // clone sheet sebanyak kelas
+        for ($i=$start_from+1; $i < $start_from+$sheet_cnt; $i++) { 
+            $clonedWorksheet = clone $ac;
+            $clonedWorksheet->setTitle("Kelas {$i}");
+            $ex->addSheet($clonedWorksheet);
+        }
+
+        return $ex;
     }
 
     private function cekSimpulanTipeFormula(&$j, &$s, &$at){
@@ -343,6 +330,35 @@ class RekapController extends Controller
 
     // membuat heading Excel
     private function makeHeadingSimpulan(&$s, &$ac, $coll){ //simpulan, active sheet
+        $r=7;
+        switch($s['tipe']){
+            case 1:   
+                $cell = $ac->getCellByColumnAndRow($coll, $r);
+                $cell->setValue($s['field']);
+                $c = $cell->getColumn();
+                $ac->mergeCells($c.$r.':'.$c.($r+1));
+                break;
+            case 2:
+                $cell = $ac->getCellByColumnAndRow($coll, $r);
+                $cell->setValue($s['field']);
+                $c = $cell->getColumn();
+                $ac->mergeCells($c.$r.':'.$c.($r+1));
+                break;
+            case 3:
+                $at=0;
+                foreach ($s['range'] as $v) {
+                    $cell = $ac->getCellByColumnAndRow($coll+$at, $r);
+                    $cell->setValue($v[1]);
+                    $c = $cell->getColumn();
+                    $ac->mergeCells($c.$r.':'.$c.($r+1));
+                    $at+=1;
+                }
+                break;
+        }
+    }
+
+    // add data csv ke Excel
+    private function insertSimpulanToRekap(&$s, &$ac, $coll){ //simpulan, active sheet
         $r=7;
         switch($s['tipe']){
             case 1:   

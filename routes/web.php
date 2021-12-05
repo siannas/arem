@@ -117,6 +117,8 @@ Route::get('/formulir/user/{formulir}', 'FormulirController@generate');
 
 Route::get('/rekap/tes/{id}', 'RekapController@tes');
 
+Route::post('/rekap/download/{id}', 'RekapController@download')->name('rekap.download');
+
 Route::resource('/rekap', RekapController::class)->except([
     'create', 'edit', 'store'
 ]);

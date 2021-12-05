@@ -55,29 +55,39 @@ Dashboard
             </div>
         </div>
         <div class="card-body row">
-            <form action="#" class="mb-4 col" id="filter-form">
+            <div class="col-lg-12 mb-4">
                 <div class="row">
-                    <div class="col-sm-6 col-md-5 my-1">
-                        <select class="form-control" id="filter" name="for" required>
-                            <option value="" disabled selected>Rekap Berdasar</option>
-                            @foreach($filter as $f)
-                            <option value="{{$f->id}}">{{$f->nama}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-sm-4 col-md-3 my-1">
-                        <button type="submit" class="btn btn-sm btn-success my-1">
-                            Filter
-                        </button>
-                    </div>
-                    <div class="col-sm-12 col-md-4 my-1 text-right">
+                    <form action="#" class="col-md-8" id="filter-form">
+                        <div class="row">
+                            <div class="col-7 my-1">
+                                <select class="form-control" id="filter" name="for" required>
+                                    <option value="" disabled selected>Rekap Berdasar</option>
+                                    @foreach($filter as $f)
+                                    <option value="{{$f->id}}">{{$f->nama}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-5 my-1">
+                                <button type="submit" class="btn btn-sm btn-success my-1">
+                                    Filter
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="{{route('rekap.download', ['id'=>$id_formulir])}}" class="col-md-4" id="download-form" method="POST">
+                    @csrf
+                    @if(isset($berdasar))
+                    <input type="hidden" name="for" readonly value="{{$berdasar->id}}">
+                    <div class="my-1 text-right">
                         <button type="submit" class="btn btn-sm btn-success my-1">
                             <i class="fas fa-download fa-sm text-white"></i>
                             &nbsp Download
                         </button>
                     </div>
+                    @endif
+                    </form>
                 </div>
-            </form>
+            </div>
         @if (isset($rekap))
         @foreach ($rekap as $key => $json)
         <div class="col-lg-12">
