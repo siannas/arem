@@ -230,6 +230,7 @@ Validasi
 <div class="container-fluid" style="max-width:60rem;">
     <div class="row">
         <div class="col-xxl-4 col-xl-12 mb-4">
+            @include('form.alert')
             <div class="card shadow h-100">
                 <div class="card-body h-100 p-5">
                     <div class="row align-items-center">

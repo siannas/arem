@@ -113,7 +113,7 @@ Route::post('/pertanyaan/add/{formulir}', 'PertanyaanController@store')->name('p
 
 Route::post('/pertanyaan/generate/preview', 'PertanyaanController@preview')->name('pertanyaan.preview');
 
-Route::get('/formulir/user/{formulir}', 'FormulirController@generate');
+Route::get('/formulir/user/{formulir}', 'FormulirController@generate')->middleware(['hasProfile']);
 
 Route::get('/rekap/tes/{id}', 'RekapController@tes');
 
@@ -122,23 +122,6 @@ Route::post('/rekap/download/{id}', 'RekapController@download')->name('rekap.dow
 Route::resource('/rekap', RekapController::class)->except([
     'create', 'edit', 'store'
 ]);
-
-Route::get('/tes/{id_puskesmas}', function(App\User $id_puskesmas){
-    $kelurahan = $id_puskesmas->users;
-    foreach ($kelurahan as $key => $k) {
-        $sekolah[] = $k->users;
-    }
-    dd($sekolah);
-});
-
-Route::get('/tes/formulir/user/{formulir}', function(App\Formulir $formulir){
-    return view('form.formGenerated', [ 'formulir' => $formulir, 'allPertanyaan' => $formulir->pertanyaan]);
-});
-
-Route::get('/coba/dong', function(){
-    $user = App\User::find(113);
-    dd($user->parents()->where('id_role',4)->get());
-});
 
 Route::post('/upload/{id_user}/{id_form}/{id_pertanyaan}', 'FileController@upload')->name('file.upload');
 
@@ -157,12 +140,6 @@ Route::post('/imunisasi', 'ImunisasiController@store')->name('imunisasi.simpan')
 Route::get('/imunisasi/validasi', 'ImunisasiController@validasi');
 Route::put('/imunisasi/validasi/{id}', 'ImunisasiController@validasiImunisasi')->name('imunisasi.validasi');
 
-use Maatwebsite\Excel\Facades\Excel;
-
-Route::get('/tis', function(){
-    return Excel::download(new \App\Exports\Template, 'template.xlsx');
-});
-
 Route::get('/import', 'ImporSiswaController@index')->name('data-siswa.import');
 Route::post('/import', 'ImporSiswaController@preview')->name('data-siswa.import.preview');
 Route::post('/import/send', 'ImporSiswaController@send')->name('data-siswa.import.send');
@@ -175,5 +152,3 @@ Route::get('/kie/edit/{id}', 'KieController@edit');
 Route::put('/kie/edit/{id}', 'KieController@update')->name('kie.update');
 Route::get('/kie/{id}', 'KieController@show')->name('kie.show');
 Route::delete('/kie/{id}', 'KieController@destroy')->name('kie.destroy');
-
-Route::get('tes2', 'RekapController@tes2');

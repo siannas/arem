@@ -78,7 +78,7 @@ Profil
                             <div class="col-md-6">
                                 <label class="small mb-1" for="JnsKelamin">Jenis Kelamin</label>
                                 <div class="input-group">
-                                    <select id="gender" name="gender" class="form-control">
+                                    <select id="gender" name="gender" class="form-control" required>
                                         <option selected disabled>Pilih Jenis Kelamin</option>
                                         <option value="L" @if(is_null($profil)==false && $profil->gender=="L") selected @endif>Laki-laki</option>
                                         <option value="P" @if(is_null($profil)==false && $profil->gender=="P") selected @endif>Perempuan</option>
@@ -104,7 +104,7 @@ Profil
                             <!-- Form Group (birthday)-->
                             <div class="col-md-6">
                                 <label class="small mb-1" for="tanggal_lahir">Tanggal Lahir</label>
-                                <input class="form-control" id="tanggal_lahir" type="date" name="tanggal_lahir" value="@if(is_null($profil)==false){{$profil->tanggal_lahir}}@endif">
+                                <input class="form-control" id="tanggal_lahir" type="date" name="tanggal_lahir" value="@if(is_null($profil)==false){{$profil->tanggal_lahir}}@endif" required>
                             </div>
                         </div>
                         
