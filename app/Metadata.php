@@ -15,6 +15,8 @@ class Metadata extends Model
 
     protected $primaryKey = 'key';
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +24,6 @@ class Metadata extends Model
      */
     protected $fillable = [
         'key',
-        'data',
+        'value',
     ];
 }

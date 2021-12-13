@@ -8,6 +8,7 @@ use App\Pertanyaan;
 use App\Jawaban;
 use App\Rekap;
 use App\User;
+use App\Metadata;
 use Illuminate\Support\Facades\Storage;
 
 class doRekap extends Command
@@ -76,14 +77,14 @@ class doRekap extends Command
                         $query->select('id', 'kelas');
                     },
                     'getUser' => function ($query) {
-                        $query->select('id', 'kelas');
+                        $query->select('id', 'kelas','nama');
                     },
                     'getUser.profil'
                 ])->first();
             
             $kelas = $jawaban_raw->getUser->kelas;
             // $gender = $jawaban_raw->getUser->profil->gender;
-            //sementara karena belum ada profil
+            ////sementara karena belum ada profil
             $gender_arr=['L','P'];
             $gender = $gender_arr[array_rand($gender_arr)];
             
@@ -145,50 +146,71 @@ class doRekap extends Command
 
                 //cek pada semua simpulan
                 foreach ($simpulan as $k2 => $s) {
+                    $metaSIndex=FALSE;
                     switch ($s['tipe']) {
-                    case 1:
-                        $id = $s['id'];
-                        if ($is_new) {
-                            array_push($csv_arr, 0, 0);
-                        } //PUSH UNTUK LAKI, PEREMPUAN
+                        case 1:
+                            $id = $s['id'];
+                            if ($is_new) {
+                                array_push($csv_arr, 0, 0);
+                            } //PUSH UNTUK LAKI, PEREMPUAN
 
-                        if (in_array($jawaban[$id], $s['opsi'])) {
-                            $csv_arr[$s_count+$add]+=1;
-                        }
-                        
-                        $s_count+=2;
-                        break;
-                    case 2:
-                        if ($is_new) {
-                            array_push($csv_arr, 0, 0);
-                        } //PUSH UNTUK LAKI, PEREMPUAN
-                        //apabila jawab salah satu dari array ini
-                        for ($i=0; $i < count($s['on']); $i++) {
-                            $item = $s['on'][$i];
-                            $id = $item[0];
-                            if ($jawaban[$id] === $item[1]) {
+                            if (in_array($jawaban[$id], $s['opsi'])) {
                                 $csv_arr[$s_count+$add]+=1;
-                                break;
+                                $metaSIndex=$s_count/2;
                             }
-                        }
+                            
+                            $s_count+=2;
+                            break;
+                        case 2:
+                            if ($is_new) {
+                                array_push($csv_arr, 0, 0);
+                            } //PUSH UNTUK LAKI, PEREMPUAN
+                            //apabila jawab salah satu dari array ini
+                            for ($i=0; $i < count($s['on']); $i++) {
+                                $item = $s['on'][$i];
+                                $id = $item[0];
+                                if ($jawaban[$id] === $item[1]) {
+                                    $csv_arr[$s_count+$add]+=1;
+                                    $metaSIndex=$s_count/2;
+                                    break;
+                                }
+                            }
 
-                        $s_count+=2;
-                        break;
-                    case 3:
-                        $range = count($s['range']);
-                        if ($is_new) {   //PUSH UNTUK LAKI, PEREMPUAN
-                            $f = array_fill(0, $range*2, 0);
-                            $csv_arr = array_merge($csv_arr, $f);
+                            $s_count+=2;
+                            break;
+                        case 3:
+                            $range = count($s['range']);
+                            if ($is_new) {   //PUSH UNTUK LAKI, PEREMPUAN
+                                $f = array_fill(0, $range*2, 0);
+                                $csv_arr = array_merge($csv_arr, $f);
+                            }
+                            $at = 0;
+                            $field = $this->cekSimpulanTipeFormula($jawaban, $s, $at);
+                            if ($field) {
+                                //tambah 1 anak pada kolom dengan field ini
+                                $csv_arr[$s_count+$add+$at*2]+=1;
+                                $metaSIndex=$s_count/2+$at;
+                            }
+                            $s_count+=($range*2);
+                            break;
+                    }
+
+                    if($metaSIndex){
+                        //assign siswa ke meta dari opsi simpulan
+                        $metakey="rekap_{$p->id_formulir}_{$p->id}_s_{$k2}_{$gender}";
+                        $meta = Metadata::where('key',$metakey)->first();
+                        if($meta === NULL){
+                            $meta = Metadata::make([
+                                'key'=> $metakey,
+                                'value'=>$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id,
+                            ]);
                         }
-                        $at = 0;
-                        $field = $this->cekSimpulanTipeFormula($jawaban, $s, $at);
-                        if ($field) {
-                            //tambah 1 anak pada kolom dengan field ini
-                            $csv_arr[$s_count+$add+$at*2]+=1;
+                        else{
+                            $meta->value.="\n".$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id;
                         }
-                        $s_count+=($range*2);
-                        break;
-                }
+                        $meta->save();
+                    }
+                    
                 }
             
                 //KOLEKSI JAWABAN UNTUK REKAP
@@ -209,6 +231,20 @@ class doRekap extends Command
                             $pp[$aa->id]=$opsi;
                         }
                         $pp[$aa->id][$key][$gender==='L'?0:1] += 1;
+
+                        //assign siswa ke meta dari opsi jawaban
+                        $metakey="rekap_{$jawaban_raw->id_formulir}_{$aa->id}_{$key}_{$gender}";
+                        $meta = Metadata::where('key',$metakey)->first();
+                        if($meta === NULL){
+                            $meta = Metadata::make([
+                                'key'=> $metakey,
+                                'value'=>$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id,
+                            ]);
+                        }
+                        else{
+                            $meta->value.="\n".$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id;
+                        }
+                        $meta->save();
                     }
                 }
                 //END of KOLEKSI JAWABAN UNTUK REKAP

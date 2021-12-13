@@ -14,8 +14,8 @@ class CreateMetadataTable extends Migration
     public function up()
     {
         Schema::create('metadata', function (Blueprint $table) {
-            $table->string('key', 20);
-            $table->text('data');
+            $table->string('key', 50);
+            $table->text('value');
             $table->primary('key');
         });
     }
