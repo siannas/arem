@@ -228,8 +228,7 @@ Dashboard
 <script>
 const myPieChart2 = function(id, labels, datas, $canvas=null, colors={backgroundColor:null,hoverBackgroundColor:null}) {
     var chartElem = $canvas || $('#'+id+'-canvas');
-    // console.log('chartElem',chartElem);
-    // return;
+    
     new Chart( chartElem, {
         type: 'doughnut',
         data: {
@@ -325,7 +324,7 @@ const legend='<span class="mr-2"><i class="fas fa-circle"></i>  </span>';
 const myCSV=@json($csv_gabungan);
 const mySimpulan=@json($simpulans);
 const myPertanyaan=@json($pertanyaan);
-const myHasil=@json($hasil_gabungan);console.log(myPertanyaan);
+const myHasil=@json($hasil_gabungan);
 var myData= myCSV.reduce(function (r, a) {
         a.forEach(function (b, i) {
             r[i] = (r[i] || 0) + parseInt(b);
@@ -363,6 +362,7 @@ $(document).ready(function() {
                 var opsis = myDataJSON[p.id];
                 var $newchart = $(template);
                 var $canvas=$newchart.find('canvas');
+                $canvas.attr('onclick',"onChartClicked("+counter+",\""+p['id']+"\",event)");
                 $newchart.find("#-title").text(p['pertanyaan']).removeAttr('id');
 
                 var values=[];
@@ -472,5 +472,24 @@ $(document).ready(function() {
         width: '100%'
     });
 });
+
+const onChartClicked = function(index,idpertanyaan, evt){
+    const _chart = Chart.instances[index];
+    var activePoint = _chart.getElementAtEvent(evt)[0];    
+    var label = _chart.data.labels[activePoint._index];
+    var gender = label.substr(-2,1);  // L atau P
+    var opsi = label.substr(0,label.length-4);  // opsi jawaban
+    
+    let url="{{route('rekap.siswa.by.jawaban', ['id'=>$id_formulir])}}"+"?for={{$for}}"+"&idpertanyaan="+idpertanyaan+"&gender="+gender+"&opsi="+opsi;
+    console.log(url);
+}
+
+const parse = function(){
+    names.split('\n').forEach(name => {
+        var id = name.match(/,[^,]*$/)[0]; 
+        name = id.substr(1-id.length);
+        id = id.substr(1);
+    });
+}
 </script>
 @endsection

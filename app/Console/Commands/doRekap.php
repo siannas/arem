@@ -82,6 +82,7 @@ class doRekap extends Command
                     'getUser.profil'
                 ])->first();
             
+            $id_sekolah=$jawaban_raw->id_user_sekolah;
             $kelas = $jawaban_raw->getUser->kelas;
             // $gender = $jawaban_raw->getUser->profil->gender;
             ////sementara karena belum ada profil
@@ -197,18 +198,19 @@ class doRekap extends Command
 
                     if($metaSIndex){
                         //assign siswa ke meta dari opsi simpulan
-                        $metakey="rekap_{$p->id_formulir}_{$p->id}_s_{$k2}_{$gender}";
-                        $meta = Metadata::where('key',$metakey)->first();
-                        if($meta === NULL){
-                            $meta = Metadata::make([
-                                'key'=> $metakey,
-                                'value'=>$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id,
-                            ]);
-                        }
-                        else{
-                            $meta->value.="\n".$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id;
-                        }
-                        $meta->save();
+                        $metakey="rekap_{$id_sekolah}_{$p->id_formulir}_{$p->id}_s_{$k2}_{$gender}";
+                        Storage::append("rekap/".$metakey.".txt", $jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id);
+                        // $meta = Metadata::where('key',$metakey)->first();
+                        // if(Storage::exists("rekap".$metakey.".txt") === FALSE){
+                            // $meta = Metadata::make([
+                            //     'key'=> $metakey,
+                            //     'value'=>$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id,
+                            // ]);
+                        // }
+                        // else{
+                            // $meta->value.="\n".$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id;
+                        // }
+                        // $meta->save();
                     }
                     
                 }
@@ -233,18 +235,22 @@ class doRekap extends Command
                         $pp[$aa->id][$key][$gender==='L'?0:1] += 1;
 
                         //assign siswa ke meta dari opsi jawaban
-                        $metakey="rekap_{$jawaban_raw->id_formulir}_{$aa->id}_{$key}_{$gender}";
-                        $meta = Metadata::where('key',$metakey)->first();
-                        if($meta === NULL){
-                            $meta = Metadata::make([
-                                'key'=> $metakey,
-                                'value'=>$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id,
-                            ]);
-                        }
-                        else{
-                            $meta->value.="\n".$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id;
-                        }
-                        $meta->save();
+                        $metakey="rekap_{$id_sekolah}_{$jawaban_raw->id_formulir}_{$aa->id}_{$key}_{$gender}";
+                        Storage::append("rekap/".$metakey.".txt", $jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id);
+                        // $meta = Metadata::where('key',$metakey)->first();
+                        // if($meta === NULL){
+                        // if(Storage::exists("rekap".$metakey.".txt") === FALSE){
+                            // $meta = Metadata::make([
+                            //     'key'=> $metakey,
+                            //     'value'=>$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id,
+                            // ]);
+                        //     Storage::append("rekap".$metakey.".txt", $jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id);
+                        // }
+                        // else{
+                            // $meta->value.="\n".$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id;
+                        //     Storage::append("rekap".$metakey.".txt", "\n".$jawaban_raw->getUser->nama.",".$jawaban_raw->getUser->id);
+                        // }
+                        // $meta->save();
                     }
                 }
                 //END of KOLEKSI JAWABAN UNTUK REKAP

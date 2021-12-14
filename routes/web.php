@@ -58,6 +58,12 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/rujukan', 'ValidasiController@rujukan');
         Route::put('/rujukan/{id}', 'ValidasiController@validasiRujukan')->name('validasi.rujukan');
+
+        Route::post('/rekap/download/{id}', 'RekapController@download')->name('rekap.download');
+        Route::get('/rekap/siswa/by/jawaban/{id}', 'RekapController@getSiswaByJawaban')->name('rekap.siswa.by.jawaban');
+        Route::resource('/rekap', RekapController::class)->except([
+            'create', 'edit', 'store'
+        ]);
     });
 
     Route::middleware(['role:Kelurahan,Puskesmas,Kecamatan,Kota'])->group(function () {
@@ -80,7 +86,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:Puskesmas'])->group(function () {
-        Route::get('/data-skrining/{id_formulir}/{id_user}', 'FormulirController@generate_4_puskesmas');
+        Route::get('/data-skrining/{id_formulir}/{id_user}', 'FormulirController@generate_4_puskesmas')->name('data.skrining.siswa');
         Route::post('/pertanyaan-formulir/import', 'FormulirController@importIsiDataSkrining')->name('formulir.pertanyaan.import');
     });
 
@@ -114,14 +120,6 @@ Route::post('/pertanyaan/add/{formulir}', 'PertanyaanController@store')->name('p
 Route::post('/pertanyaan/generate/preview', 'PertanyaanController@preview')->name('pertanyaan.preview');
 
 Route::get('/formulir/user/{formulir}', 'FormulirController@generate')->middleware(['hasProfile']);
-
-Route::get('/rekap/tes/{id}', 'RekapController@tes');
-
-Route::post('/rekap/download/{id}', 'RekapController@download')->name('rekap.download');
-
-Route::resource('/rekap', RekapController::class)->except([
-    'create', 'edit', 'store'
-]);
 
 Route::post('/upload/{id_user}/{id_form}/{id_pertanyaan}', 'FileController@upload')->name('file.upload');
 

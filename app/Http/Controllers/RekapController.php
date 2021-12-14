@@ -115,6 +115,48 @@ class RekapController extends Controller
         ]);
     }
 
+    public function getSiswaByJawaban(Request $request, $id){
+        $data = $request->validate([
+            'for' => 'required|integer|',
+            'idpertanyaan' => 'required',
+            'opsi' => 'required',
+            'gender' => 'required',
+        ]);
+
+        $formulir = Formulir::findOrFail($id);
+        $user=\App\User::findOrFail($data['for']);
+
+        //cek apakah formulir khusus anak SD
+        $isSD= ($formulir->kelas === '1,2,3,4,5,6'? TRUE: FALSE);
+
+        // ambil sekolah yg termasuk
+        if($user->id_role===6){
+            $filter = User::where('id_role','2')
+                ->select('id')
+                ->get();
+        }else{
+            $filter = \DB::table('user_pivot AS a')
+                ->join('users AS u', 'u.id', '=', 'a.id_child')
+                ->select('u.id')
+                ->where('u.id_role','2')
+                ->where('a.id_user',$user->id)
+                ->where(function($q) use($isSD) {
+                    $q->where('u.kelas',($isSD?'=':'>'),'1')
+                    ->orWhere('u.kelas', NULL);
+                })
+                ->get();            
+        }
+        $res=[];
+        foreach ($filter as $s) {
+            $fileName = "rekap/rekap_{$s->id}_{$id}_{$data['idpertanyaan']}_{$data['opsi']}_{$data['gender']}.txt";
+            if(Storage::exists($fileName)){
+                $txt=Storage::get($fileName);
+                $res=array_merge($res,preg_split('/\r\n|\r|\n/', $txt));
+            }
+        }
+        return $res;
+    }
+
     public function download(Request $request, $id){
         $validator = Validator::make($request->all(), [
             'for' => 'required|exists:users,id'    // id sekolah

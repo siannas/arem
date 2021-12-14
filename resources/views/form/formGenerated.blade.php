@@ -411,7 +411,7 @@ for(var id in jawabans){
 @endforeach
 @endforeach
 
-    @if ($role==='Puskesmas' and $jawaban->validasi_puskesmas!==0)
+    @if ($role==='Puskesmas' and is_null($jawaban)==false and $jawaban->validasi_puskesmas!==0)
     $('input[type="text"]').attr('readonly', true);
     $('input[type="file"]').attr('disabled', true);
     $('input[type="radio"]:not(:checked)').attr('disabled', true);
