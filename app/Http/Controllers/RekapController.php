@@ -11,6 +11,7 @@ use App\User;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Validator;
+use \Illuminate\Routing\RouteCollection;
 
 class RekapController extends Controller
 {
@@ -134,6 +135,8 @@ class RekapController extends Controller
             $filter = User::where('id_role','2')
                 ->select('id')
                 ->get();
+        }else if($user->id_role===2){
+            $filter = [$user];
         }else{
             $filter = \DB::table('user_pivot AS a')
                 ->join('users AS u', 'u.id', '=', 'a.id_child')
@@ -146,15 +149,19 @@ class RekapController extends Controller
                 })
                 ->get();            
         }
-        $res=[];
+        $resHTML='';
         foreach ($filter as $s) {
             $fileName = "rekap/rekap_{$s->id}_{$id}_{$data['idpertanyaan']}_{$data['opsi']}_{$data['gender']}.txt";
             if(Storage::exists($fileName)){
                 $txt=Storage::get($fileName);
-                $res=array_merge($res,preg_split('/\r\n|\r|\n/', $txt));
+                $res=preg_split('/\r\n|\r|\n|,/', $txt);
+                for ($i=0; $i < count($res)/2; $i++) { 
+                    $rut=route('data.skrining.siswa', ['id_formulir'=>$id,'id_user'=>$res[$i*2+1]]);
+                    $resHTML.="<tr><td><a target=\"_blank\" href=\"".$rut."\">{$res[$i*2]}</a></td><td width=\"60px\"><a target=\"_blank\" href=\"".$rut."\" class=\"btn btn-sm btn-light\"><i class=\"fas fa-fw fa-eye\"></i></a></td></tr>";
+                }
             }
         }
-        return $res;
+        return $resHTML;
     }
 
     public function download(Request $request, $id){

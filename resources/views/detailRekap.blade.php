@@ -29,6 +29,39 @@ Dashboard
 <script>
     var myData= {};
 </script>
+<!-- Modal -->
+<div class="modal fade" id="modalSiswa" tabindex="-1" aria-labelledby="modalSiswa" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="modalSiswaLabel">Jawaban rekap_97_14_AVOvd_Tidak_P</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="modalSiswaBody">
+            <table class="table table-bordered mb-0" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th width="78px">Aksi</th>
+                    </tr>
+                </thead>    
+            </table>
+            <div style="height: 60vh;position: relative;overflow-y: scroll;">
+            <table class="table table-bordered" id="modalSiswaTable" width="100%" cellspacing="0">
+                <tbody>
+                    <!-- content siswa -->
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
 <div class="container-fluid">
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Rekap Skrining</h1>
@@ -473,7 +506,8 @@ $(document).ready(function() {
     });
 });
 
-const onChartClicked = function(index,idpertanyaan, evt){
+const onChartClicked = async function(index,idpertanyaan, evt){
+    $('#loading').modal('show');
     const _chart = Chart.instances[index];
     var activePoint = _chart.getElementAtEvent(evt)[0];    
     var label = _chart.data.labels[activePoint._index];
@@ -481,7 +515,17 @@ const onChartClicked = function(index,idpertanyaan, evt){
     var opsi = label.substr(0,label.length-4);  // opsi jawaban
     
     let url="{{route('rekap.siswa.by.jawaban', ['id'=>$id_formulir])}}"+"?for={{$for}}"+"&idpertanyaan="+idpertanyaan+"&gender="+gender+"&opsi="+opsi;
-    console.log(url);
+    try {
+        $('#modalSiswaLabel').text(opsi+' ('+gender+')')
+        const res = await myRequest.get(url);
+        $('#modalSiswaTable tbody').html(res);
+        $('#modalSiswa').modal('show');
+    } catch(err) {
+        console.log(err);
+    }
+    setTimeout(() => {
+        $('#loading').modal('hide');
+    }, 1000);
 }
 
 const parse = function(){
