@@ -270,6 +270,8 @@ class FormulirController extends Controller
         $ac->getCell('B3')->setValue("2");
 
         $maxcol=2;
+
+        $ac->getProtection()->setSheet(true);
         //header pertanyaan dan kode
         foreach ($pertanyaan as $i=>$val) {
             $maxcol++;
@@ -290,6 +292,7 @@ class FormulirController extends Controller
             $cell->setValue($nama);
             $cell = $ac->getCellByColumnAndRow(2, $i+4);
             $cell->setValue($nik);
+
             $ac->getColumnDimension($cell->getColumn())->setWidth(15);
         }
 
@@ -324,6 +327,7 @@ class FormulirController extends Controller
         $ac->getStyle('A3:'.$maxcol.'3')->getFont()->setSize(8);
         $ac->getStyle('A4:A'.$maxrow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
         $ac->getStyle('B4:B'.$maxrow)->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER);
+        $ac->getStyle('C4:'.$maxcol.$maxrow)->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
 
         $sekolah = \App\User::select('id','nama')->where('id',explode('_',json_decode($request->input('sekolah')))[0])->first();
         $fileName="INPUT_{$sekolah->nama}.xlsx";

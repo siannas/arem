@@ -65,12 +65,12 @@ Profil
                     <div class="card-body">
                         <div class="mb-3">
                             <label class="small mb-1" for="Username">Username (NIK)</label>
-                            <input class="form-control" id="Username" type="text" value="{{Auth::user()->username}}" readonly>
+                            <input class="form-control" id="Username" type="text" value="{{Auth::user()->username}}" disabled>
                         </div>
                         
                         <div class="mb-3">
                             <label class="small mb-1" for="Name">Nama</label>
-                            <input class="form-control" id="Name" type="text" value="{{Auth::user()->nama}}" readonly>
+                            <input class="form-control" id="Name" type="text" value="{{Auth::user()->nama}}" disabled>
                         </div>
                         <!-- Form Row -->
                         <div class="row gx-3 mb-3">
@@ -78,8 +78,8 @@ Profil
                             <div class="col-md-6">
                                 <label class="small mb-1" for="JnsKelamin">Jenis Kelamin</label>
                                 <div class="input-group">
-                                    <select id="gender" name="gender" class="form-control" required>
-                                        <option selected disabled>Pilih Jenis Kelamin</option>
+                                    <select id="gender" name="gender" class="form-control" required @if(is_null($profil)==false) disabled @endif>
+                                        <option value="">Pilih Jenis Kelamin</option>
                                         <option value="L" @if(is_null($profil)==false && $profil->gender=="L") selected @endif>Laki-laki</option>
                                         <option value="P" @if(is_null($profil)==false && $profil->gender=="P") selected @endif>Perempuan</option>
                                     </select>

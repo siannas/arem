@@ -51,14 +51,14 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
 <body id="page-top">
 
     <!-- Page Wrapper -->
-    <div id="wrapper">
+    <div id="wrapper" style="min-height:calc(100vh + 2px);">
 
         <!-- Sidebar -->
         @yield('sidebar')
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper" class="d-flex flex-column" style="min-height:100vh;">
 
             @if($role=='Siswa')
             <div class="bg">

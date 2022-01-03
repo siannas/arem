@@ -37,7 +37,7 @@
     </div>
     <!-- <div class="bg-pattern"> -->
     <div class="container">
-
+        
         <!-- Outer Row -->
         <div class="row justify-content-center">
 
@@ -90,6 +90,9 @@
 
         </div>
 
+    </div>
+    <div style="position:fixed; bottom:0; right:0; margin: 10px;">
+        <a href="http://www.freepik.com" style="color:white;">Designed by pch.vector / Freepik</a>
     </div>
     <!-- </div> -->
     <!-- Custom scripts for all pages-->
