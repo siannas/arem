@@ -319,7 +319,7 @@ const cardTemplate=`<div class="card shadow mb-4">
     </div>
 </div>`
 const template=`<div class="row" style="padding-top:30px" >
-    <div class="col-12" style="margin-bottom:5px">
+    <div class="col-12" style="margin-bottom:5px; cursor:pointer;">
         <h5 id="-title"></h5>
         <div class="chart-pie pt-4 pb-2">
             <canvas></canvas>
@@ -507,25 +507,31 @@ $(document).ready(function() {
 });
 
 const onChartClicked = async function(index,idpertanyaan, evt){
-    $('#loading').modal('show');
-    const _chart = Chart.instances[index];
-    var activePoint = _chart.getElementAtEvent(evt)[0];    
-    var label = _chart.data.labels[activePoint._index];
-    var gender = label.substr(-2,1);  // L atau P
-    var opsi = label.substr(0,label.length-4);  // opsi jawaban
     
-    let url="{{route('rekap.siswa.by.jawaban', ['id'=>$id_formulir])}}"+"?for={{$for}}"+"&idpertanyaan="+idpertanyaan+"&gender="+gender+"&opsi="+opsi;
-    try {
-        $('#modalSiswaLabel').text(opsi+' ('+gender+')')
-        const res = await myRequest.get(url);
-        $('#modalSiswaTable tbody').html(res);
-        $('#modalSiswa').modal('show');
-    } catch(err) {
-        console.log(err);
+    const _chart = Chart.instances[index];
+    var activePoint = _chart.getElementAtEvent(evt)[0];
+    console.log(activePoint==null);
+    if(activePoint != null){
+        $('#loading').modal('show');
+        var label = _chart.data.labels[activePoint._index];
+        var gender = label.substr(-2,1);  // L atau P
+        var opsi = label.substr(0,label.length-4);  // opsi jawaban
+        
+        let url="{{route('rekap.siswa.by.jawaban', ['id'=>$id_formulir])}}"+"?for={{$for}}"+"&idpertanyaan="+idpertanyaan+"&gender="+gender+"&opsi="+opsi;
+
+        try {
+            $('#modalSiswaLabel').text(opsi+' ('+gender+')')
+            const res = await myRequest.get(url);
+            $('#modalSiswaTable tbody').html(res);
+            $('#modalSiswa').modal('show');
+        } catch(err) {
+            console.log(err);
+        }
+        setTimeout(() => {
+            $('#loading').modal('hide');
+        }, 1000);
     }
-    setTimeout(() => {
-        $('#loading').modal('hide');
-    }, 1000);
+    
 }
 
 const parse = function(){

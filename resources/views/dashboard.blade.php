@@ -116,8 +116,8 @@ $(document).ready(function() {
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
 </div>
 
 <!-- Content Row -->
@@ -131,7 +131,7 @@ $(document).ready(function() {
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Jumlah Siswa</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">40,000</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{number_format($statusList[1])}}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -219,41 +219,41 @@ $(document).ready(function() {
                 <h6 class="m-0 font-weight-bold text-primary">Status</h6>
             </div>
             <div class="card-body">
-                <h4 class="small font-weight-bold">Belum Mengisi (20/100) <span
-                        class="float-right">20%</span></h4>
+                <h4 class="small font-weight-bold">Belum Mengisi ({{$statusList[2]}}/{{$statusList[1]}}) <span    
+                    class="float-right">{{number_format($statusList[2]/$statusList[1]*100,2)}}%</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                        aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{$statusList[2]/$statusList[1]*100}}%"
+                        aria-valuenow="{{$statusList[2]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
-                <h4 class="small font-weight-bold">Belum Tervalidasi Sekolah (10/100) <span
-                        class="float-right">10%</span></h4>
+                <h4 class="small font-weight-bold">Belum Tervalidasi Sekolah ({{$statusList[3]}}/{{$statusList[1]}}) <span
+                        class="float-right">{{number_format($statusList[3]/$statusList[1]*100,2)}}%</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: 10%"
-                        aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{$statusList[3]/$statusList[1]*100}}%"
+                        aria-valuenow="{{$statusList[3]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
-                <h4 class="small font-weight-bold">Tervalidasi Sekolah (40/100) <span
-                        class="float-right">40%</span></h4>
+                <h4 class="small font-weight-bold">Tervalidasi Sekolah ({{$statusList[4]}}/{{$statusList[1]}}) <span
+                        class="float-right">{{number_format($statusList[4]/$statusList[1]*100,2)}}%</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar" role="progressbar" style="width: 40%"
-                        aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar" role="progressbar" style="width: {{$statusList[4]/$statusList[1]*100}}%"
+                        aria-valuenow="{{$statusList[4]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
-                <h4 class="small font-weight-bold">Tervalidasi Puskesmas (20/100) <span
-                        class="float-right">20%</span></h4>
+                <h4 class="small font-weight-bold">Tervalidasi Puskesmas ({{$statusList[5]}}/{{$statusList[1]}}) <span
+                        class="float-right">{{number_format($statusList[5]/$statusList[1]*100,2)}}%</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 20%"
-                        aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-info" role="progressbar" style="width: {{$statusList[5]/$statusList[1]*100}}%"
+                        aria-valuenow="{{$statusList[5]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
-                <h4 class="small font-weight-bold">Dirujuk (8/100) <span
-                        class="float-right">8%</span></h4>
+                <h4 class="small font-weight-bold">Dirujuk ({{$statusList[6]}}/{{$statusList[1]}}) <span
+                        class="float-right">{{number_format($statusList[6]/$statusList[1]*100,2)}}%</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: 8%"
-                        aria-valuenow="8" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{$statusList[6]/$statusList[1]*100}}%"
+                        aria-valuenow="{{$statusList[6]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
-                <h4 class="small font-weight-bold">Sudah Dirujuk (2/100) <span
-                        class="float-right">2%</span></h4>
+                <h4 class="small font-weight-bold">Sudah Dirujuk ({{$statusList[7]}}/{{$statusList[1]}}) <span
+                        class="float-right">{{number_format($statusList[7]/$statusList[1]*100,2)}}%</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 2%"
-                        aria-valuenow="2" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{$statusList[7]/$statusList[1]*100}}%"
+                        aria-valuenow="{{$statusList[7]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
             </div>
         </div>

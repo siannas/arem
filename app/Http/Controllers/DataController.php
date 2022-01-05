@@ -8,6 +8,7 @@ use App\UserPivot;
 use App\Jawaban;
 use App\Formulir;
 use App\Pengajuan;
+use App\Metadata;
 use Auth;
 use Hash;
 use Validator;
@@ -17,6 +18,7 @@ class DataController extends Controller
 {
     public function dashboard(){
         $user = Auth::user();
+        $listSekolah=[];
         if($user->id_role==1){
             // Cari relasi yang berhubungan dengan user login
             $sekolah = UserPivot::where('id_child', $user->id)->get();
@@ -28,7 +30,7 @@ class DataController extends Controller
             }
             else{
                 // Get data semua sekolah untuk daftar
-                $dataSekolah = User::where('id_role', 2)->get();;
+                $dataSekolah = User::where('id_role', 2)->get();
                 $detailSekolah = [];
             }
             // Cari data pengajuan yg blm diverifikasi
@@ -36,7 +38,38 @@ class DataController extends Controller
             
             return view('dashboard', ['sekolah'=>$detailSekolah, 'dataSekolah'=>$dataSekolah, 'dataPengajuan'=>$dataPengajuan]);
         }
-        return view('dashboard');
+        else{
+            $statusList = [0,0,0,0,0,0,0,0];
+            // Penghitungan Status Role Dinas
+            if($user->id_role == 6){
+                $statusList = [0,1,0,0,0,0,0,0];
+                $relasi = User::where('id_role', 2)->get();
+                foreach($relasi as $unit){
+                    $status = Metadata::where('key', 'jumlah_status_'.$unit->id)->first();
+                    $tempStatus = explode(',', $status->value);
+                    for($i=1;$i<count($tempStatus);$i++){
+                        $statusList[$i] += intval($tempStatus[$i]);
+                    }   
+                }
+            }
+            // Penghitungan Status Role Selain Dinas & Sekolah
+            elseif($user->id_role != 2){
+                $relasi = $user->users()->where('id_role', 2)->get();
+                foreach($relasi as $unit){
+                    $status = Metadata::where('key', 'jumlah_status_'.$unit->id)->first();
+                    $tempStatus = explode(',', $status->value);
+                    for($i=1;$i<count($tempStatus);$i++){
+                        $statusList[$i] += intval($tempStatus[$i]);
+                    }   
+                }
+            }
+            // Penghitungan Status Role Sekolah
+            else{
+                $status = Metadata::where('key', 'jumlah_status_'.$user->id)->first();
+                $statusList = explode(',', $status->value);
+            }
+        }
+        return view('dashboard', ['statusList' => $statusList]);
     }
 
     public function pengajuan(){
