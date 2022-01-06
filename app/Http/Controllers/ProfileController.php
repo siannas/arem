@@ -64,7 +64,7 @@ class ProfileController extends Controller
         ]);
         
         if ($validator->fails()) {
-            return back()->withError($validator->errors()->first('file'));
+            throw new HttpResponseException(response()->json($validator->errors(), 422));
         }
 
         $mime = $request->file('file')->getMimeType();

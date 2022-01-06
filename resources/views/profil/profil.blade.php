@@ -43,7 +43,9 @@ Profil
             <div class="card mb-4 mb-xl-0">
                 <div class="card-header font-weight-bold text-primary">Foto Profil</div>
                 <div class="card-body text-center">
-                    <img class="img-account-profile rounded-circle mb-2" src="{{ isset($profil->foto) ? $profil->foto : asset('public/img/undraw_profile.svg')}}" alt="" style="height:10rem;">
+                    <div style="height:10rem;width:10rem;margin: auto;overflow: hidden;position: relative;" class=" rounded-circle">
+                        <img class="img-account-profile profile-pict mb-2" src="{{ isset($profil->foto) ? $profil->foto : asset('public/img/undraw_profile.svg')}}" alt="">
+                    </div>
                     @if(isset($profil->foto))
                     <form action="{{route('profil.hapus')}}" method="post">
                     @csrf
@@ -78,10 +80,10 @@ Profil
                             <div class="col-md-6">
                                 <label class="small mb-1" for="JnsKelamin">Jenis Kelamin</label>
                                 <div class="input-group">
-                                    <select id="gender" name="gender" class="form-control" required @if(is_null($profil)==false) disabled @endif>
+                                    <select id="gender" name="gender" class="form-control" required @if( in_array($profil->gender, ['L','P']) ) disabled @endif>
                                         <option value="">Pilih Jenis Kelamin</option>
-                                        <option value="L" @if(is_null($profil)==false && $profil->gender=="L") selected @endif>Laki-laki</option>
-                                        <option value="P" @if(is_null($profil)==false && $profil->gender=="P") selected @endif>Perempuan</option>
+                                        <option value="L" @if($profil->gender=="L") selected @endif>Laki-laki</option>
+                                        <option value="P" @if($profil->gender=="P") selected @endif>Perempuan</option>
                                     </select>
                                 </div>
                             </div>
@@ -152,8 +154,20 @@ $("#trigger-photo").click(function(){
     $("#photo").click();
 });
 
-document.getElementById("photo").onchange = function() {
-    document.getElementById("photo-form").submit();
+document.getElementById("photo").onchange = async function() {
+    file=$(this)[0].files[0];
+
+    try {
+        var formData = new FormData();
+        formData.append('_token', "{{ csrf_token() }}");
+        var newfile = await my.noMoreBigFile(file);
+        formData.append('file', newfile);
+        const res = await myRequest.upload( "{{route('profil.upload')}}" , formData);
+        window.location.reload();
+    } catch (err) {
+        console.log('ayee');
+        myAlert('Terjadi kesalahan, pastikan file berupa gambar.');
+    }
 };
 </script>
 @endsection

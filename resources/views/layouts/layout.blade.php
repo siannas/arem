@@ -268,6 +268,9 @@ $foto = Profile::select('foto')->where('id_user', Auth::user()->id)->first();
 
     <!-- bootstrap multiselect -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.14/js/bootstrap-multiselect.min.js" integrity="sha512-ByDbyutg5bTK+6f4Ke7Fgcg2I2fMUnOdzwC+F/ECFpgde2o2QHRVTFa//oeAHrJuAGX61DPNeKA80KA6V+ca7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- custom js -->
+    <script src="{{ asset('public/js/custom.js') }}"></script>
     @yield('script')
     @stack('scripts')
     

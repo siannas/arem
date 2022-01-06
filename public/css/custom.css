@@ -145,3 +145,10 @@ div.custom-control-right .custom-control-label::before {
 .float-end{
     float: right;
 }
+
+.profile-pict{
+    position: absolute;
+    left: -10%;
+    top: 0;
+    width: 120%;
+}
