@@ -111,6 +111,32 @@ $(document).ready(function() {
 
 @else
 @section('content')
+<div class="modal fade" id="ubah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pengumuman</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{{route('pengumuman.store')}}" method="post">
+        @csrf
+        <div class="modal-body">
+            <div class="form-group">
+                <textarea class="form-control" placeholder="Masukkan Deskripsi Pertanyaan" name="deskripsi" style="height: 200px;">{{$pengumuman->value}}</textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid">
 
 <!-- Page Heading -->
@@ -123,248 +149,122 @@ $(document).ready(function() {
 <!-- Content Row -->
 @include('form.alert')
 <div class="row">
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            Jumlah Siswa</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{number_format($statusList[1])}}</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-users fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            Tervalidasi</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">15,000</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Belum 
-                        </div>
+    <!-- Card Siswa Terdaftar -->
+    <div class="col-xl-6 col-md-6 mb-4">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
                         <div class="row no-gutters align-items-center">
-                            <div class="col-auto">
-                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Siswa Terdaftar</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{number_format($statusList[1])}}</div>
                             </div>
-                            <div class="col">
-                                <div class="progress progress-sm mr-2">
-                                    <div class="progress-bar bg-info" role="progressbar"
-                                        style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                        aria-valuemax="100"></div>
-                                </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="col-auto">
-                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+            </div>
+
+            <!-- Card Siswa Tdk Terdaftar -->
+            <div class="col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Siswa Tidak Terdaftar</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{number_format($jumlahSiswa[0]-$jumlahSiswa[1])}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Pending Requests Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Pending Requests</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-comments fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Content Row -->
-<div class="row">
-
-    <!-- Content Column -->
-    <div class="col-lg-6 mb-4">
-
-        <!-- Project Card Example -->
+        
+        <!-- Pengumuman -->
         <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <div class="row">
+                    <div class="col">
+                        <h6 class="m-0 font-weight-bold text-primary">Pengumuman</h6>
+                    </div>
+                    <div class="col text-right">
+                        @if($role == 'Kota')
+                            <button type="button" class="btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#ubah"><i class="fas fa-edit fa-sm text-white-50"></i>Ubah</button>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p>{{$pengumuman->value}}</p>
+                Manual: <a href="https://drive.google.com/drive/folders/1CDnm8_gpiOMNKSvkqSWqEXEQQQJtKzNQ?usp=sharing">Link</a>
+            </div>
+        </div>    
+    </div>
+    
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-6 col-md-6 mb-4">
+        <div class="card shadow">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Status</h6>
             </div>
             <div class="card-body">
-                <h4 class="small font-weight-bold">Belum Mengisi ({{$statusList[2]}}/{{$statusList[1]}}) <span    
-                    class="float-right">{{number_format($statusList[2]/$statusList[1]*100,2)}}%</span></h4>
+                @php
+                function cekNol($statusList, $nomor, $jumlah){
+                    if($statusList[$jumlah]>0){
+                        return $statusList[$nomor]/$statusList[$jumlah]*100;
+                    } 
+                    else{
+                        return 0;
+                    }
+                }
+                @endphp
+                <h4 class="small font-weight-bold">Belum Mengisi ({{$statusList[2]}}) <span    
+                    class="float-right">@php echo number_format(cekNol($statusList,2,1),2) @endphp %</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{$statusList[2]/$statusList[1]*100}}%"
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: @php echo cekNol($statusList,2,1); @endphp%"
                         aria-valuenow="{{$statusList[2]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
-                <h4 class="small font-weight-bold">Belum Tervalidasi Sekolah ({{$statusList[3]}}/{{$statusList[1]}}) <span
-                        class="float-right">{{number_format($statusList[3]/$statusList[1]*100,2)}}%</span></h4>
+                <h4 class="small font-weight-bold">Belum Tervalidasi Sekolah ({{$statusList[3]}}) <span
+                        class="float-right">@php echo number_format(cekNol($statusList,3,1),2) @endphp %</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{$statusList[3]/$statusList[1]*100}}%"
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: @php echo cekNol($statusList,3,1); @endphp%"
                         aria-valuenow="{{$statusList[3]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
-                <h4 class="small font-weight-bold">Tervalidasi Sekolah ({{$statusList[4]}}/{{$statusList[1]}}) <span
-                        class="float-right">{{number_format($statusList[4]/$statusList[1]*100,2)}}%</span></h4>
+                <h4 class="small font-weight-bold">Tervalidasi Sekolah ({{$statusList[4]}}) <span
+                        class="float-right">@php echo number_format(cekNol($statusList,4,1),2) @endphp %</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar" role="progressbar" style="width: {{$statusList[4]/$statusList[1]*100}}%"
+                    <div class="progress-bar" role="progressbar" style="width: @php echo cekNol($statusList,4,1); @endphp%"
                         aria-valuenow="{{$statusList[4]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
-                <h4 class="small font-weight-bold">Tervalidasi Puskesmas ({{$statusList[5]}}/{{$statusList[1]}}) <span
-                        class="float-right">{{number_format($statusList[5]/$statusList[1]*100,2)}}%</span></h4>
+                <h4 class="small font-weight-bold">Tervalidasi Puskesmas ({{$statusList[5]}}) <span
+                        class="float-right">@php echo number_format(cekNol($statusList,5,1),2) @endphp %</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: {{$statusList[5]/$statusList[1]*100}}%"
+                    <div class="progress-bar bg-info" role="progressbar" style="width: @php echo cekNol($statusList,5,1); @endphp%"
                         aria-valuenow="{{$statusList[5]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
-                <h4 class="small font-weight-bold">Dirujuk ({{$statusList[6]}}/{{$statusList[1]}}) <span
-                        class="float-right">{{number_format($statusList[6]/$statusList[1]*100,2)}}%</span></h4>
+                <h4 class="small font-weight-bold">Dirujuk ({{$statusList[6]}}) <span
+                        class="float-right">@php echo number_format(cekNol($statusList,6,1),2) @endphp %</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{$statusList[6]/$statusList[1]*100}}%"
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: @php echo cekNol($statusList,6,1); @endphp%"
                         aria-valuenow="{{$statusList[6]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
-                <h4 class="small font-weight-bold">Sudah Dirujuk ({{$statusList[7]}}/{{$statusList[1]}}) <span
-                        class="float-right">{{number_format($statusList[7]/$statusList[1]*100,2)}}%</span></h4>
+                <h4 class="small font-weight-bold">Sudah Dirujuk ({{$statusList[7]}}) <span
+                        class="float-right">@php echo number_format(cekNol($statusList,7,1),2) @endphp %</span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: {{$statusList[7]/$statusList[1]*100}}%"
+                    <div class="progress-bar bg-success" role="progressbar" style="width: @php echo cekNol($statusList,7,1); @endphp%"
                         aria-valuenow="{{$statusList[7]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
                 </div>
             </div>
         </div>
-
-        <!-- Color System -->
-        <div class="row">
-            <div class="col-lg-6 mb-4">
-                <div class="card bg-primary text-white shadow">
-                    <div class="card-body">
-                        Primary
-                        <div class="text-white-50 small">#4e73df</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 mb-4">
-                <div class="card bg-success text-white shadow">
-                    <div class="card-body">
-                        Success
-                        <div class="text-white-50 small">#1cc88a</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 mb-4">
-                <div class="card bg-info text-white shadow">
-                    <div class="card-body">
-                        Info
-                        <div class="text-white-50 small">#36b9cc</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 mb-4">
-                <div class="card bg-warning text-white shadow">
-                    <div class="card-body">
-                        Warning
-                        <div class="text-white-50 small">#f6c23e</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 mb-4">
-                <div class="card bg-danger text-white shadow">
-                    <div class="card-body">
-                        Danger
-                        <div class="text-white-50 small">#e74a3b</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 mb-4">
-                <div class="card bg-secondary text-white shadow">
-                    <div class="card-body">
-                        Secondary
-                        <div class="text-white-50 small">#858796</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 mb-4">
-                <div class="card bg-light text-black shadow">
-                    <div class="card-body">
-                        Light
-                        <div class="text-black-50 small">#f8f9fc</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 mb-4">
-                <div class="card bg-dark text-white shadow">
-                    <div class="card-body">
-                        Dark
-                        <div class="text-white-50 small">#5a5c69</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
-
-    <div class="col-lg-6 mb-4">
-
-        <!-- Illustrations -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-            </div>
-            <div class="card-body">
-                <div class="text-center">
-                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                        src="{{asset('public/img/undraw_posting_photo.svg')}}" alt="...">
-                </div>
-                <p>Add some quality, svg illustrations to your project courtesy of <a
-                        target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                    constantly updated collection of beautiful svg images that you can use
-                    completely free and without attribution!</p>
-                <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                    unDraw &rarr;</a>
-            </div>
-        </div>
-
-        <!-- Approach -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-            </div>
-            <div class="card-body">
-                <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                    CSS bloat and poor page performance. Custom CSS classes are used to create
-                    custom components and custom utility classes.</p>
-                <p class="mb-0">Before working with this theme, you should become familiar with the
-                    Bootstrap framework, especially the utility classes.</p>
-            </div>
-        </div>
-
-    </div>
-</div>
 
 </div>
 

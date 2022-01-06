@@ -40,9 +40,9 @@ class DataController extends Controller
         }
         else{
             $statusList = [0,0,0,0,0,0,0,0];
+
             // Penghitungan Status Role Dinas
             if($user->id_role == 6){
-                $statusList = [0,1,0,0,0,0,0,0];
                 $relasi = User::where('id_role', 2)->get();
                 foreach($relasi as $unit){
                     $status = Metadata::where('key', 'jumlah_status_'.$unit->id)->first();
@@ -68,8 +68,21 @@ class DataController extends Controller
                 $status = Metadata::where('key', 'jumlah_status_'.$user->id)->first();
                 $statusList = explode(',', $status->value);
             }
+
+            $jumlahSiswa = Metadata::where('key', 'jumlah_siswa')->first();
+            $jumlahSiswa = explode(',', $jumlahSiswa->value);
+            $pengumuman = Metadata::where('key', 'pengumuman')->first();
         }
-        return view('dashboard', ['statusList' => $statusList]);
+        return view('dashboard', ['statusList' => $statusList, 'jumlahSiswa' => $jumlahSiswa, 'pengumuman' => $pengumuman]);
+    }
+
+    public function simpanPengumuman(Request $request){
+        $pengumuman = Metadata::where('key', 'pengumuman')->first();
+        $pengumuman->value = $request->deskripsi;
+        // dd($pengumuman);
+        $pengumuman->save();
+
+        return redirect()->action('DataController@dashboard')->with('success', 'Pengumuman Berhasil Diubah');
     }
 
     public function pengajuan(){

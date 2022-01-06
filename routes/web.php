@@ -80,6 +80,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['role:Kota'])->group(function () {
         Route::get('/data-kecamatan', 'DataController@dataKecamatan');
+        Route::post('/simpan-pengumuman', 'DataController@simpanPengumuman')->name('pengumuman.store');
         Route::get('/tambah-form', function () {
             return view('form.crudForm');
         });
