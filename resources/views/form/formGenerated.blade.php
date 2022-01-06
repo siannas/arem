@@ -165,7 +165,7 @@ $role = Auth::user()->getRole->role;
                                     <div class="input-group">
                                     <input type="text" name="{{ $p->id }}" id="{{ $p->id }}" hidden readonly>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="{{ $p->id }}-file-dummy" id="{{ $p->id }}-file-dummy" onchange="myToggleButtonUpload('{{ $p->id }}','upload')">
+                                        <input type="file" class="custom-file-input" name="{{ $p->id }}-file-dummy" id="{{ $p->id }}-file-dummy" onchange="myUpload('{{ $p->id }}-file-dummy','{{ $p->id }}')">
                                         <label class="custom-file-label invalid" for="{{ $p->id }}-file-dummy">Pilih file</label>
                                     </div>
                                     <div class="input-group-append" id="{{ $p->id }}-btn-container">
@@ -182,7 +182,7 @@ $role = Auth::user()->getRole->role;
                                     </div>
                                     </div>
                                     <div id="{{ $p->id }}-alert">
-                                        <p class="text-danger"><i>* File harus berformat .jpg/.jpeg/.png dan maksimal 512 KB</i></p>
+                                        <p class="text-primary"><i>* File berupa gambar</i></p>
                                     </div>
                                 </div>
                             </div>
@@ -256,7 +256,8 @@ $role = Auth::user()->getRole->role;
         var input = $('#'+id_dummy);
         var formData = new FormData();
         formData.append('_token', "{{ csrf_token() }}");
-        formData.append('file', input[0].files[0]);
+        var newfile = await my.noMoreBigFile(input[0].files[0]);
+        formData.append('file', newfile);
 
         try {
             const res = await myRequest.upload( '{{ route('file.upload', ['id_user'=> $user, 'id_form'=>$formulir , 'id_pertanyaan'=> '']) }}/'+id , formData);

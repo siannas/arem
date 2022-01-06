@@ -80,10 +80,10 @@ Profil
                             <div class="col-md-6">
                                 <label class="small mb-1" for="JnsKelamin">Jenis Kelamin</label>
                                 <div class="input-group">
-                                    <select id="gender" name="gender" class="form-control" required @if( in_array($profil->gender, ['L','P']) ) disabled @endif>
+                                    <select id="gender" name="gender" class="form-control" required @if( isset($profil) && in_array($profil->gender, ['L','P']) ) disabled @endif>
                                         <option value="">Pilih Jenis Kelamin</option>
-                                        <option value="L" @if($profil->gender=="L") selected @endif>Laki-laki</option>
-                                        <option value="P" @if($profil->gender=="P") selected @endif>Perempuan</option>
+                                        <option value="L" @if(isset($profil) && $profil->gender=="L") selected @endif>Laki-laki</option>
+                                        <option value="P" @if(isset($profil) && $profil->gender=="P") selected @endif>Perempuan</option>
                                     </select>
                                 </div>
                             </div>
