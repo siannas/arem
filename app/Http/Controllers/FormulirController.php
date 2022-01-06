@@ -86,8 +86,10 @@ class FormulirController extends Controller
     {
         $formulir = Formulir::findOrFail($id);
     
+        //cek udah ada jawaban yg masuk
+        $total=Jawaban::where('id_formulir',$id)->count();
         $pertanyaan = $formulir->pertanyaan;
-        return view('form.jenisForm', ['formulir' => $formulir, 'pertanyaan' => $pertanyaan]);
+        return view('form.jenisForm', ['formulir' => $formulir, 'pertanyaan' => $pertanyaan, 'total'=>$total]);
     }
 
     /**
@@ -129,6 +131,13 @@ class FormulirController extends Controller
     {
         try {
             $formulir = Formulir::findOrFail($id);
+
+            //cek udah ada jawaban yg masuk
+            $total=Jawaban::where('id_formulir',$id)->count();
+            if($total>0){
+                return back()->withError('Formulir tidak dapat dihapus, sudah ada siswa yang mengisi.');
+            }
+
             $formulir->delete();
         }catch (QueryException $exception) {
             return back()->withError($exception->getMessage())->withInput();

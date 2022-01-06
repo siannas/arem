@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Pertanyaan;
+use App\Jawaban;
 use Illuminate\Http\Request;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -28,8 +29,13 @@ class PertanyaanController extends Controller
             )
         ]);
 
-        $pertanyaan_baru->formulir()->associate($formulir);
+        //cek udah ada jawaban yg masuk
+        $total=Jawaban::where('id_formulir',$formulir->id)->count();
+        if($total>0){
+            return back()->withError('Pertanyaan tidak dapat ditambahkan, sudah ada siswa yang mengisi.');
+        }
 
+        $pertanyaan_baru->formulir()->associate($formulir);
         $pertanyaan_baru->save();
         // return dd($pertanyaan_baru);
         return redirect()->action('FormulirController@show', $formulir)->with('success', 'Data Berhasil Ditambahkan');
@@ -49,7 +55,10 @@ class PertanyaanController extends Controller
         $simpulan = empty($pertanyaan->json_simpulan) ? [] : json_decode($pertanyaan->json_simpulan);
         $pertanyaan = json_decode($pertanyaan->json);
         $deskripsi = property_exists($pertanyaan, 'deskripsi') ? $pertanyaan->deskripsi : '';        
-        return view('form.crudForm', ['id_pertanyaan'=>$id, 'judul' => $judul , 'pertanyaan' => $pertanyaan, 'id_form' => $id_form, 'deskripsi' => $deskripsi, 'simpulan'=>$simpulan ]);
+
+        //cek udah ada jawaban yg masuk
+        $total=Jawaban::where('id_formulir',$id_form)->count();
+        return view('form.crudForm', ['id_pertanyaan'=>$id, 'judul' => $judul , 'pertanyaan' => $pertanyaan, 'id_form' => $id_form, 'deskripsi' => $deskripsi, 'simpulan'=>$simpulan, 'total'=>$total ]);
     }
 
     /**
@@ -62,6 +71,12 @@ class PertanyaanController extends Controller
     public function update(Request $request, $id)
     {
         $pertanyaan = Pertanyaan::findOrFail($id);
+
+        //cek udah ada jawaban yg masuk
+        $total=Jawaban::where('id_formulir',$pertanyaan->id_formulir)->count();
+        if($total>0){
+            throw new HttpResponseException(response()->json(['statusText'=>'Pertanyaan tidak dapat diubah, sudah ada siswa yang mengisi.'], 422));
+        }
 
         $validator = Validator::make($request->all(), [
             'judul' => 'required_without_all:json,json_simpulan',
@@ -90,6 +105,13 @@ class PertanyaanController extends Controller
     {
         $pertanyaan = Pertanyaan::findOrFail($id);
         $id_form = $pertanyaan->id_formulir;
+
+        //cek udah ada jawaban yg masuk
+        $total=Jawaban::where('id_formulir',$id_form)->count();
+        if($total>0){
+            return back()->withError('Pertanyaan tidak dapat dihapus, sudah ada siswa yang mengisi.');
+        }
+
         $pertanyaan->delete();
         return redirect()->action('FormulirController@show', $id_form)->with('success', 'Data Berhasil Dihapus');;
     }

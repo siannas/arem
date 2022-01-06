@@ -96,6 +96,7 @@ active
                         <label><b>Deskripsi</b></label>
                         <textarea class="form-control" rows="2" placeholder="Masukkan Deskripsi Pertanyaan" name="deskripsi" >{{ $deskripsi }}</textarea>
                     </div>
+                    @if ($total==0)
                     <div class="form-group">
                         <label><b>Tipe Pertanyaan</b></label>
                         <div class="input-group">
@@ -111,11 +112,12 @@ active
                             </div>
                         </div>
                     </div>
+                    @endif
                     </form>
                 </div>
                 <div class="card-footer">
                     <a href="{{url('/formulir/'.$id_form)}}" class="btn btn-secondary"><i class="fas fa-fw fa-sign-out-alt"></i> Kembali</a>
-                    <button  class="btn btn-primary" onclick="$('#mainform').trigger('submit')"><i class="fas fa-fw fa-save"></i> Simpan</button>
+                    <button @if ($total>0) disabled @endif class="btn btn-primary" onclick="$('#mainform').trigger('submit')"><i class="fas fa-fw fa-save"></i> Simpan</button>
                     <button  class="btn btn-info" id="previewButton" data-toggle="modal" data-target="#previewModal" ><i class="fas fa-fw fa-eye"></i> Pratinjau</button>
                 </div>
             </div>
@@ -147,7 +149,9 @@ active
                         </div>
                         <div class="card-body">
                             <div>
+                                @if ($total==0)
                                 <button class="w-100 btn btn-success" id="tambah-simpulan"><i class="fas fa-plus"></i>&nbsp Tambah</button>
+                                @endif
                             </div>
                         </div>                        
                     </div>
@@ -162,11 +166,13 @@ active
             <div class="d-flex">
                 <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
                 </a>
+                @if ($total==0)
                 <div class="input-group" style="width:unset!important;">
                     <div class="input-group-append">
                         <button class="btn btn-danger font-weight-bold" style="padding: 0 18px;border-radius:0;" type="button" id="delete"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
+                @endif
             </div>
             <div id="collapse" class="collapse" data-parent="#accordionPertanyaan">
                 <div class="card-body">
@@ -184,11 +190,13 @@ active
             <div class="d-flex">
                 <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
                 </a>
+                @if ($total==0)
                 <div class="input-group" style="width:unset!important;">
                     <div class="input-group-append">
                         <button class="btn btn-danger font-weight-bold" style="padding: 0 18px;border-radius:0;" type="button" id="delete"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
+                @endif
             </div>
             <div id="collapse" class="collapse" data-parent="#accordionPertanyaan">
                 <div class="card-body">
@@ -217,11 +225,13 @@ active
             <div class="d-flex">
                 <a class="card-header py-3 flex-grow-1 " href="#" data-toggle="collapse" id="collapse-toggle" aria-expanded="false">
                 </a>
+                @if ($total==0)
                 <div class="input-group" style="width:unset!important;">
                     <div class="input-group-append">
                         <button class="btn btn-danger font-weight-bold" style="padding: 0 18px;border-radius:0;" type="button" id="delete"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
+                @endif
             </div>
             <div id="collapse" class="collapse" data-parent="#accordionPertanyaan">
                 <div class="card-body">

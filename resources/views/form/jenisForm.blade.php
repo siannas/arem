@@ -89,14 +89,7 @@ Jenis Pemeriksaan
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Jenis Pemeriksaan</h1>
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+    @include('form.alert')
     <div class="row">
 
         @foreach($pertanyaan as $unit)
@@ -110,7 +103,9 @@ Jenis Pemeriksaan
                             <button type="button" class="btn" data-toggle="modal" data-target="#hapus{{ $unit->id }}"disabled>.</button>
                                 <div style="position:absolute; bottom:0;">
                                     <a href="{{url('/pertanyaan/'.$unit->id)}}" class="btn btn-primary"><i class="fas fa-pen"></i> Edit</a>
+                                    @if ($total==0)
                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hapus{{ $unit->id }}"><i class="fas fa-fw fa-trash-alt"></i> Hapus</button>
+                                    @endif
                                 </div>
                             <div class="modal modal-danger fade" id="hapus{{ $unit->id }}" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -144,6 +139,7 @@ Jenis Pemeriksaan
         @endforeach
 
         <!-- Earnings (Monthly) Card Example -->
+        @if ($total==0)
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
@@ -163,6 +159,7 @@ Jenis Pemeriksaan
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
 </div>
