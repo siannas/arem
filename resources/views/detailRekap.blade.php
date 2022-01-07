@@ -379,6 +379,7 @@ $(document).ready(function() {
     const $rekapContainer=$('#rekap-container');
     const $simpulanContainer=$('#simpulan-container');
     var cnt=0;
+    var counter2=0;
     for (const key2 in myPertanyaan) {
         var judul = myPertanyaan[key2]['judul'];
         var pertanyaan = JSON.parse(myPertanyaan[key2]['json'])['pertanyaan'];
@@ -395,8 +396,9 @@ $(document).ready(function() {
                 var opsis = myDataJSON[p.id];
                 var $newchart = $(template);
                 var $canvas=$newchart.find('canvas');
-                $canvas.attr('onclick',"onChartClicked("+counter+",\""+p['id']+"\",event)");
+                $canvas.attr('onclick',"onChartClicked("+counter2+",\""+p['id']+"\",event)");
                 $newchart.find("#-title").text(p['pertanyaan']).removeAttr('id');
+                counter2++;
 
                 var values=[];
                 var labels = Object.keys(opsis).reduce(function(r, data){
@@ -509,8 +511,7 @@ $(document).ready(function() {
 const onChartClicked = async function(index,idpertanyaan, evt){
     
     const _chart = Chart.instances[index];
-    var activePoint = _chart.getElementAtEvent(evt)[0];
-    console.log(activePoint==null);
+    var activePoint = _chart.getElementAtEvent(evt)[0];    
     if(activePoint != null){
         $('#loading').modal('show');
         var label = _chart.data.labels[activePoint._index];
