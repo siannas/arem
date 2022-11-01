@@ -92,7 +92,7 @@ Dashboard
                 <div class="row">
                     <form action="#" class="col-md-8" id="filter-form">
                         <div class="row">
-                            <div class="col-7 my-1">
+                            <div class="col-7 my-1" style="padding-right:0;">
                                 <select class="form-control" id="filter" name="for" required>
                                     <option value="" disabled selected>Rekap Berdasar</option>
                                     @foreach($filter as $f)
@@ -100,8 +100,8 @@ Dashboard
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-5 my-1">
-                                <button type="submit" class="btn btn-sm btn-success my-1">
+                            <div class="col-5 my-1" style="margin-top:0 !important;">
+                                <button type="submit" class="btn btn-sm btn-primary my-1">
                                     Filter
                                 </button>
                             </div>
@@ -328,13 +328,12 @@ const template=`<div class="row" style="padding-top:30px" >
         </div>
     </div>
 </div>`;
-const simpulanTemplate=`<div class="card card-icon lift lift-sm mb-4">
+const simpulanTemplate=`<div class="card border-left-info card-icon lift lift-sm mb-4">
     <div class="d-flex">
-        <div class="col-auto bg-primary"></div>
         <div class="col">
             <div class="card-body py-4">
                 <h5 class="card-title text-primary mb-2" id="-title">Gangguan Makan</h5>
-                <span class="float-end fw-bold small" id="-total">220</span>
+                <span class="float-end fw-bold small">(Total) <span id="-total">220</span></span>
                 <div class="d-flex">
                     <h4 class="small" style="width:20%;" id="-laki-container">
                         (L)

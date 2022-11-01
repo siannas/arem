@@ -5,11 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Kategori;
 use App\KIE;
+use Auth;
 
 class KieController extends Controller
 {
     public function index(){
-        $kie = KIE::select('id','jenjang', 'kategori', 'judul', 'ringkasan', 'foto')->get();
+        $user = Auth::user();
+        if($user->id_role!=1){
+            $kie = KIE::get(['id','jenjang', 'kategori', 'judul', 'ringkasan', 'foto']);
+        }else{
+            // utk cari kie bdk jenjang
+            if($user->kelas > 0 && $user->kelas < 7 ) $jenjang = '1,2,3,4,5,6';
+            elseif($user->kelas > 6 && $user->kelas < 13 ) $jenjang = '7,8,9,10,11,12';
+            
+            $kie = KIE::where('jenjang', $jenjang)->get(['id','jenjang', 'kategori', 'judul', 'ringkasan', 'foto']);
+        }
         return view('kie.index', ['kie' => $kie]);
     }
 

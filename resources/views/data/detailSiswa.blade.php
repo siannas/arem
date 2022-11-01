@@ -31,7 +31,7 @@ Validasi
                 <div class="col-12 col-lg-auto text-center text-lg-right">
                     <h5 class="card-title text-light mb-3"><b>{{ $siswa->nama }}</b></h5>
                     <h6 class="card-subtitle text-gray-300 mb-2">NIK {{ $siswa->username }}</h6>
-                    <h6 class="card-subtitle text-gray-300 mb-2">{{ $sekolah->nama }}</h6>
+                    
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@ Validasi
                 <!-- Card Header - Accordion -->
                 <a href="#collapse-card-{{$key}}" class="d-block card-header py-3" data-toggle="collapse"
                     role="button" aria-expanded="false" aria-controls="collapse-card-{{$key}}">
-                    <h6 class="m-0 font-weight-bold text-primary">Tahun Ajaran {{ $siswa->tahun_ajaran }} 
+                    <h6 class="m-0 font-weight-bold text-primary">{{$jawaban->getSekolah->nama}} | Tahun Ajaran {{ $siswa->tahun_ajaran }} 
                     @if($jawaban->validasi_puskesmas===1)
                     <div class="badge bg-success text-white rounded-pill">Tervalidasi Puskesmas</div>
                     @elseif($jawaban->validasi_puskesmas===-1)

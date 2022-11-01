@@ -75,10 +75,11 @@ Validasi
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="formEdit" method="POST">
+                <form id="formEdit" method="POST" action="{{route('siswa.edit')}}">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
+                    <input type="hidden" id="id" name="id">
                     <div class="form-group">
                         <label><b>Username(NIK)</b></label>
                         <input type="text" id="editUsername" name="editUsername" class="form-control" placeholder="Username(NIK)" maxlength="16" required>
@@ -185,67 +186,18 @@ Validasi
                     Tambah
                     </button>
                     <a href="{{route('data-siswa.import')}}" type="button" class="btn btn-sm btn-success">Import</a>
-                    <button class="btn btn-sm btn-danger keluar" data-toggle="modal" data-target="#keluar"><i class="fas fa-fw fa-sign-out-alt" ></i> Keluarkan</button>
-                    <button class="btn btn-sm btn-info naik" data-toggle="modal" data-target="#naik"><i class="fas fa-fw fa-sign-out-alt" ></i> Naik Kelas</button>
+                    <!-- <button class="btn btn-sm btn-danger keluar" data-toggle="modal" data-target="#keluar"><i class="fas fa-fw fa-sign-out-alt" ></i> Keluarkan</button>
+                    <button class="btn btn-sm btn-info naik" data-toggle="modal" data-target="#naik"><i class="fas fa-fw fa-sign-out-alt" ></i> Naik Kelas</button> -->
                 </div>
                 @endif
             </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="datatables" width="100%" cellspacing="0">
                     <thead>
-                        <tr>
-                            <th>NIK</th>
-                            <th>Nama</th>
-                            @if($role!='Sekolah')
-                            <th>Sekolah</th>
-                            @endif
-                            <th>Kelas</th>
-                            <th>Aksi</th>
-                            @if($role=='Sekolah')
-                            <th><input type="checkbox" class="master"></th>
-                            @endif
-                        </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>NIK</th>
-                            <th>Nama</th>
-                            @if($role!='Sekolah')
-                            <th>Sekolah</th>
-                            @endif
-                            <th>Kelas</th>
-                            <th>Aksi</th>
-                            @if($role=='Sekolah')
-                            <th><input type="checkbox" class="master"></th>
-                            @endif
-                        </tr>
-                    </tfoot>
                     <tbody>
-                        
-                        @foreach($dataSiswa as $unit)
-                        <tr>
-                            <td>{{ $unit->username }}</td>
-                            <td>{{ $unit->nama }}</td>
-                            @if($role!='Sekolah')
-                            <td>{{ $unit->getSekolah->isEmpty()?'-':$unit->getSekolah[0]->nama }}</td>
-                            @endif
-                            <td>{{ $unit->kelas }}</td>
-                            <td><a href="{{url('/data-siswa/'.$unit->id)}}" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Lihat Detail Siswa"><i class="fas fa-fw fa-eye"></i></a>
-                                @if($role==='Sekolah')
-                                <button class="btn btn-sm btn-secondary" id="btnEdit" data-toggle="modal" data-target="#editSiswa" data-rute="{{ route('siswa.edit', [$unit->id]) }}" 
-                                    data-semua="{{$unit}}" data-toggle="tooltip" data-placement="top" title="Edit Data Siswa"><i class="fas fa-fw fa-edit" ></i></button>
-                                <button class="btn btn-sm btn-warning" id="btnReset" data-toggle="modal" data-target="#detail" data-rute="{{ route('admin.resetpassword', [$unit->id]) }}" 
-                                    data-toggle="tooltip" data-placement="top" title="Ganti Password"><i class="fas fa-fw fa-key" ></i></button>
-                                @endif
-                            </td>
-                            @if($role=='Sekolah')
-                            <td><input type="checkbox" class="sub_chk" data-id="{{$unit->id}}"></td>
-                            @endif
-                        </tr>
-                        @endforeach
-                        
                     </tbody>
                 </table>
             </div>
@@ -342,7 +294,7 @@ Validasi
             $('#loading').modal('show');
 
             try {
-                console.log(allVals);
+                // console.log(allVals);
                 allVals.forEach(async unit =>{
                     const res = await myRequest.post( '{{ route('siswa.naik', ['id'=> '']) }}/'+unit,{_method:'PUT'});
                 });
@@ -355,6 +307,26 @@ Validasi
                 location.reload(true);
             }, 1000);    
         });
+
+        oTable = $("#datatables").DataTable({
+          bAutoWidth: false, 
+          select:{
+              className: 'dataTable-selector form-select'
+          },
+          responsive: true,
+          processing: true,
+          serverSide: true,
+          ajax: {type: "POST", url: '{{route("siswa.data")}}', data:{'_token':@json(csrf_token())}},
+          columns: [
+              { data:'id', title:'ID', visible: false},
+              { data:'nama', title:'Nama'},
+              { data:'id_role', title:'ID Role', visible: false},
+              { data:'username', title:'Username'},
+              { data:'kelas', title:'Kelas'},
+              { data:'tahun_ajaran', title:'Tahun Ajaran'},
+              { data:'action', title:'Aksi'},
+          ],
+      });   
     });
 </script>
 <script>
@@ -371,21 +343,36 @@ $('#detail').on('show.bs.modal', function (event) {
     
 })
 
-$('#editSiswa').on('show.bs.modal', function (event) {
-    // Button utk trigger kirim data ke modal
-    var button = $(event.relatedTarget)
+function edit(self){
+    var tr = $(self).closest('tr');
+    let idx = oTable.row(tr)[0]
+    var data = oTable.data()[idx];
     
-    // Ekstrak data dari atribut data-
-    var rute = button.data('rute')
-    var semua = button.data('semua')
+    var $modal = $('#editSiswa');
+    $modal.find('#id').val(data['id'])
+    $modal.find('#editUsername').val(data['username'])
+    $modal.find('#editNama').val(data['nama'])
+    $modal.find('#editKelas').val(data['kelas'])
+    // $("#formEdit").attr("action", rute)
 
-    // Update isi modal
-    var modal = $(this)
-    modal.find('#editUsername').val(semua.username)
-    modal.find('#editNama').val(semua.nama)
-    modal.find('#editKelas').val(semua.kelas)
-    $("#formEdit").attr("action", rute)
-})
+    $modal.modal('show');
+}
+
+// $('#editSiswa').on('show.bs.modal', function (event) {
+//     // Button utk trigger kirim data ke modal
+//     var button = $(event.relatedTarget)
+    
+//     // Ekstrak data dari atribut data-
+//     var rute = button.data('rute')
+//     var semua = button.data('semua')
+
+//     // Update isi modal
+//     // var modal = $(this)
+//     modal.find('#editUsername').val(semua.username)
+//     modal.find('#editNama').val(semua.nama)
+//     modal.find('#editKelas').val(semua.kelas)
+//     $("#formEdit").attr("action", rute)
+// })
 
 </script>
 @endsection

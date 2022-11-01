@@ -74,7 +74,7 @@ Validasi
             <form action="#" id="filter-form">
                 <div class="row">
                     <div class="col-sm-4 col-md-3">
-                        <select class="form-control" required name="formulir" required onchange="filterFormulirOnChange(this)">
+                        <select class="form-control" required name="formulir" required onchange="filterFormulirOnChange(this)" data-size='7'>
                             <option value="" disabled selected>Formulir</option>
                             @foreach($formulir as $f)
                                 @if($f->kelas[0]==='1')
@@ -85,8 +85,8 @@ Validasi
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-sm-4 col-md-4">
-                        <select class="form-control" required name="sekolah" onchange="setState('sekolah',this.value,true)" required>
+                    <div class="col-sm-4 col-md-4" style="padding-left:0; padding-right:0;">
+                        <select class="form-control" required name="sekolah" onchange="setState('sekolah',this.value,true)">
                             <option value="" disabled selected>Sekolah</option>
                         </select>
                     </div>
@@ -95,12 +95,12 @@ Validasi
                             <option value="" disabled selected>Kelas</option>
                         </select>
                     </div>
-                    <div class="col-sm-4 col-md-2" id="pertanyaan-container">
+                    <div class="col-sm-4 col-md-2" id="pertanyaan-container" style="padding-left:0; padding-right:0;">
                         <select class="form-control" required name="pertanyaan" id="multiple-checkboxes" multiple="multiple">
                         </select>
                     </div>
                     <div class="col-sm-4 col-md-1">
-                        <button type="submit" class="btn btn-success">Filter</button>
+                        <button type="submit" class="btn btn-success" style="width:100%;">Filter</button>
                     </div>
                 </div>
             </form>
@@ -435,7 +435,11 @@ $(document).ready(function() {
                     e.kelas,
                     e.jawabans.length === 0 ? '-' : e.jawabans[0].updated_at ,
                     badge,
+                    @if(Auth::user()->id_role==4)
                     `<a href="{{url('/data-skrining')}}/${id_formulir}/${e.id}" class="btn btn-sm btn-warning"><i class="fas fa-fw fa-pen"></i></button></td>`
+                    @else
+                    `<a href="{{url('/data-siswa')}}/${e.id}" class="btn btn-sm btn-primary"><i class="fas fa-fw fa-eye"></i></button></td>`
+                    @endif
                 ]);
             });
             table.clear();

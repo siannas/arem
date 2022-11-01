@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/verifikasi/{id}', 'DataController@verifikasiSiswa');
         Route::delete('/verifikasi/tolak/{id}', 'DataController@tolakSiswa');
         
-        Route::put('/data-siswa/edit/{id}', 'DataController@editSiswa')->name('siswa.edit');
+        Route::put('/data-siswa/edit', 'DataController@editSiswa')->name('siswa.edit');
         Route::put('/naik/{id}', 'DataController@naikKelas')->name('siswa.naik');
         Route::delete('/keluar/{id}', 'DataController@pindahSiswa')->name('siswa.keluar');
     });
@@ -52,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::middleware(['role:Sekolah,Kelurahan,Puskesmas,Kecamatan,Kota'])->group(function () {
         Route::get('/data-siswa', 'DataController@dataSiswa');
+        Route::post('/data-siswa', 'DataController@siswaData')->name('siswa.data');
         Route::get('/validasi', 'ValidasiController@index');
         Route::get('/validasi/{id}', 'ValidasiController@validasiSiswa');
         Route::put('/validasi/{id}', 'ValidasiController@validasi')->name('validasi.edit');
@@ -151,3 +152,9 @@ Route::get('/kie/edit/{id}', 'KieController@edit');
 Route::put('/kie/edit/{id}', 'KieController@update')->name('kie.update');
 Route::get('/kie/{id}', 'KieController@show')->name('kie.show');
 Route::delete('/kie/{id}', 'KieController@destroy')->name('kie.destroy');
+
+use Maatwebsite\Excel\Facades\Excel;
+
+Route::get('/tis', function(){
+    return Excel::download(new \App\Exports\Template, 'template.xlsx');
+});

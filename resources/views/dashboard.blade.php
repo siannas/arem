@@ -111,6 +111,8 @@ $(document).ready(function() {
 
 @else
 @section('content')
+<div class="container-fluid">
+
 <div class="modal fade" id="ubah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -136,8 +138,6 @@ $(document).ready(function() {
     </div>
   </div>
 </div>
-
-<div class="container-fluid">
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -266,6 +266,7 @@ $(document).ready(function() {
         </div>
     </div>
 
+</div>
 </div>
 
 @endsection

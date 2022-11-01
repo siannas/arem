@@ -9,6 +9,7 @@ use App\Jawaban;
 use App\Formulir;
 use App\Pengajuan;
 use App\Metadata;
+use Datatables;
 use Auth;
 use Hash;
 use Validator;
@@ -131,8 +132,7 @@ class DataController extends Controller
         return redirect()->action('DataController@verifikasi')->with('success', 'Data Berhasil Diverifikasi');
     }
 
-    public function tolakSiswa($id)
-    {
+    public function tolakSiswa($id){
         try {
             $pengajuan = Pengajuan::where('id_user' ,$id)->where('verifikasi', 0);
             $pengajuan->delete();
@@ -142,13 +142,18 @@ class DataController extends Controller
         return redirect()->action('DataController@verifikasi')->with('success', 'Pengajuan Siswa Ditolak');
     }
 
-
     public function dataSiswa(){
+        return view('data.dataSiswa');
+    }
+
+    public function siswaData(Request $request){
+        // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
+        // $data = User::raw('select * from user');
         $id_user= Auth::user();
         if($id_user->id==1){
-            $dataSiswa = User::with(['getSekolah' => function($query) { $query->select('nama');}])
+            $dataSiswa = User::with(['getSekolah:nama'])
             ->select('id', 'nama', 'id_role', 'username', 'kelas', 'tahun_ajaran')
-            ->where('id_role',1)->get();
+            ->where('id_role',1);
         }
         else{
             // List siswa di bawah naungan user login
@@ -160,22 +165,36 @@ class DataController extends Controller
                 array_push($listSiswa, $unit->id);
             }
 
-            $dataSiswa = User::with(['getSekolah' => function($query) { $query->select('nama');}])
+            $dataSiswa = User::with(['getSekolah:nama'])
             ->select('id', 'nama', 'id_role', 'username', 'kelas', 'tahun_ajaran')
-            ->where('id_role',1)->whereIn('id', $listSiswa)->get();
+            ->where('id_role',1)->whereIn('id', $listSiswa);
         }
-        return view('data.dataSiswa', ['dataSiswa' => $dataSiswa]);
-    }
-    public function detailSiswa($id){
-        $detailSiswa = User::findOrFail($id);
-        $sekolah = $detailSiswa->parents()->where('id_role', 2)->first();
-        $allJawaban = Jawaban::where('id_user', $detailSiswa->id)->with('getFormulir','getFormulir.pertanyaan')->get();
         
-        return view('data.detailSiswa', ['siswa' => $detailSiswa, 'allJawaban'=>$allJawaban, 'sekolah'=>$sekolah]);
+        $datatable = Datatables::of($dataSiswa);
+        $datatable->rawColumns(['action']);
+        if($id_user->id_role == 2){
+            $datatable->addColumn('action', function ($t) {
+                return '<a href="'.url('data-siswa').'/'.$t->id.'" class="btn btn-info btn-link" style="padding:5px;" data-toggle="tooltip" data-placement="top" title="Lihat Detail Siswa"><i class="fas fa-fw fa-eye" style="color:white;"></i></a>&nbsp'.
+                '<button type="button" class="btn btn-warning btn-link" style="padding:5px;" onclick="edit(this)"><i class="fas fa-fw fa-edit" style="color:white;"></i></button>&nbsp';
+            });
+        }else{
+            $datatable->addColumn('action', function ($t) {
+            return '<a href="'.url('data-siswa').'/'.$t->id.'" class="btn btn-info btn-link" style="padding:5px;" data-toggle="tooltip" data-placement="top" title="Lihat Detail Siswa"><i class="fas fa-fw fa-eye" style="color:white;"></i></a>&nbsp';
+            });
+        }
+        return $datatable->make(true); 
     }
 
-    public function editSiswa($id, Request $request){
+    public function detailSiswa($id){
         $detailSiswa = User::findOrFail($id);
+        // $sekolah = $detailSiswa->parents()->where('id_role', 2)->first();
+        $allJawaban = Jawaban::where('id_user', $detailSiswa->id)->with('getFormulir','getSekolah:id,nama')->get();
+        // dd($allJawaban);
+        return view('data.detailSiswa', ['siswa' => $detailSiswa, 'allJawaban'=>$allJawaban]);
+    }
+
+    public function editSiswa(Request $request){
+        $detailSiswa = User::findOrFail($request->id);
         $detailSiswa->username = request('editUsername');
         $detailSiswa->nama = request('editNama');
         $detailSiswa->kelas = request('editKelas');

@@ -13,7 +13,8 @@
         "laravel/framework": "5.7.*",
         "laravel/tinker": "~1.0",
         "maatwebsite/excel": "^3.0",
-        "myclabs/php-enum": "1.7.7"
+        "myclabs/php-enum": "1.7.7",
+        "yajra/laravel-datatables": "^1.5"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
