@@ -142,8 +142,15 @@ $(document).ready(function() {
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-    <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+    @if(Auth::id()==1)
+    <div class="card">
+        <span class="p-1">
+        Last Update: {{$update->value}}
+        <a href="{{url('/refresh')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm ml-2"><i
+                class="fas fa-sync fa-sm text-white-50"></i> Refresh</a>
+        </span>
+    </div>
+    @endif
 </div>
 
 <!-- Content Row -->
@@ -206,7 +213,7 @@ $(document).ready(function() {
                 <p>{{$pengumuman->value}}</p>
                 Manual: <a href="https://drive.google.com/drive/folders/1CDnm8_gpiOMNKSvkqSWqEXEQQQJtKzNQ?usp=sharing">Link</a>
             </div>
-        </div>    
+        </div>
     </div>
     
     <!-- Earnings (Monthly) Card Example -->
@@ -215,52 +222,196 @@ $(document).ready(function() {
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Status</h6>
             </div>
-            <div class="card-body">
+            <div class="card-body accordion" id="accordionExample">
                 @php
                 function cekNol($statusList, $nomor, $jumlah){
                     if($statusList[$jumlah]>0){
                         return $statusList[$nomor]/$statusList[$jumlah]*100;
-                    } 
+                    }
                     else{
                         return 0;
                     }
                 }
                 @endphp
-                <h4 class="small font-weight-bold">Belum Mengisi ({{$statusList[2]}}) <span    
-                    class="float-right">@php echo number_format(cekNol($statusList,2,1),2) @endphp %</span></h4>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: @php echo cekNol($statusList,2,1); @endphp%"
-                        aria-valuenow="{{$statusList[2]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                <div class="card">
+                    <div class="card-header p-0" id="headingOne">
+                        <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" style="background-color:white;" data-toggle="collapse" data-target="#collapseStatus1" aria-expanded="true" aria-controls="collapseStatus1">
+                            <h4 class="small font-weight-bold">Belum Mengisi ({{$statusList[2]}}) <span
+                                class="float-right">@php echo number_format(cekNol($statusList,2,1),2) @endphp %</span></h4>
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: @php echo cekNol($statusList,2,1); @endphp%"
+                                    aria-valuenow="{{$statusList[2]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                            </div>
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapseStatus1" class="collapse">
+                        <div class="card-body">
+                            <table class="table w-100">
+                                <tbody>
+                                @foreach($listSekolah as $unit)
+                                @if($unit[2]>0)
+                                <tr>
+                                    <td>{{$unit[0]}}</td>
+                                    <td>{{$unit[2]}}</td>
+                                </tr>
+                                @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <h4 class="small font-weight-bold">Belum Tervalidasi Sekolah ({{$statusList[3]}}) <span
-                        class="float-right">@php echo number_format(cekNol($statusList,3,1),2) @endphp %</span></h4>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: @php echo cekNol($statusList,3,1); @endphp%"
-                        aria-valuenow="{{$statusList[3]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                <div class="card">
+                    <div class="card-header p-0" id="headingTwo">
+                        <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" style="background-color:white;" data-toggle="collapse" data-target="#collapseStatus2" aria-expanded="true" aria-controls="collapseStatus2">
+                            <h4 class="small font-weight-bold">Belum Tervalidasi Sekolah ({{$statusList[3]}}) <span
+                                    class="float-right">@php echo number_format(cekNol($statusList,3,1),2) @endphp %</span></h4>
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: @php echo cekNol($statusList,3,1); @endphp%"
+                                    aria-valuenow="{{$statusList[3]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                            </div>
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapseStatus2" class="collapse">
+                        <div class="card-body">
+                            <table class="table w-100">
+                                <tbody>
+                                @foreach($listSekolah as $unit)
+                                @if($unit[3]>0)
+                                <tr>
+                                    <td>{{$unit[0]}}</td>
+                                    <td>{{$unit[3]}}</td>
+                                </tr>
+                                @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <h4 class="small font-weight-bold">Tervalidasi Sekolah ({{$statusList[4]}}) <span
-                        class="float-right">@php echo number_format(cekNol($statusList,4,1),2) @endphp %</span></h4>
-                <div class="progress mb-4">
-                    <div class="progress-bar" role="progressbar" style="width: @php echo cekNol($statusList,4,1); @endphp%"
-                        aria-valuenow="{{$statusList[4]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                <div class="card">
+                    <div class="card-header p-0" id="headingTwo">
+                        <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" style="background-color:white;" data-toggle="collapse" data-target="#collapseStatus3" aria-expanded="true" aria-controls="collapseStatus3">
+                            <h4 class="small font-weight-bold">Tervalidasi Sekolah ({{$statusList[4]}}) <span
+                                    class="float-right">@php echo number_format(cekNol($statusList,4,1),2) @endphp %</span></h4>
+                            <div class="progress mb-4">
+                                <div class="progress-bar" role="progressbar" style="width: @php echo cekNol($statusList,4,1); @endphp%"
+                                    aria-valuenow="{{$statusList[4]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                            </div>
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapseStatus3" class="collapse">
+                        <div class="card-body">
+                            <table class="table w-100">
+                                <tbody>
+                                @foreach($listSekolah as $unit)
+                                @if($unit[4]>0)
+                                <tr>
+                                    <td>{{$unit[0]}}</td>
+                                    <td>{{$unit[4]}}</td>
+                                </tr>
+                                @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <h4 class="small font-weight-bold">Tervalidasi Puskesmas ({{$statusList[5]}}) <span
-                        class="float-right">@php echo number_format(cekNol($statusList,5,1),2) @endphp %</span></h4>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: @php echo cekNol($statusList,5,1); @endphp%"
-                        aria-valuenow="{{$statusList[5]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                <div class="card">
+                    <div class="card-header p-0" id="headingTwo">
+                        <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" style="background-color:white;" data-toggle="collapse" data-target="#collapseStatus4" aria-expanded="true" aria-controls="collapseStatus4">
+                            <h4 class="small font-weight-bold">Tervalidasi Puskesmas ({{$statusList[5]}}) <span
+                                    class="float-right">@php echo number_format(cekNol($statusList,5,1),2) @endphp %</span></h4>
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: @php echo cekNol($statusList,5,1); @endphp%"
+                                    aria-valuenow="{{$statusList[5]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                            </div>
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapseStatus4" class="collapse">
+                        <div class="card-body">
+                            <table class="table w-100">
+                                <tbody>
+                                @foreach($listSekolah as $unit)
+                                @if($unit[5]>0)
+                                <tr>
+                                    <td>{{$unit[0]}}</td>
+                                    <td>{{$unit[5]}}</td>
+                                </tr>
+                                @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <h4 class="small font-weight-bold">Dirujuk ({{$statusList[6]}}) <span
-                        class="float-right">@php echo number_format(cekNol($statusList,6,1),2) @endphp %</span></h4>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: @php echo cekNol($statusList,6,1); @endphp%"
-                        aria-valuenow="{{$statusList[6]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                <div class="card">
+                    <div class="card-header p-0" id="headingTwo">
+                        <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" style="background-color:white;" data-toggle="collapse" data-target="#collapseStatus5" aria-expanded="true" aria-controls="collapseStatus5">
+                            <h4 class="small font-weight-bold">Dirujuk ({{$statusList[6]}}) <span
+                                    class="float-right">@php echo number_format(cekNol($statusList,6,1),2) @endphp %</span></h4>
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: @php echo cekNol($statusList,6,1); @endphp%"
+                                    aria-valuenow="{{$statusList[6]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                            </div>
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapseStatus5" class="collapse">
+                        <div class="card-body">
+                            <table class="table w-100">
+                                <tbody>
+                                @foreach($listSekolah as $unit)
+                                @if($unit[6]>0)
+                                <tr>
+                                    <td>{{$unit[0]}}</td>
+                                    <td>{{$unit[6]}}</td>
+                                </tr>
+                                @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <h4 class="small font-weight-bold">Sudah Dirujuk ({{$statusList[7]}}) <span
-                        class="float-right">@php echo number_format(cekNol($statusList,7,1),2) @endphp %</span></h4>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: @php echo cekNol($statusList,7,1); @endphp%"
-                        aria-valuenow="{{$statusList[7]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                <div class="card">
+                    <div class="card-header p-0" id="headingTwo">
+                        <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" style="background-color:white;" data-toggle="collapse" data-target="#collapseStatus6" aria-expanded="true" aria-controls="collapseStatus6">
+                            <h4 class="small font-weight-bold">Sudah Dirujuk ({{$statusList[7]}}) <span
+                                    class="float-right">@php echo number_format(cekNol($statusList,7,1),2) @endphp %</span></h4>
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: @php echo cekNol($statusList,7,1); @endphp%"
+                                    aria-valuenow="{{$statusList[7]}}" aria-valuemin="0" aria-valuemax="{{$statusList[1]}}"></div>
+                            </div>
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapseStatus6" class="collapse">
+                        <div class="card-body">
+                            <table class="table w-100">
+                                <tbody>
+                                @foreach($listSekolah as $unit)
+                                @if($unit[7]>0)
+                                <tr>
+                                    <td>{{$unit[0]}}</td>
+                                    <td>{{$unit[7]}}</td>
+                                </tr>
+                                @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

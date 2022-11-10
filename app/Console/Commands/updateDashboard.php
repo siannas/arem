@@ -58,14 +58,28 @@ class updateDashboard extends Command
             $blmIsi = $jumlah_siswa-$blmValidSek-$ValidSek-$ValidPus-$dirujuk-$sdhDirujuk;            
 
             $meta_baru = Metadata::where('key', 'jumlah_status_'.$unit->id)->first();
-            $meta_baru->value = $unit->id.','.$jumlah_siswa.','.$blmIsi.','.$blmValidSek.','.$ValidSek.','.$ValidPus.','.$dirujuk.','.$sdhDirujuk;
-            $meta_baru->save();
+            if(isset($meta_baru)){
+                $meta_baru->value = $unit->id.','.$jumlah_siswa.','.$blmIsi.','.$blmValidSek.','.$ValidSek.','.$ValidPus.','.$dirujuk.','.$sdhDirujuk;
+                $meta_baru->save();
+            } else{
+                $meta_baru = new Metadata();
+                $meta_baru->key = 'jumlah_status_'.$unit->id;
+                $meta_baru->value = $unit->id.','.$jumlah_siswa.','.$blmIsi.','.$blmValidSek.','.$ValidSek.','.$ValidPus.','.$dirujuk.','.$sdhDirujuk;
+                $meta_baru->save();
+            }
+            
         }
         
         // Hitung Jumlah Semua Siswa (Terdaftar Sekolah maupun Tidak)
         $meta_baru = Metadata::where('key', 'jumlah_siswa')->first();
         $siswaSemua = User::where('id_role', 1)->count();
         $meta_baru->value = $siswaSemua.','.$siswaTerdaftar;
+        $meta_baru->save();
+
+        // Timestamp Last Update
+        $meta_baru = Metadata::where('key','last_update')->first();
+        date_default_timezone_set("Asia/Jakarta");
+        $meta_baru->value = date("d-m-Y H:i:s");
         $meta_baru->save();
     }
 }

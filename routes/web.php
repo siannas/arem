@@ -85,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/tambah-form', function () {
             return view('form.crudForm');
         });
+        Route::get('/refresh', 'DataController@refresh');
     });
 
     Route::middleware(['role:Puskesmas'])->group(function () {

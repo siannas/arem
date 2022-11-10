@@ -13,6 +13,7 @@ use Datatables;
 use Auth;
 use Hash;
 use Validator;
+use Artisan;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class DataController extends Controller
@@ -41,15 +42,23 @@ class DataController extends Controller
         }
         else{
             $statusList = [0,0,0,0,0,0,0,0];
+            $listSekolah = array();
+            $counter = 0;
 
             // Penghitungan Status Role Dinas
             if($user->id_role == 6){
-                $relasi = User::where('id_role', 2)->get();
+                if($user->id==1) $relasi = User::where('id_role', 2)->get();
+                else $relasi = User::where('id_role', 2)->where('jenis', $user->jenis)->get();
                 foreach($relasi as $unit){
                     $status = Metadata::where('key', 'jumlah_status_'.$unit->id)->first();
-                    $tempStatus = explode(',', $status->value);
-                    for($i=1;$i<count($tempStatus);$i++){
-                        $statusList[$i] += intval($tempStatus[$i]);
+                    if(isset($status)){
+                        $listSekolah[$counter][0] = $unit->nama;
+                        $tempStatus = explode(',', $status->value);
+                        for($i=1;$i<count($tempStatus);$i++){
+                            $statusList[$i] += intval($tempStatus[$i]);
+                            $listSekolah[$counter][$i] = $tempStatus[$i];
+                        }
+                        $counter++;
                     }   
                 }
             }
@@ -66,15 +75,22 @@ class DataController extends Controller
             }
             // Penghitungan Status Role Sekolah
             else{
+                $relasi = [];
                 $status = Metadata::where('key', 'jumlah_status_'.$user->id)->first();
-                $statusList = explode(',', $status->value);
+                if(isset($status)) $statusList = explode(',', $status->value);
             }
 
             $jumlahSiswa = Metadata::where('key', 'jumlah_siswa')->first();
             $jumlahSiswa = explode(',', $jumlahSiswa->value);
             $pengumuman = Metadata::where('key', 'pengumuman')->first();
+            $update = Metadata::where('key','last_update')->first();
         }
-        return view('dashboard', ['statusList' => $statusList, 'jumlahSiswa' => $jumlahSiswa, 'pengumuman' => $pengumuman]);
+        return view('dashboard', ['statusList' => $statusList, 'jumlahSiswa' => $jumlahSiswa, 'pengumuman' => $pengumuman, 'sekolah'=>$relasi, 'update'=>$update, 'listSekolah'=>$listSekolah]);
+    }
+
+    public function refresh(){
+        Artisan::call('updateDashboard');
+        return redirect()->back()->with('success','Data Berhasil Diperbarui');
     }
 
     public function simpanPengumuman(Request $request){
@@ -150,10 +166,28 @@ class DataController extends Controller
         // Lebih cepet pake raw() src: https://geekflare.com/laravel-optimization/
         // $data = User::raw('select * from user');
         $id_user= Auth::user();
-        if($id_user->id==1){
-            $dataSiswa = User::with(['getSekolah:nama'])
-            ->select('id', 'nama', 'id_role', 'username', 'kelas', 'tahun_ajaran')
-            ->where('id_role',1);
+        if($id_user->id_role==6){
+            if(!isset($id_user->jenis)){
+                $dataSiswa = User::with(['getSekolah:nama,jenis'])
+                    ->select('id', 'nama', 'id_role', 'username', 'kelas', 'tahun_ajaran')
+                    ->where('id_role',1);
+            } else{
+                $sekolah = User::where('id_role',2)->where('jenis',$id_user->jenis)->get();
+                $listSiswa = [];
+                
+                // Simpan id setiap sekolah
+                foreach($sekolah as $unit){
+                    $siswa = $unit->users()->where('id_role',1)->get();
+                    foreach($siswa as $unit2){
+                        array_push($listSiswa, $unit2->id);
+                    }
+                }
+                
+                $dataSiswa = User::with(['getSekolah:nama,jenis'])
+                    ->select('id', 'nama', 'id_role', 'username', 'kelas', 'tahun_ajaran')
+                    ->where('id_role',1)->whereIn('id', $listSiswa);
+            }
+            
         }
         else{
             // List siswa di bawah naungan user login
@@ -236,8 +270,9 @@ class DataController extends Controller
 
     public function dataSekolah(){
         $id_user= Auth::user();
-        if($id_user->id==1){
-            $dataSekolah = User::where('id_role',2)->get();        
+        if($id_user->id_role==6){
+            if($id_user->id==1) $dataSekolah = User::where('id_role',2)->get();
+            else $dataSekolah = User::where('id_role',2)->where('jenis',$id_user->jenis)->get();
         }
         else{
             $dataSekolah = $id_user->users()->where('id_role',2)->get();        
@@ -256,7 +291,7 @@ class DataController extends Controller
 
     public function dataKelurahan(){
         $id_user= Auth::user();
-        if($id_user->id==1){
+        if($id_user->id_role==6){
             $dataKelurahan = User::where('id_role',3)->get();    
         }
         else{
@@ -274,7 +309,7 @@ class DataController extends Controller
 
     public function dataPuskesmas(){
         $id_user= Auth::user();
-        if($id_user->id==1){
+        if($id_user->id_role==6){
             $dataPuskesmas = User::where('id_role',4)->get();
         }
         else{
